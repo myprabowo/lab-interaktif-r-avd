@@ -1,0 +1,211 @@
+---
+title: "Praktikum Transformasi Data"
+format: live-html
+engine: knitr
+---
+
+## Tujuan Praktikum (Assessment for Learning)
+
+Setelah praktikum ini, Anda mampu:
+
+1.  Menjelaskan kapan transformasi logaritma dan pangkat diperlukan.
+2.  Menerapkan transformasi logaritma (ln, log2, log10) pada data positif.
+3.  Menangani kasus data bernilai nol/negatif sebelum transformasi logaritma.
+4.  Menerapkan transformasi pangkat (kuadrat, akar kuadrat, pangkat tiga, akar pangkat tiga).
+5.  Membandingkan distribusi data sebelum dan sesudah transformasi menggunakan visualisasi.
+6.  Merefleksikan dampak transformasi terhadap interpretasi analisis.
+
+> **Catatan AfL:** Pada beberapa bagian, Anda diminta *memprediksi* bentuk distribusi/hasil sebelum menjalankan kode, lalu membandingkan dengan output yang muncul.
+
+------------------------------------------------------------------------
+
+## 1. Pemanasan: Mengapa Transformasi?
+
+Transformasi data sering dipakai ketika:
+
+-   Distribusi sangat miring (*skewed*),
+-   Varians meningkat seiring nilai (indikasi heteroskedastisitas),
+-   Hubungan antar-variabel kurang linear.
+
+### Pertanyaan Reflektif (AfL)
+
+-   Sebelum melihat grafik, menurut Anda data pendapatan biasanya condong ke kiri atau ke kanan? Mengapa?
+-   Jika kita ingin membuat hubungan lebih “linear”, transformasi apa yang paling masuk akal?
+
+------------------------------------------------------------------------
+
+## 2. Transformasi Logaritma
+
+Transformasi logaritma membantu:
+
+-   Mengurangi *skewness*,
+-   Menstabilkan variansi,
+-   Mengompresi rentang data,
+-   Memperbaiki hubungan linear dalam regresi.
+
+### 2.1 Contoh Data Pendapatan
+
+```{webr}
+# Contoh data pendapatan (dalam ribuan)
+income <- c(25, 30, 35, 40, 100, 200, 300, 400, 500, 1000)
+
+summary(income)
+```
+
+### 2.2 Log Natural (ln), Log Basis 2, dan Log Basis 10
+
+```{webr}
+log_income_ln  <- log(income)     # ln(x) (basis e)
+log_income_2   <- log2(income)    # log basis 2
+log_income_10  <- log10(income)   # log basis 10
+
+head(data.frame(income, ln=log_income_ln, log2=log_income_2, log10=log_income_10), 10)
+```
+
+### 2.3 Visualisasi: Sebelum vs Sesudah Transformasi
+
+```{webr}
+par(mfrow = c(1, 2))
+hist(income, main = "Sebelum Transformasi Log", xlab = "Pendapatan", ylab = "Frekuensi")
+hist(log_income_ln, main = "Setelah Transformasi Log (ln)", xlab = "ln(Pendapatan)", ylab = "Frekuensi")
+par(mfrow = c(1, 1))
+```
+
+### Pertanyaan Reflektif (AfL)
+
+-   Sebelum menjalankan histogram kedua: apakah Anda memprediksi distribusi akan “lebih simetris”? Kenapa?
+-   Setelah melihat histogram: perubahan apa yang paling jelas (rentang, puncak, kemiringan)?
+-   Jika Anda memakai log10, apakah bentuk histogram *secara umum* berubah dibanding ln? (Petunjuk: basis log mengubah skala, bukan bentuk relatif.)
+
+------------------------------------------------------------------------
+
+## 3. Catatan Penting: Nilai Nol dan Negatif pada Log
+
+Logaritma **hanya berlaku untuk nilai positif**. Jika ada nol/negatif, Anda perlu penyesuaian. Salah satu pendekatan sederhana adalah menambahkan konstanta agar semua nilai menjadi positif.
+
+### 3.1 Simulasi Data dengan Nol
+
+```{webr}
+x <- c(0, 1, 2, 5, 10, 50)
+x
+```
+
+```{webr}
+# Ini akan menghasilkan -Inf untuk 0
+log(x)
+```
+
+### 3.2 Strategi Sederhana: Tambah Konstanta
+
+```{webr}
+k <- 1  # konstanta kecil
+log_x_shift <- log(x + k)
+
+data.frame(x=x, x_plus_k=x+k, ln_shift=log_x_shift)
+```
+
+### Pertanyaan Reflektif (AfL)
+
+-   Apa konsekuensi interpretasi ketika kita menambahkan konstanta sebelum log?
+-   Dalam konteks data nyata, kapan strategi ini “cukup”, dan kapan perlu metode lain (mis. model khusus, transformasi lain)?
+
+------------------------------------------------------------------------
+
+## 4. Transformasi Pangkat (Power Transform)
+
+Transformasi pangkat dapat membantu mengurangi skewness/heteroskedastisitas dan membuat hubungan lebih linear.
+
+### 4.1 Data Contoh
+
+```{webr}
+data_raw <- 1:10
+data_raw
+```
+
+### 4.2 Kuadrat (Power of 2) dan Pangkat Tiga (Power of 3)
+
+```{webr}
+data_sq <- data_raw^2
+data_cu <- data_raw^3
+
+data.frame(data_raw, kuadrat=data_sq, pangkat3=data_cu)
+```
+
+### 4.3 Akar Kuadrat dan Akar Pangkat Tiga
+
+```{webr}
+data_sqrt <- sqrt(data_raw)
+data_cbrt <- data_raw^(1/3)  # cube root
+
+data.frame(data_raw, akar2=data_sqrt, akar3=data_cbrt)
+```
+
+### 4.4 Visualisasi: Sebelum vs Sesudah Transformasi Kuadrat
+
+```{webr}
+par(mfrow = c(1, 2))
+hist(data_raw, main = "Sebelum Transformasi", xlab = "Data", ylab = "Frekuensi")
+hist(data_sq, main = "Setelah Transformasi Kuadrat", xlab = "Data^2", ylab = "Frekuensi")
+par(mfrow = c(1, 1))
+```
+
+### Pertanyaan Reflektif (AfL)
+
+-   Transformasi kuadrat membuat nilai besar makin besar. Menurut Anda ini cocok untuk mengatasi skewness ke arah mana (kiri/kanan)?
+-   Transformasi akar (sqrt) “mengecilkan” nilai besar. Kapan transformasi ini lebih tepat?
+-   Bandingkan efek `^2` vs `sqrt()` terhadap jarak antar-nilai.
+
+------------------------------------------------------------------------
+
+## 5. Mini-Tugas Praktikum (AfL): Prediksi → Jalankan → Jelaskan
+
+### Tugas A — Coba Log2 dan Log10 + Bandingkan
+
+1.  Jalankan `log2(income)` dan `log10(income)`.
+2.  Buat histogramnya dan bandingkan dengan ln.
+
+```{webr}
+par(mfrow=c(1,3))
+hist(log_income_ln,  main="ln",   xlab="ln(income)")
+hist(log_income_2,   main="log2", xlab="log2(income)")
+hist(log_income_10,  main="log10",xlab="log10(income)")
+par(mfrow=c(1,1))
+```
+
+**Refleksi singkat (tulis 2–4 kalimat):**
+
+-   Apa yang sama dari ketiga histogram?
+-   Apa yang berbeda?
+
+### Tugas B — Coba Transformasi Pangkat pada Data Skewed
+
+Buat data yang sangat miring, lalu coba `sqrt()` dan `log()`.
+
+```{webr}
+set.seed(123)
+skewed <- rexp(200, rate = 0.2)  # data miring ke kanan
+par(mfrow=c(1,3))
+hist(skewed, main="Asli", xlab="skewed")
+hist(sqrt(skewed), main="Sqrt", xlab="sqrt(skewed)")
+hist(log(skewed), main="Log", xlab="log(skewed)")
+par(mfrow=c(1,1))
+```
+
+**Refleksi singkat (tulis 2–4 kalimat):**
+
+-   Transformasi mana yang paling mengurangi kemiringan?
+-   Kalau data punya nol, transformasi mana yang akan Anda pilih dan mengapa?
+
+------------------------------------------------------------------------
+
+## 6. Penutup: Ringkasan & Jurnal Refleksi
+
+### Ringkasan
+
+-   **Log**: kompresi skala, cocok untuk data positif dan miring ke kanan (mis. pendapatan).
+-   **Pangkat**: bisa memperbesar atau mengecilkan nilai besar (tergantung pangkat/akar).
+-   Selalu cek **validitas domain** (nol/negatif) dan dampak **interpretasi**.
+
+### Jurnal Refleksi (AfL)
+
+Jawab singkat: 1. Transformasi mana yang paling “masuk akal” untuk data pendapatan? Mengapa? 2. Kesalahan apa yang paling mungkin terjadi saat melakukan log transform? 3. Jika grafik sudah tampak normal setelah transformasi, apa langkah analisis berikutnya yang Anda usulkan?

@@ -1,0 +1,38 @@
+project:
+  type: website
+
+website:
+  title: "Lab Interaktif R" # Judul di pojok kiri
+  description: "Lab Interaktif R"
+  
+  page-footer:
+    right: "© Muhammad Yoga Prabowo"
+    background: light
+    
+  # Bagian Header/Navbar
+  navbar:
+    background: "#447099" # Warna biru khas RStudio/Quarto (atau gunakan 'primary')
+    search: true          # Menambahkan kolom pencarian
+    
+    left:
+      - text: "Home"
+        href: https://muhammadyogaprabowo.quarto.pub/
+      - text: "Praktikum"
+        menu:
+          - href: praktikum-01.qmd
+            text: Praktikum 01 – Dasar R
+          - href: praktikum-02.qmd
+            text: Praktikum 02 – Transformasi Data
+          - href: praktikum-03.qmd
+            text: Praktikum 03 – Penanganan Data Hilang
+          - href: praktikum-04.qmd
+            text: Praktikum 04 – Analisis Regresi
+        
+    right:
+      - icon: linkedin
+        href: https://linkedin.com/in/muhammad-yoga-prabowo
+
+format:
+  html:
+    theme: cosmo
+    toc: true

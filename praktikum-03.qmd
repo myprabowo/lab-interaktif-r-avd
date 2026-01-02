@@ -1,0 +1,173 @@
+---
+title: "Praktikum Penanganan Data Hilang"
+format: live-html
+engine: knitr
+---
+
+## Tujuan Praktikum (Assessment for Learning)
+
+Setelah menyelesaikan praktikum ini, mahasiswa mampu:
+
+1. Mengidentifikasi keberadaan dan pola data hilang (*missing data*).
+2. Menjelaskan dampak data hilang terhadap analisis regresi.
+3. Menerapkan berbagai teknik penanganan data hilang di R.
+4. Membandingkan hasil analisis regresi sebelum dan sesudah penanganan data hilang.
+5. Merefleksikan pilihan teknik imputasi berdasarkan konteks analisis.
+
+> **Catatan AfL:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
+
+---
+
+## 1. Mengapa Data Hilang Perlu Ditangani?
+
+Data hilang dapat menyebabkan:
+
+- Bias estimasi koefisien regresi,
+- Berkurangnya kekuatan statistik,
+- Pelanggaran asumsi model.
+
+### Pertanyaan Reflektif (AfL)
+
+- Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
+- Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
+
+---
+
+## 2. Mengecek dan Mengeksplorasi Data Hilang
+
+Gunakan dataset bawaan `airquality`.
+
+```{webr}
+data("airquality")
+str(airquality)
+```
+
+### 2.1 Menghitung Data Hilang
+
+```{webr}
+colSums(is.na(airquality))
+sum(is.na(airquality))
+```
+
+### 2.2 Visualisasi Data Hilang
+
+```{webr}
+library(naniar)
+vis_miss(airquality)
+```
+
+### Pertanyaan Reflektif (AfL)
+
+- Variabel mana yang paling banyak memiliki data hilang?
+- Apakah pola data hilang terlihat acak atau terstruktur?
+
+---
+
+## 3. Menghapus Data Hilang
+
+### 3.1 Menghapus Baris dengan Data Hilang
+
+```{webr}
+airquality_omit <- na.omit(airquality)
+dim(airquality)
+dim(airquality_omit)
+```
+
+### Refleksi (AfL)
+- Berapa banyak observasi yang hilang setelah `na.omit()`?
+- Dalam konteks regresi, apa risiko utama pendekatan ini?
+
+---
+
+## 4. Imputasi Sederhana
+
+### 4.1 Imputasi Mean dan Median
+
+```{webr}
+airquality_mean <- airquality
+airquality_mean$Ozone[is.na(airquality_mean$Ozone)] <-
+  mean(airquality_mean$Ozone, na.rm = TRUE)
+
+airquality_median <- airquality
+airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
+  median(airquality_median$Ozone, na.rm = TRUE)
+```
+
+### Refleksi (AfL)
+- Apa asumsi implisit saat menggunakan mean/median?
+- Variabilitas data bertambah atau berkurang?
+
+---
+
+## 5. Imputasi Lanjutan
+
+### 5.1 k-Nearest Neighbors (kNN)
+
+```{webr}
+library(VIM)
+airquality_knn <- kNN(airquality, k = 5)
+```
+
+### 5.2 Multiple Imputation dengan `mice`
+
+```{webr}
+library(mice)
+imp <- mice(airquality, m = 5, method = "pmm", seed = 123)
+airquality_mice <- complete(imp, 1)
+```
+
+### Refleksi (AfL)
+
+- Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
+- Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
+
+---
+
+## 6. Dampak Data Hilang terhadap Analisis Regresi
+
+### 6.1 Regresi Tanpa Penanganan Data Hilang
+
+```{webr}
+model_na <- lm(Ozone ~ Temp + Wind + Solar.R, data = airquality)
+summary(model_na)
+```
+
+### 6.2 Regresi Setelah `na.omit()`
+
+```{webr}
+model_omit <- lm(Ozone ~ Temp + Wind + Solar.R, data = airquality_omit)
+summary(model_omit)
+```
+
+### 6.3 Regresi Setelah Imputasi (`mice`)
+
+```{webr}
+model_mice <- lm(Ozone ~ Temp + Wind + Solar.R, data = airquality_mice)
+summary(model_mice)
+```
+
+### Pertanyaan Reflektif (AfL)
+
+- Bandingkan koefisien dan R-squared ketiga model.
+- Model mana yang paling masuk akal secara substantif?
+
+---
+
+## 7. Mini-Tugas AfL
+
+1. Coba bandingkan hasil regresi antara imputasi mean dan kNN.
+2. Buat tabel ringkas berisi koefisien utama dari setiap model.
+3. Tuliskan 3–5 kalimat refleksi:  
+   *Teknik penanganan data hilang apa yang akan Anda pilih untuk analisis regresi dan mengapa?*
+
+---
+
+## 8. Penutup: Jurnal Refleksi
+
+Jawab singkat:
+
+1. Kesalahan paling fatal apa yang mungkin terjadi jika data hilang diabaikan?
+2. Apakah selalu ada satu teknik imputasi yang “paling benar”?
+3. Bagaimana penanganan data hilang berkaitan dengan validitas kesimpulan regresi?
+
+> **Inti AfL:** Bukan sekadar menjalankan fungsi, tetapi *menyadari konsekuensi metodologis* dari setiap pilihan analisis.

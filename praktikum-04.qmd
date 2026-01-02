@@ -1,0 +1,226 @@
+---
+title: "Praktikum Analisis Regresi"
+format: live-html
+engine: knitr
+---
+
+## Tujuan Praktikum (Assessment for Learning)
+
+Setelah praktikum ini, Anda mampu:
+
+1. Melakukan eksplorasi awal data untuk kebutuhan regresi (deskriptif & visual).
+2. Menghitung dan menafsirkan korelasi sebagai indikasi awal hubungan linear.
+3. Membangun regresi linear sederhana dan berganda dengan `lm()`.
+4. Memeriksa asumsi dasar regresi melalui diagnostik residual.
+5. Mengevaluasi performa model dengan *train-test split* dan MSE.
+6. Menulis interpretasi hasil regresi secara ringkas dan tepat.
+
+> **Rujukan alur praktikum:** mengikuti langkah “cara eksplorasi” untuk analisis regresi: persiapan data → eksplorasi → korelasi → model → uji asumsi → validasi → pelaporan.
+
+---
+
+## 1. Persiapan Data
+
+Kita gunakan dataset bawaan R: `mtcars`.
+
+```{webr}
+data("mtcars")
+str(mtcars)
+head(mtcars)
+```
+
+### Pertanyaan AfL
+
+- Variabel mana yang paling masuk akal menjadi **variabel dependen** (Y) jika konteksnya efisiensi kendaraan?
+- Sebelum menghitung apa pun, menurut Anda hubungan **mpg** dengan **wt** (berat) cenderung positif atau negatif? Mengapa?
+
+---
+
+## 2. Eksplorasi Data Awal (Deskriptif & Visual)
+
+### 2.1 Statistik deskriptif
+
+```{webr}
+summary(mtcars)
+```
+
+### 2.2 Visualisasi dasar
+
+```{webr}
+hist(mtcars$mpg, main="Histogram mpg", xlab="mpg")
+boxplot(mtcars$mpg, main="Boxplot mpg", ylab="mpg")
+plot(mtcars$wt, mtcars$mpg, main="Scatter: mpg vs wt", xlab="wt", ylab="mpg")
+```
+
+### Pertanyaan AfL
+
+- Dari scatter plot, apakah hubungan mpg–wt tampak cukup linear?
+- Adakah titik yang terlihat “menyimpang” (calon outlier)? Apa dampaknya pada regresi?
+
+---
+
+## 3. Analisis Korelasi
+
+### 3.1 Korelasi antar-variabel (numerik)
+
+```{webr}
+cor_mtcars <- cor(mtcars)
+round(cor_mtcars["mpg", ], 3)
+```
+
+### 3.2 Visualisasi sederhana (heatmap base R)
+
+```{webr}
+heatmap(cor_mtcars, symm = TRUE)
+```
+
+### Pertanyaan AfL
+- Variabel apa yang korelasinya paling kuat (positif/negatif) dengan mpg?
+- Apakah korelasi kuat selalu berarti hubungan kausal? Jelaskan singkat.
+
+---
+
+## 4. Regresi Linear Sederhana
+
+Kita mulai dari model sederhana: **mpg ~ wt**.
+
+```{webr}
+model_simple <- lm(mpg ~ wt, data = mtcars)
+summary(model_simple)
+```
+
+### 4.1 Interpretasi cepat koefisien
+
+```{webr}
+coef(model_simple)
+```
+
+### Pertanyaan AfL
+
+- Jika koefisien `wt` bernilai negatif, artinya apa (dalam konteks kendaraan)?
+- Apa perbedaan makna **p-value** vs **R-squared** pada output `summary()`?
+
+---
+
+## 5. Regresi Linear Berganda
+
+Tambahkan prediktor lain, misalnya: `hp` dan `cyl`.
+
+```{webr}
+model_multiple <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+summary(model_multiple)
+```
+
+### Pertanyaan AfL
+
+- Apakah `wt` tetap signifikan setelah menambahkan `hp` dan `cyl`? Jika berubah, kira-kira kenapa?
+- Jika R-squared meningkat pada model berganda, apakah itu otomatis berarti model lebih baik?
+
+---
+
+## 6. Uji Asumsi Model (Diagnostik Residual)
+
+Gunakan plot diagnostik standar `lm()`.
+
+```{webr}
+par(mfrow = c(2, 2))
+plot(model_multiple)
+par(mfrow = c(1, 1))
+```
+
+### Cara membaca cepat (panduan ringkas)
+- **Residuals vs Fitted**: cek pola (homoskedastisitas/linearitas).
+- **Normal Q-Q**: cek normalitas residual.
+- **Scale-Location**: cek varians residual konstan.
+- **Residuals vs Leverage**: cek pengaruh titik ekstrem.
+
+### Pertanyaan AfL
+- Plot mana yang paling “mengkhawatirkan” jika tujuan Anda inferensi (uji hipotesis koefisien)?
+- Jika residual tidak normal, apakah regresi selalu “tidak boleh dipakai”? Dalam konteks apa masih bisa diterima?
+
+---
+
+## 7. Penanganan Masalah (Opsional)
+
+> Bagian ini konsep penting, tetapi beberapa teknik membutuhkan paket tambahan. Anda boleh menjalankannya **di R lokal** jika paket tersedia.
+
+### 7.1 Transformasi variabel (contoh: log)
+
+```{webr}
+model_log <- lm(log(mpg) ~ wt + hp + cyl, data = mtcars)
+summary(model_log)
+```
+
+### 7.2 Regresi robust (opsional, butuh MASS)
+
+```{webr}
+#| eval: false
+# install.packages("MASS") # jalankan sekali di R lokal jika perlu
+library(MASS)
+model_robust <- rlm(mpg ~ wt + hp + cyl, data = mtcars)
+summary(model_robust)
+```
+
+### Pertanyaan AfL
+- Kapan transformasi log lebih masuk akal daripada menambah prediktor baru?
+- Mengapa regresi robust bisa membantu ketika ada outlier?
+
+---
+
+## 8. Validasi Model (Train–Test Split)
+
+Tujuan: mengukur seberapa baik model memprediksi data baru.
+
+```{webr}
+set.seed(123)
+
+n <- nrow(mtcars)
+idx_train <- sample(seq_len(n), size = round(0.7 * n))
+
+train <- mtcars[idx_train, ]
+test  <- mtcars[-idx_train, ]
+
+m_train <- lm(mpg ~ wt + hp + cyl, data = train)
+pred <- predict(m_train, newdata = test)
+
+mse <- mean((test$mpg - pred)^2)
+mse
+```
+
+### Visualisasi Prediksi vs Aktual
+
+```{webr}
+plot(test$mpg, pred,
+     main = "Aktual vs Prediksi (Test Set)",
+     xlab = "mpg aktual", ylab = "mpg prediksi")
+abline(a = 0, b = 1)
+```
+
+### Pertanyaan AfL
+
+- Jika MSE kecil, apa artinya secara praktis?
+- Jika model sangat bagus di training tetapi buruk di test, itu indikasi apa?
+
+---
+
+## 9. Interpretasi & Pelaporan Hasil
+
+Gunakan format ringkas berikut:
+
+1. **Model**: sebutkan bentuk model dan variabel.
+2. **Temuan utama**: koefisien penting (arah & besar efek).
+3. **Kualitas model**: R-squared/Adj R-squared dan evaluasi asumsi.
+4. **Validasi**: tampilkan MSE test set.
+5. **Kesimpulan**: 2–4 kalimat yang menyambungkan hasil ke konteks.
+
+### Mini-Tugas AfL (Wajib)
+
+1. Buat 1 paragraf interpretasi untuk `model_multiple` (maks. 120 kata).
+2. Sebutkan 1 potensi masalah asumsi dari plot diagnostik dan usulan perbaikannya.
+3. Laporkan MSE dan jelaskan apakah model “cukup baik” untuk prediksi (dengan alasan).
+
+---
+
+## Lampiran: Template Paragraf Pelaporan
+
+> “Berdasarkan regresi linear berganda, **mpg** dipengaruhi oleh **wt**, **hp**, dan **cyl**. Koefisien **wt** bernilai … (arah & interpretasi), sementara **hp** … . Model menjelaskan sekitar …% variasi mpg (Adj R² = …). Diagnostik residual menunjukkan … (ringkas). Pada validasi train–test, MSE sebesar … menunjukkan … (interpretasi performa). Secara keseluruhan, model … (kesimpulan & batasan).”
