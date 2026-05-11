@@ -4,7 +4,7 @@ format: live-html
 engine: knitr
 ---
 
-## Tujuan Praktikum (Assessment for Learning)
+## Tujuan Praktikum
 
 Setelah menyelesaikan praktikum ini, mahasiswa mampu:
 
@@ -29,7 +29,9 @@ Data hilang dapat menyebabkan:
 ### Pertanyaan Reflektif
 
 - Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
+  *(Hint: Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.)*
 - Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
+  *(Hint: Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.)*
 
 ---
 
@@ -59,7 +61,9 @@ vis_miss(airquality)
 ### Pertanyaan Reflektif
 
 - Variabel mana yang paling banyak memiliki data hilang?
+  *(Hint: Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.)*
 - Apakah pola data hilang terlihat acak atau terstruktur?
+  *(Hint: Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.)*
 
 ---
 
@@ -75,7 +79,9 @@ dim(airquality_omit)
 
 ### Refleksi
 - Berapa banyak observasi yang hilang setelah `na.omit()`?
+  *(Hint: Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.)*
 - Dalam konteks regresi, apa risiko utama pendekatan ini?
+  *(Hint: Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.)*
 
 ---
 
@@ -95,7 +101,9 @@ airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
 
 ### Refleksi
 - Apa asumsi implisit saat menggunakan mean/median?
+  *(Hint: Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.)*
 - Variabilitas data bertambah atau berkurang?
+  *(Hint: Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.)*
 
 ---
 
@@ -119,7 +127,9 @@ airquality_mice <- complete(imp, 1)
 ### Refleksi
 
 - Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
+  *(Hint: Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.)*
 - Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
+  *(Hint: `mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.)*
 
 ---
 
@@ -149,7 +159,9 @@ summary(model_mice)
 ### Pertanyaan Reflektif
 
 - Bandingkan koefisien dan R-squared ketiga model.
+  *(Hint: R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.)*
 - Model mana yang paling masuk akal secara substantif?
+  *(Hint: Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.)*
 
 ---
 
