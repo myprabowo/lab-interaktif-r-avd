@@ -9,6 +9,8 @@
 
 set -e
 
+export HOME="/root"  # diperlukan karena webhook aaPanel berjalan tanpa $HOME
+
 QUARTO="/usr/local/bin/quarto"
 WEB_ROOT="/www/wwwroot/avd.myprabowo.my.id"
 
