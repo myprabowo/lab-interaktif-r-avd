@@ -16,7 +16,7 @@ website:
     
     left:
       - text: "Home"
-        href: https://muhammadyogaprabowo.quarto.pub/
+        href: index.qmd
       - text: "Praktikum"
         menu:
           - href: praktikum-01.qmd
@@ -27,7 +27,6 @@ website:
             text: Praktikum 03 – Penanganan Data Hilang
           - href: praktikum-04.qmd
             text: Praktikum 04 – Analisis Regresi Eksplorasi
-          - text: "---"
           - href: praktikum-05.qmd
             text: Praktikum 05 – Regresi Konfirmasi
           - href: praktikum-06.qmd
