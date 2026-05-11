@@ -6,3 +6,5 @@ _extensions/
 _site/
 .quarto/
 Praktikum AVD UT/
+/.quarto/
+**/*.quarto_ipynb
