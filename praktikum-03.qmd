@@ -14,7 +14,7 @@ Setelah menyelesaikan praktikum ini, mahasiswa mampu:
 4. Membandingkan hasil analisis regresi sebelum dan sesudah penanganan data hilang.
 5. Merefleksikan pilihan teknik imputasi berdasarkan konteks analisis.
 
-> **Catatan AfL:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
+> **Catatan:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
 
 ---
 
@@ -26,7 +26,7 @@ Data hilang dapat menyebabkan:
 - Berkurangnya kekuatan statistik,
 - Pelanggaran asumsi model.
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 - Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
 - Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
@@ -56,7 +56,7 @@ library(naniar)
 vis_miss(airquality)
 ```
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 - Variabel mana yang paling banyak memiliki data hilang?
 - Apakah pola data hilang terlihat acak atau terstruktur?
@@ -73,7 +73,7 @@ dim(airquality)
 dim(airquality_omit)
 ```
 
-### Refleksi (AfL)
+### Refleksi
 - Berapa banyak observasi yang hilang setelah `na.omit()`?
 - Dalam konteks regresi, apa risiko utama pendekatan ini?
 
@@ -93,7 +93,7 @@ airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
   median(airquality_median$Ozone, na.rm = TRUE)
 ```
 
-### Refleksi (AfL)
+### Refleksi
 - Apa asumsi implisit saat menggunakan mean/median?
 - Variabilitas data bertambah atau berkurang?
 
@@ -116,7 +116,7 @@ imp <- mice(airquality, m = 5, method = "pmm", seed = 123)
 airquality_mice <- complete(imp, 1)
 ```
 
-### Refleksi (AfL)
+### Refleksi
 
 - Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
 - Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
@@ -146,14 +146,14 @@ model_mice <- lm(Ozone ~ Temp + Wind + Solar.R, data = airquality_mice)
 summary(model_mice)
 ```
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 - Bandingkan koefisien dan R-squared ketiga model.
 - Model mana yang paling masuk akal secara substantif?
 
 ---
 
-## 7. Mini-Tugas AfL
+## 7. Mini-Tugas
 
 1. Coba bandingkan hasil regresi antara imputasi mean dan kNN.
 2. Buat tabel ringkas berisi koefisien utama dari setiap model.
@@ -170,4 +170,4 @@ Jawab singkat:
 2. Apakah selalu ada satu teknik imputasi yang “paling benar”?
 3. Bagaimana penanganan data hilang berkaitan dengan validitas kesimpulan regresi?
 
-> **Inti AfL:** Bukan sekadar menjalankan fungsi, tetapi *menyadari konsekuensi metodologis* dari setiap pilihan analisis.
+> **Inti:** Bukan sekadar menjalankan fungsi, tetapi *menyadari konsekuensi metodologis* dari setiap pilihan analisis.

@@ -4,7 +4,10 @@
 #
 # Setup di aaPanel:
 #   Website → Deployment → Git → "Deployment Script":
-#   bash /www/wwwroot/avd.myprabowo.my.id/deploy.sh
+#     bash /www/wwwroot/avd.myprabowo.my.id/deploy.sh
+#
+#   Pastikan "Running Path" / document root website di aaPanel
+#   diarahkan ke: /www/wwwroot/avd.myprabowo.my.id/_site
 # ============================================================
 
 set -e
@@ -30,10 +33,11 @@ echo "▶ Git pull..."
 git pull origin main
 echo "✅ Source terbaru diambil"
 
-# Render Quarto ke web root
+# Render Quarto — output masuk ke _site/ (document root aaPanel)
 echo ""
 echo "▶ Quarto render..."
-$QUARTO render --output-dir "$WEB_ROOT"
+$QUARTO render
+echo "✅ Render selesai → $WEB_ROOT/_site/"
 
 echo ""
 echo "🚀 Deploy selesai — https://avd.myprabowo.my.id"

@@ -29,7 +29,7 @@ str(mtcars)
 head(mtcars)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 
 - Variabel mana yang paling masuk akal menjadi **variabel dependen** (Y) jika konteksnya efisiensi kendaraan?
 - Sebelum menghitung apa pun, menurut Anda hubungan **mpg** dengan **wt** (berat) cenderung positif atau negatif? Mengapa?
@@ -52,7 +52,7 @@ boxplot(mtcars$mpg, main="Boxplot mpg", ylab="mpg")
 plot(mtcars$wt, mtcars$mpg, main="Scatter: mpg vs wt", xlab="wt", ylab="mpg")
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 
 - Dari scatter plot, apakah hubungan mpg–wt tampak cukup linear?
 - Adakah titik yang terlihat “menyimpang” (calon outlier)? Apa dampaknya pada regresi?
@@ -74,7 +74,7 @@ round(cor_mtcars["mpg", ], 3)
 heatmap(cor_mtcars, symm = TRUE)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 - Variabel apa yang korelasinya paling kuat (positif/negatif) dengan mpg?
 - Apakah korelasi kuat selalu berarti hubungan kausal? Jelaskan singkat.
 
@@ -95,7 +95,7 @@ summary(model_simple)
 coef(model_simple)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 
 - Jika koefisien `wt` bernilai negatif, artinya apa (dalam konteks kendaraan)?
 - Apa perbedaan makna **p-value** vs **R-squared** pada output `summary()`?
@@ -111,7 +111,7 @@ model_multiple <- lm(mpg ~ wt + hp + cyl, data = mtcars)
 summary(model_multiple)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 
 - Apakah `wt` tetap signifikan setelah menambahkan `hp` dan `cyl`? Jika berubah, kira-kira kenapa?
 - Jika R-squared meningkat pada model berganda, apakah itu otomatis berarti model lebih baik?
@@ -134,7 +134,7 @@ par(mfrow = c(1, 1))
 - **Scale-Location**: cek varians residual konstan.
 - **Residuals vs Leverage**: cek pengaruh titik ekstrem.
 
-### Pertanyaan AfL
+### Pertanyaan
 - Plot mana yang paling “mengkhawatirkan” jika tujuan Anda inferensi (uji hipotesis koefisien)?
 - Jika residual tidak normal, apakah regresi selalu “tidak boleh dipakai”? Dalam konteks apa masih bisa diterima?
 
@@ -161,7 +161,7 @@ model_robust <- rlm(mpg ~ wt + hp + cyl, data = mtcars)
 summary(model_robust)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 - Kapan transformasi log lebih masuk akal daripada menambah prediktor baru?
 - Mengapa regresi robust bisa membantu ketika ada outlier?
 
@@ -196,7 +196,7 @@ plot(test$mpg, pred,
 abline(a = 0, b = 1)
 ```
 
-### Pertanyaan AfL
+### Pertanyaan
 
 - Jika MSE kecil, apa artinya secara praktis?
 - Jika model sangat bagus di training tetapi buruk di test, itu indikasi apa?
@@ -213,7 +213,7 @@ Gunakan format ringkas berikut:
 4. **Validasi**: tampilkan MSE test set.
 5. **Kesimpulan**: 2–4 kalimat yang menyambungkan hasil ke konteks.
 
-### Mini-Tugas AfL (Wajib)
+### Mini-Tugas (Wajib)
 
 1. Buat 1 paragraf interpretasi untuk `model_multiple` (maks. 120 kata).
 2. Sebutkan 1 potensi masalah asumsi dari plot diagnostik dan usulan perbaikannya.

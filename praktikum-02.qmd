@@ -15,7 +15,7 @@ Setelah praktikum ini, Anda mampu:
 5.  Membandingkan distribusi data sebelum dan sesudah transformasi menggunakan visualisasi.
 6.  Merefleksikan dampak transformasi terhadap interpretasi analisis.
 
-> **Catatan AfL:** Pada beberapa bagian, Anda diminta *memprediksi* bentuk distribusi/hasil sebelum menjalankan kode, lalu membandingkan dengan output yang muncul.
+> **Catatan:** Pada beberapa bagian, Anda diminta *memprediksi* bentuk distribusi/hasil sebelum menjalankan kode, lalu membandingkan dengan output yang muncul.
 
 ------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ Transformasi data sering dipakai ketika:
 -   Varians meningkat seiring nilai (indikasi heteroskedastisitas),
 -   Hubungan antar-variabel kurang linear.
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 -   Sebelum melihat grafik, menurut Anda data pendapatan biasanya condong ke kiri atau ke kanan? Mengapa?
 -   Jika kita ingin membuat hubungan lebih “linear”, transformasi apa yang paling masuk akal?
@@ -71,7 +71,7 @@ hist(log_income_ln, main = "Setelah Transformasi Log (ln)", xlab = "ln(Pendapata
 par(mfrow = c(1, 1))
 ```
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 -   Sebelum menjalankan histogram kedua: apakah Anda memprediksi distribusi akan “lebih simetris”? Kenapa?
 -   Setelah melihat histogram: perubahan apa yang paling jelas (rentang, puncak, kemiringan)?
@@ -104,7 +104,7 @@ log_x_shift <- log(x + k)
 data.frame(x=x, x_plus_k=x+k, ln_shift=log_x_shift)
 ```
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 -   Apa konsekuensi interpretasi ketika kita menambahkan konstanta sebelum log?
 -   Dalam konteks data nyata, kapan strategi ini “cukup”, dan kapan perlu metode lain (mis. model khusus, transformasi lain)?
@@ -149,7 +149,7 @@ hist(data_sq, main = "Setelah Transformasi Kuadrat", xlab = "Data^2", ylab = "Fr
 par(mfrow = c(1, 1))
 ```
 
-### Pertanyaan Reflektif (AfL)
+### Pertanyaan Reflektif
 
 -   Transformasi kuadrat membuat nilai besar makin besar. Menurut Anda ini cocok untuk mengatasi skewness ke arah mana (kiri/kanan)?
 -   Transformasi akar (sqrt) “mengecilkan” nilai besar. Kapan transformasi ini lebih tepat?
@@ -157,7 +157,7 @@ par(mfrow = c(1, 1))
 
 ------------------------------------------------------------------------
 
-## 5. Mini-Tugas Praktikum (AfL): Prediksi → Jalankan → Jelaskan
+## 5. Mini-Tugas Praktikum: Prediksi → Jalankan → Jelaskan
 
 ### Tugas A — Coba Log2 dan Log10 + Bandingkan
 
@@ -206,6 +206,6 @@ par(mfrow=c(1,1))
 -   **Pangkat**: bisa memperbesar atau mengecilkan nilai besar (tergantung pangkat/akar).
 -   Selalu cek **validitas domain** (nol/negatif) dan dampak **interpretasi**.
 
-### Jurnal Refleksi (AfL)
+### Jurnal Refleksi
 
 Jawab singkat: 1. Transformasi mana yang paling “masuk akal” untuk data pendapatan? Mengapa? 2. Kesalahan apa yang paling mungkin terjadi saat melakukan log transform? 3. Jika grafik sudah tampak normal setelah transformasi, apa langkah analisis berikutnya yang Anda usulkan?
