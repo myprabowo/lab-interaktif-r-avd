@@ -1,0 +1,490 @@
+---
+title: "Praktikum Visualisasi Data Interaktif"
+format: live-html
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Dokumen ini memperkenalkan **visualisasi data interaktif** menggunakan **Shiny** — framework R untuk membangun aplikasi web yang bisa dioperasikan oleh pengguna tanpa menulis kode.
+
+> **Catatan Penting:** Kode Shiny di halaman ini **tidak dapat dijalankan langsung di browser**. Salin setiap blok kode ke **RStudio**, simpan sebagai `app.R`, lalu klik **Run App**.
+
+Yang akan dipelajari:
+
+- Struktur dasar aplikasi Shiny (UI + Server)
+- Elemen input: dropdown, slider, checkbox
+- Output: plot, teks, tabel
+- Membuat plot interaktif yang merespons input pengguna
+
+---
+
+## 1. Apa Itu Visualisasi Interaktif?
+
+Visualisasi **statis** (seperti `plot()` atau `ggplot2`) menghasilkan gambar tetap yang tidak bisa diubah oleh pengguna. Visualisasi **interaktif** memungkinkan pengguna untuk:
+
+- **Memilih** variabel yang ingin ditampilkan
+- **Mengatur** parameter (jumlah bin, rentang data)
+- **Menjelajahi** data secara mandiri tanpa menulis kode
+
+### Perbandingan Cepat
+
+| | Statis | Interaktif (Shiny) |
+|---|---|---|
+| Output | Gambar PNG/PDF | Aplikasi web |
+| Pengguna | Hanya melihat | Bisa berinteraksi |
+| Kebutuhan | `plot()` / `ggplot2` | `library(shiny)` |
+| Cocok untuk | Laporan, paper | Dashboard, eksplorasi |
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan interaktif lebih baik dari statis?"}
+Pilih visualisasi **interaktif** ketika:  
+(1) Pengguna perlu menjelajahi berbagai subset data  
+(2) Ada banyak variabel yang bisa dipilih  
+(3) Audiens adalah pengambil keputusan non-teknis yang ingin eksplorasi mandiri  
+
+Tetap gunakan visualisasi **statis** untuk laporan akademis, jurnal, atau ketika hanya ada satu tampilan yang perlu dikomunikasikan.
+:::
+
+**Pertanyaan:** Untuk presentasi hasil skripsi, mana yang lebih tepat — statis atau interaktif?
+
+---
+
+## 2. Struktur Dasar Aplikasi Shiny
+
+Setiap aplikasi Shiny tersusun dari **dua bagian**:
+
+```
+app.R
+├── ui     → Tampilan: apa yang dilihat pengguna
+└── server → Logika: bagaimana data diproses
+```
+
+### 2.1 Template Paling Minimal
+
+```{webr}
+#| eval: false
+
+# Salin ke RStudio → simpan sebagai app.R → klik Run App
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Aplikasi Pertama Saya"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      p("Kontrol di sini.")
+    ),
+    mainPanel(
+      p("Output di sini.")
+    )
+  )
+)
+
+server <- function(input, output) {
+  # Logika di sini (kosong untuk sekarang)
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa UI dan Server dipisahkan?"}
+Pemisahan UI dan Server mengikuti prinsip **separation of concerns**:  
+- **UI** mendeskripsikan *apa* yang ditampilkan  
+- **Server** mendeskripsikan *bagaimana* data diproses  
+
+Ini membuat kode lebih mudah dibaca, diuji, dan dimodifikasi. Perubahan tampilan tidak perlu menyentuh logika, dan sebaliknya.
+:::
+
+**Pertanyaan:** Jika Anda ingin mengubah warna latar belakang aplikasi, di bagian mana (UI atau Server) perubahan itu dilakukan?
+
+---
+
+## 3. Histogram Interaktif dengan Input Dropdown dan Slider
+
+Aplikasi ini memungkinkan pengguna memilih variabel dari `mtcars` dan mengatur jumlah bin histogram.
+
+```{webr}
+#| eval: false
+
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Histogram Interaktif – mtcars"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      # Input 1: dropdown untuk memilih variabel
+      selectInput(
+        inputId  = "variabel",
+        label    = "Pilih Variabel:",
+        choices  = colnames(mtcars)[sapply(mtcars, is.numeric)],
+        selected = "mpg"
+      ),
+      
+      # Input 2: slider untuk jumlah bin
+      sliderInput(
+        inputId = "bins",
+        label   = "Jumlah Bin:",
+        min = 5, max = 50, value = 15
+      )
+    ),
+    
+    mainPanel(
+      # Output: histogram
+      plotOutput("histogram"),
+      hr(),
+      # Output: ringkasan statistik
+      verbatimTextOutput("ringkasan")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  # reactive(): hitung data saat input berubah
+  data_dipilih <- reactive({
+    mtcars[[input$variabel]]
+  })
+  
+  # renderPlot(): buat histogram
+  output$histogram <- renderPlot({
+    x    <- data_dipilih()
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    
+    hist(x, breaks = bins, col = "steelblue", border = "white",
+         main = paste("Histogram:", input$variabel),
+         xlab = input$variabel, ylab = "Frekuensi")
+  })
+  
+  # renderPrint(): tampilkan ringkasan
+  output$ringkasan <- renderPrint({
+    summary(data_dipilih())
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+### Yang Terjadi Saat Anda Mengubah Input
+
+1. Pengguna geser slider → nilai `input$bins` berubah
+2. Shiny mendeteksi perubahan pada `data_dipilih` (reactive)
+3. `output$histogram` otomatis di-*render* ulang dengan data baru
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa itu reactive() dan mengapa digunakan?"}
+`reactive()` membuat "blok kode yang otomatis dijalankan ulang" saat input yang digunakannya berubah. Tanpa `reactive()`, Anda harus menduplikasi kode pemrosesan di setiap `renderXxx()`. Dengan `reactive()`, perhitungan cukup dilakukan sekali dan hasilnya bisa dipakai di banyak output.
+:::
+
+**Pertanyaan:** Mengapa `data_dipilih` didefinisikan sebagai `reactive()` dan bukan langsung `mtcars[[input$variabel]]` di dalam `renderPlot()`?
+
+---
+
+## 4. Menambahkan Tabel Interaktif
+
+Paket `DT` menampilkan data frame sebagai tabel yang bisa dicari, diurutkan, dan difilter.
+
+```{webr}
+#| eval: false
+
+library(shiny)
+library(DT)
+
+ui <- fluidPage(
+  titlePanel("Plot + Tabel Interaktif"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("variabel", "Pilih Variabel:",
+                  choices = colnames(mtcars)[sapply(mtcars, is.numeric)]),
+      sliderInput("bins", "Jumlah Bin:", min = 5, max = 50, value = 15)
+    ),
+    
+    mainPanel(
+      # tabsetPanel: tampilkan output dalam tab terpisah
+      tabsetPanel(
+        tabPanel("Histogram", plotOutput("histogram")),
+        tabPanel("Data Lengkap", DTOutput("tabel"))
+      )
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  output$histogram <- renderPlot({
+    x    <- mtcars[[input$variabel]]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(x, breaks = bins, col = "steelblue", border = "white",
+         main = paste("Histogram:", input$variabel), xlab = input$variabel)
+  })
+  
+  output$tabel <- renderDT({
+    datatable(mtcars, options = list(pageLength = 10, scrollX = TRUE))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa keunggulan tabsetPanel?"}
+`tabsetPanel()` memisahkan beberapa output ke dalam tab berbeda, sehingga halaman tidak terlalu penuh. Pengguna bisa fokus pada satu tampilan sekaligus tanpa scrolling berlebihan. Ini praktik UI yang baik ketika ada beberapa jenis output (plot, tabel, ringkasan).
+:::
+
+**Pertanyaan:** Apa perbedaan antara `renderPlot()` dan `renderDT()`? Mengapa tidak bisa ditukar?
+
+---
+
+## 5. Scatter Plot Interaktif
+
+Pengguna bisa memilih variabel untuk sumbu X dan Y, serta mengaktifkan garis regresi.
+
+```{webr}
+#| eval: false
+
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Scatter Plot Interaktif – mtcars"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("xvar", "Sumbu X:",
+                  choices  = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                  selected = "wt"),
+      selectInput("yvar", "Sumbu Y:",
+                  choices  = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                  selected = "mpg"),
+      checkboxInput("garis", "Tampilkan garis regresi", value = FALSE)
+    ),
+    
+    mainPanel(
+      plotOutput("scatter"),
+      textOutput("korelasi")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  output$scatter <- renderPlot({
+    x <- mtcars[[input$xvar]]
+    y <- mtcars[[input$yvar]]
+    
+    plot(x, y,
+         xlab = input$xvar, ylab = input$yvar,
+         main = paste("Scatter:", input$xvar, "vs", input$yvar),
+         pch  = 16, col = "steelblue", cex = 1.3)
+    
+    if (input$garis) {
+      abline(lm(y ~ x), col = "tomato", lwd = 2)
+    }
+  })
+  
+  output$korelasi <- renderText({
+    r <- cor(mtcars[[input$xvar]], mtcars[[input$yvar]])
+    paste("Korelasi Pearson:", round(r, 4))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa itu checkboxInput dan bagaimana membacanya di server?"}
+`checkboxInput()` mengembalikan nilai `TRUE` (dicentang) atau `FALSE` (tidak dicentang). Di server, nilai ini diakses via `input$garis`. Pernyataan `if (input$garis) { ... }` berarti "jalankan kode di dalam kurung kurawal hanya jika kotak dicentang".
+:::
+
+**Pertanyaan:** Jika korelasi antara dua variabel mendekati 0, apakah masuk akal menampilkan garis regresi? Mengapa?
+
+---
+
+## 6. Referensi Elemen Input Shiny
+
+| Fungsi | Jenis Kontrol | Nilai yang Dikembalikan |
+|---|---|---|
+| `selectInput()` | Dropdown | String (nama pilihan) |
+| `sliderInput()` | Slider | Angka |
+| `checkboxInput()` | Kotak centang | `TRUE` / `FALSE` |
+| `radioButtons()` | Tombol pilihan | String |
+| `textInput()` | Kotak teks | String |
+| `numericInput()` | Kotak angka | Angka |
+
+---
+
+## 7. Latihan
+
+### Latihan 1 — Mudah: Tambahkan Input Warna
+
+Modifikasi aplikasi **Bagian 3** (Histogram) dengan menambahkan dropdown untuk memilih warna histogram.
+
+```{webr}
+#| eval: false
+
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Histogram dengan Pilihan Warna"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("variabel", "Variabel:",
+                  choices = colnames(mtcars)[sapply(mtcars, is.numeric)]),
+      sliderInput("bins", "Jumlah Bin:", min = 5, max = 50, value = 15),
+      
+      # Tambahkan selectInput untuk warna di sini
+      selectInput(
+        inputId  = "___",         # isi nama input ID
+        label    = "Warna:",
+        choices  = c("___", "___", "___"),   # isi 3 pilihan warna
+        selected = "___"
+      )
+    ),
+    mainPanel(
+      plotOutput("histogram")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$histogram <- renderPlot({
+    x    <- mtcars[[input$variabel]]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(x, breaks = bins,
+         col    = input$___,    # gunakan input warna
+         border = "white",
+         main   = paste("Histogram:", input$variabel),
+         xlab   = input$variabel)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+```r
+# Bagian UI — tambahkan di sidebarPanel:
+selectInput(
+  inputId  = "warna",
+  label    = "Warna:",
+  choices  = c("steelblue", "tomato", "forestgreen"),
+  selected = "steelblue"
+)
+
+# Bagian Server — ubah col di hist():
+col = input$warna,
+```
+:::
+
+---
+
+### Latihan 2 — Mudah: Tambahkan Output Teks Mean dan Median
+
+Lanjutkan dari Latihan 1. Tambahkan `textOutput("statistik")` di UI dan `renderText()` di server yang menampilkan nilai **mean** dan **median** variabel yang dipilih.
+
+```{webr}
+#| eval: false
+
+# Di bagian mainPanel (UI), tambahkan:
+# textOutput("statistik")
+
+# Di bagian server, tambahkan:
+output$statistik <- renderText({
+  x <- mtcars[[input$variabel]]
+  paste0(
+    "Mean: ",   round(___(x), 2),    # isi fungsi mean
+    " | Median: ", round(___(x), 2)  # isi fungsi median
+  )
+})
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+```r
+# UI — di dalam mainPanel():
+plotOutput("histogram"),
+textOutput("statistik")
+
+# Server:
+output$statistik <- renderText({
+  x <- mtcars[[input$variabel]]
+  paste0(
+    "Mean: ",    round(mean(x), 2),
+    " | Median: ", round(median(x), 2)
+  )
+})
+```
+:::
+
+---
+
+### Latihan 3 — Sedang: Scatter Plot dengan Pilihan Kelompok Warna
+
+Modifikasi aplikasi Scatter Plot (Bagian 5) agar titik-titik diwarnai berdasarkan variabel kategori yang dipilih pengguna (misalnya `cyl` atau `gear`).
+
+```{webr}
+#| eval: false
+
+library(shiny)
+
+# Variabel yang bersifat kategori di mtcars
+var_kategori <- c("cyl", "gear", "carb", "vs", "am")
+
+ui <- fluidPage(
+  titlePanel("Scatter Plot dengan Pewarnaan Kelompok"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("xvar", "Sumbu X:",
+                  choices = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                  selected = "wt"),
+      selectInput("yvar", "Sumbu Y:",
+                  choices = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                  selected = "mpg"),
+      selectInput("grp", "Warna berdasarkan:",
+                  choices = ___)   # isi dengan var_kategori
+    ),
+    mainPanel(plotOutput("scatter"))
+  )
+)
+
+server <- function(input, output) {
+  output$scatter <- renderPlot({
+    x   <- mtcars[[input$xvar]]
+    y   <- mtcars[[input$yvar]]
+    grp <- as.factor(mtcars[[___]])   # isi dengan input grup
+
+    plot(x, y,
+         col  = as.integer(grp),
+         pch  = 16, cex = 1.3,
+         xlab = input$xvar, ylab = input$yvar,
+         main = paste("Scatter:", input$xvar, "vs", input$yvar,
+                      "— warna:", input$grp))
+    legend("topright", legend = levels(grp),
+           col = seq_along(levels(grp)), pch = 16)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+```r
+# Di selectInput untuk grup:
+choices = var_kategori
+
+# Di renderPlot, untuk mengakses variabel grup:
+grp <- as.factor(mtcars[[input$grp]])
+```
+`as.factor()` mengubah kolom numerik seperti `cyl` menjadi kategori, sehingga setiap nilai unik mendapat warna berbeda. `as.integer(grp)` mengubah faktor menjadi angka untuk digunakan sebagai indeks warna.
+:::
+
+---
+
+## Ringkasan
+
+| Fungsi Shiny | Tipe | Keterangan |
+|---|---|---|
+| `selectInput()` | Input | Dropdown pilihan |
+| `sliderInput()` | Input | Slider angka |
+| `checkboxInput()` | Input | Kotak centang TRUE/FALSE |
+| `reactive()` | Reaktif | Kalkulasi yang diperbarui otomatis |
+| `renderPlot()` | Output | Menghasilkan grafik |
+| `renderPrint()` | Output | Menghasilkan teks/ringkasan |
+| `renderText()` | Output | Menghasilkan teks sederhana |
+| `renderDT()` | Output | Menghasilkan tabel interaktif |

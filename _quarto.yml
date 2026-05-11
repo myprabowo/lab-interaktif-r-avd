@@ -26,7 +26,18 @@ website:
           - href: praktikum-03.qmd
             text: Praktikum 03 – Penanganan Data Hilang
           - href: praktikum-04.qmd
-            text: Praktikum 04 – Analisis Regresi
+            text: Praktikum 04 – Analisis Regresi Eksplorasi
+          - text: "---"
+          - href: praktikum-05.qmd
+            text: Praktikum 05 – Regresi Konfirmasi
+          - href: praktikum-06.qmd
+            text: Praktikum 06 – Analisis Data Teks
+          - href: praktikum-07.qmd
+            text: Praktikum 07 – Visualisasi Data Teks
+          - href: praktikum-08.qmd
+            text: Praktikum 08 – Visualisasi Interaktif
+          - href: praktikum-09.qmd
+            text: Praktikum 09 – Dashboard Interaktif
         
     right:
       - icon: linkedin

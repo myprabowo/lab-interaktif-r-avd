@@ -1,0 +1,503 @@
+---
+title: "Praktikum Dashboard Interaktif"
+format: live-html
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Dokumen ini membahas cara membangun **dashboard interaktif** di R menggunakan **Shiny** dan paket `shinydashboard` — tampilan yang lebih terstruktur dibanding aplikasi Shiny biasa.
+
+> **Catatan:** Kode di halaman ini dijalankan di **RStudio**. Salin blok kode ke file `app.R`, lalu klik **Run App**.
+
+Yang akan dipelajari:
+
+- Perbedaan Shiny biasa dan `shinydashboard`
+- Struktur layout dashboard (header, sidebar, body)
+- Menampilkan beberapa visualisasi sekaligus dalam satu dashboard
+- Mendistribusikan aplikasi ke shinyapps.io
+
+---
+
+## 1. Shinydashboard vs Shiny Biasa
+
+`shinydashboard` adalah ekstensi Shiny yang menyediakan template dashboard siap pakai — lengkap dengan header, sidebar menu, dan kotak konten (*box*).
+
+### Instalasi
+
+```{webr}
+#| eval: false
+
+install.packages("shiny")
+install.packages("shinydashboard")
+install.packages("ggplot2")
+install.packages("DT")
+```
+
+### Perbandingan Struktur
+
+| | Shiny Biasa | shinydashboard |
+|---|---|---|
+| Layout utama | `fluidPage()` | `dashboardPage()` |
+| Navigasi | `tabsetPanel()` | `dashboardSidebar()` + `menuItem()` |
+| Konten | Bebas | Dalam `box()` |
+| Tampilan | Minimalis | Dashboard profesional |
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan perlu pakai shinydashboard?"}
+Gunakan `shinydashboard` ketika:  
+(1) Ada banyak visualisasi yang perlu diatur dalam satu halaman  
+(2) Dibutuhkan navigasi antar halaman/tab  
+(3) Audiens mengharapkan tampilan seperti business intelligence dashboard  
+
+Cukup gunakan `shiny` biasa untuk aplikasi dengan satu atau dua visualisasi sederhana.
+:::
+
+**Pertanyaan:** Jika Anda hanya perlu menampilkan satu histogram interaktif, apakah perlu `shinydashboard`?
+
+---
+
+## 2. Struktur Dasar Dashboard
+
+```{webr}
+#| eval: false
+
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(DT)
+
+# ───── UI ──────────────────────────────────────────────────
+ui <- dashboardPage(
+
+  # 1. Header: judul di pojok kiri atas
+  dashboardHeader(title = "Dashboard Analisis Data"),
+
+  # 2. Sidebar: menu navigasi
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Beranda",    tabName = "beranda",   icon = icon("home")),
+      menuItem("Tabel Data", tabName = "tabel_data", icon = icon("table"))
+    )
+  ),
+
+  # 3. Body: konten tiap tab
+  dashboardBody(
+    tabItems(
+
+      # Tab 1: Beranda
+      tabItem(tabName = "beranda",
+        fluidRow(
+          box(title = "Histogram", status = "primary", solidHeader = TRUE,
+              width = 8,
+              plotOutput("plot_histogram", height = 300)),
+          box(title = "Kontrol", status = "warning", solidHeader = TRUE,
+              width = 4,
+              sliderInput("bins", "Jumlah Bin:", min = 5, max = 50, value = 20))
+        )
+      ),
+
+      # Tab 2: Tabel Data
+      tabItem(tabName = "tabel_data",
+        fluidRow(
+          box(title = "Dataset faithful", status = "primary", solidHeader = TRUE,
+              width = 12,
+              DTOutput("tabel_data"))
+        )
+      )
+    )
+  )
+)
+
+# ───── Server ──────────────────────────────────────────────
+server <- function(input, output) {
+
+  output$plot_histogram <- renderPlot({
+    x    <- faithful$eruptions
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(x, breaks = bins, col = "steelblue", border = "white",
+         main = "Durasi Letusan Geyser Old Faithful",
+         xlab = "Durasi (menit)")
+  })
+
+  output$tabel_data <- renderDT({
+    datatable(faithful, options = list(pageLength = 10))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa fungsi status dan solidHeader pada box()?"}
+- `status`: warna garis atas box — `"primary"` (biru), `"warning"` (kuning), `"danger"` (merah), `"success"` (hijau)  
+- `solidHeader = TRUE`: mengisi header box dengan warna penuh (lebih mencolok)  
+- `width`: lebar dalam grid 12 kolom Bootstrap — `width = 6` artinya setengah layar
+:::
+
+**Pertanyaan:** Apa yang terjadi jika dua box dalam satu `fluidRow()` memiliki `width = 8` dan `width = 6`? (Total > 12)
+
+---
+
+## 3. Dashboard dengan Beberapa Tab dan Visualisasi
+
+```{webr}
+#| eval: false
+
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(DT)
+
+ui <- dashboardPage(
+  dashboardHeader(title = "Dashboard mtcars"),
+
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Histogram",    tabName = "hist",    icon = icon("chart-bar")),
+      menuItem("Scatter Plot", tabName = "scatter", icon = icon("circle-dot")),
+      menuItem("Data",         tabName = "data",    icon = icon("table"))
+    )
+  ),
+
+  dashboardBody(
+    tabItems(
+
+      # Tab 1: Histogram
+      tabItem(tabName = "hist",
+        fluidRow(
+          box(title = "Kontrol", status = "warning", solidHeader = TRUE, width = 4,
+              selectInput("var_hist", "Variabel:",
+                          choices  = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                          selected = "mpg"),
+              sliderInput("bins_hist", "Jumlah Bin:", min = 5, max = 50, value = 15)
+          ),
+          box(title = "Histogram", status = "primary", solidHeader = TRUE, width = 8,
+              plotOutput("histogram"))
+        )
+      ),
+
+      # Tab 2: Scatter Plot
+      tabItem(tabName = "scatter",
+        fluidRow(
+          box(title = "Kontrol", status = "warning", solidHeader = TRUE, width = 4,
+              selectInput("xvar", "Sumbu X:",
+                          choices = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                          selected = "wt"),
+              selectInput("yvar", "Sumbu Y:",
+                          choices = colnames(mtcars)[sapply(mtcars, is.numeric)],
+                          selected = "mpg"),
+              checkboxInput("reg_line", "Garis regresi", value = FALSE)
+          ),
+          box(title = "Scatter Plot", status = "primary", solidHeader = TRUE, width = 8,
+              plotOutput("scatter"),
+              textOutput("korelasi_teks"))
+        )
+      ),
+
+      # Tab 3: Tabel
+      tabItem(tabName = "data",
+        fluidRow(
+          box(title = "Dataset mtcars", status = "primary", solidHeader = TRUE,
+              width = 12, DTOutput("tabel"))
+        )
+      )
+    )
+  )
+)
+
+server <- function(input, output) {
+
+  output$histogram <- renderPlot({
+    x    <- mtcars[[input$var_hist]]
+    bins <- seq(min(x), max(x), length.out = input$bins_hist + 1)
+    hist(x, breaks = bins, col = "steelblue", border = "white",
+         main = paste("Histogram:", input$var_hist), xlab = input$var_hist)
+  })
+
+  output$scatter <- renderPlot({
+    x <- mtcars[[input$xvar]]
+    y <- mtcars[[input$yvar]]
+    plot(x, y, pch = 16, col = "steelblue", cex = 1.2,
+         xlab = input$xvar, ylab = input$yvar,
+         main = paste(input$xvar, "vs", input$yvar))
+    if (input$reg_line) abline(lm(y ~ x), col = "tomato", lwd = 2)
+  })
+
+  output$korelasi_teks <- renderText({
+    r <- cor(mtcars[[input$xvar]], mtcars[[input$yvar]])
+    paste("Korelasi Pearson:", round(r, 4))
+  })
+
+  output$tabel <- renderDT({
+    datatable(mtcars, options = list(pageLength = 10, scrollX = TRUE))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Cara membaca tab dari sidebar yang dipilih"}
+`tabName` di `menuItem()` harus **persis sama** dengan `tabName` di `tabItem()`. Shiny menggunakan string ini sebagai penghubung antara klik menu dan konten yang ditampilkan. Kesalahan ejaan akan membuat tab tidak muncul tanpa pesan error.
+:::
+
+**Pertanyaan:** Jika dua `menuItem()` memiliki `tabName` yang sama, apa yang terjadi?
+
+---
+
+## 4. Mendistribusikan Dashboard ke Shinyapps.io
+
+Setelah dashboard selesai, Anda bisa membagikannya melalui internet menggunakan **shinyapps.io** (gratis untuk penggunaan terbatas).
+
+### Langkah-langkah
+
+```{webr}
+#| eval: false
+
+# Langkah 1: Install paket rsconnect
+install.packages("rsconnect")
+
+# Langkah 2: Hubungkan akun shinyapps.io
+# (token tersedia di dashboard shinyapps.io → Account → Tokens)
+library(rsconnect)
+rsconnect::setAccountInfo(
+  name   = "<USERNAME_ANDA>",
+  token  = "<TOKEN_ANDA>",
+  secret = "<SECRET_ANDA>"
+)
+
+# Langkah 3: Deploy aplikasi
+rsconnect::deployApp("path/ke/folder/app")
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Di mana mendapatkan token shinyapps.io?"}
+1. Buka [shinyapps.io](https://www.shinyapps.io) dan buat akun gratis  
+2. Login → klik nama pengguna di pojok kanan atas → **Tokens**  
+3. Klik **Show** untuk melihat token dan secret  
+4. Salin dan tempel ke `rsconnect::setAccountInfo()`  
+
+Alternatif: di RStudio, klik **Publish** (ikon biru) di pojok kanan atas editor saat file `app.R` terbuka.
+:::
+
+**Pertanyaan:** Apa batasan akun gratis shinyapps.io yang perlu diperhatikan sebelum deploy?
+
+---
+
+## 5. Latihan
+
+### Latihan 1 — Mudah: Tambahkan `valueBox` di Beranda
+
+`valueBox` menampilkan angka ringkasan (seperti total, rata-rata) di kotak kecil yang mencolok — umum dalam dashboard bisnis.
+
+Tambahkan tiga `valueBox` di Tab "Beranda" pada dashboard Bagian 2 yang menampilkan **mean**, **min**, dan **max** dari variabel yang dipilih.
+
+```{webr}
+#| eval: false
+
+# Tambahkan di fluidRow baru di Tab beranda (UI):
+fluidRow(
+  valueBox(
+    value    = textOutput("mean_val"),
+    subtitle = "Rata-rata",
+    icon     = icon("___"),         # pilih ikon: "calculator", "chart-line", dll.
+    color    = "blue"
+  ),
+  valueBox(
+    value    = textOutput("min_val"),
+    subtitle = "Minimum",
+    icon     = icon("arrow-down"),
+    color    = "___"               # pilih warna: "red", "yellow", "green"
+  ),
+  valueBox(
+    value    = textOutput("max_val"),
+    subtitle = "Maksimum",
+    icon     = icon("arrow-up"),
+    color    = "green"
+  )
+)
+
+# Tambahkan di server:
+output$mean_val <- renderText({ round(mean(faithful$eruptions), 2) })
+output$min_val  <- renderText({ round(___(faithful$eruptions), 2) })   # isi fungsi
+output$max_val  <- renderText({ round(___(faithful$eruptions), 2) })   # isi fungsi
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+```r
+# UI:
+icon("calculator"), color = "blue"
+color = "red"
+
+# Server:
+output$min_val <- renderText({ round(min(faithful$eruptions), 2) })
+output$max_val <- renderText({ round(max(faithful$eruptions), 2) })
+```
+Warna yang tersedia: `"blue"`, `"black"`, `"purple"`, `"green"`, `"yellow"`, `"red"`, `"orange"`, `"navy"`, `"teal"`, `"olive"`, `"lime"`, `"fuchsia"`, `"maroon"`, `"aqua"`.
+:::
+
+---
+
+### Latihan 2 — Mudah: Tambahkan Tab Baru "Boxplot"
+
+Tambahkan tab ketiga pada dashboard Bagian 3 yang menampilkan **boxplot** dari variabel mtcars yang dipilih pengguna.
+
+```{webr}
+#| eval: false
+
+# Di dashboardSidebar, tambahkan:
+menuItem("Boxplot", tabName = "___", icon = icon("box"))
+
+# Di dashboardBody, tambahkan tabItem baru:
+tabItem(tabName = "___",
+  fluidRow(
+    box(title = "Kontrol Boxplot", status = "warning", solidHeader = TRUE, width = 4,
+        selectInput("var_box", "Variabel:", 
+                    choices = colnames(mtcars)[sapply(mtcars, is.numeric)])
+    ),
+    box(title = "Boxplot", status = "primary", solidHeader = TRUE, width = 8,
+        plotOutput("boxplot_out"))
+  )
+)
+
+# Di server, tambahkan:
+output$boxplot_out <- renderPlot({
+  boxplot(
+    mtcars[[input$var_box]],
+    col  = "___",              # pilih warna
+    main = paste("Boxplot:", input$var_box),
+    ylab = input$var_box
+  )
+})
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+```r
+# tabName yang konsisten antara menuItem dan tabItem:
+tabName = "boxplot"
+
+# renderPlot untuk boxplot:
+output$boxplot_out <- renderPlot({
+  boxplot(
+    mtcars[[input$var_box]],
+    col  = "steelblue",
+    main = paste("Boxplot:", input$var_box),
+    ylab = input$var_box
+  )
+})
+```
+:::
+
+---
+
+### Latihan 3 — Sedang: Dashboard Lengkap dari Awal
+
+Buat dashboard baru menggunakan dataset `iris` (bawaan R) dengan spesifikasi:
+
+- **Tab 1 "Eksplorasi"**: scatter plot sepal length vs sepal width, diwarnai berdasarkan `Species`
+- **Tab 2 "Distribusi"**: histogram salah satu variabel numerik (bisa dipilih lewat dropdown)
+- **Tab 3 "Data"**: tabel lengkap dataset `iris`
+
+```{webr}
+#| eval: false
+
+library(shiny)
+library(shinydashboard)
+library(DT)
+
+# Variabel numerik iris
+var_iris <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+
+ui <- dashboardPage(
+  dashboardHeader(title = "___"),          # isi judul dashboard
+
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Eksplorasi",  tabName = "___", icon = icon("circle-dot")),
+      menuItem("Distribusi",  tabName = "___", icon = icon("chart-bar")),
+      menuItem("Data",        tabName = "___", icon = icon("table"))
+    )
+  ),
+
+  dashboardBody(
+    tabItems(
+      tabItem(tabName = "___",       # Tab 1: Scatter plot iris
+        fluidRow(
+          box(title = "Scatter Iris", status = "primary", solidHeader = TRUE,
+              width = 12, plotOutput("scatter_iris"))
+        )
+      ),
+      tabItem(tabName = "___",       # Tab 2: Histogram
+        fluidRow(
+          box(title = "Kontrol", status = "warning", solidHeader = TRUE, width = 4,
+              selectInput("var_dist", "Variabel:", choices = ___)),
+          box(title = "Histogram", status = "primary", solidHeader = TRUE, width = 8,
+              plotOutput("hist_iris"))
+        )
+      ),
+      tabItem(tabName = "___",       # Tab 3: Tabel
+        fluidRow(
+          box(width = 12, DTOutput("tabel_iris"))
+        )
+      )
+    )
+  )
+)
+
+server <- function(input, output) {
+
+  output$scatter_iris <- renderPlot({
+    plot(iris$Sepal.Length, iris$Sepal.Width,
+         col  = as.integer(iris$Species),
+         pch  = 16, cex = 1.2,
+         xlab = "Sepal Length", ylab = "Sepal Width",
+         main = "Scatter: Sepal Length vs Sepal Width")
+    legend("topright", legend = levels(iris$Species),
+           col = 1:3, pch = 16)
+  })
+
+  output$hist_iris <- renderPlot({
+    x <- iris[[input$var_dist]]
+    hist(x, col = "steelblue", border = "white",
+         main = paste("Distribusi:", input$var_dist),
+         xlab = input$var_dist)
+  })
+
+  output$tabel_iris <- renderDT({
+    datatable(___, options = list(pageLength = 10))   # isi nama dataset
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+```r
+# Header:
+dashboardHeader(title = "Dashboard Iris")
+
+# tabName yang konsisten (contoh):
+# menuItem → tabName = "eksplorasi", "distribusi", "data"
+# tabItem  → tabName = "eksplorasi", "distribusi", "data"
+
+# choices untuk histogram:
+choices = var_iris
+
+# Dataset untuk tabel:
+datatable(iris, options = list(pageLength = 10))
+```
+Pastikan setiap `tabName` di `menuItem()` sama persis dengan `tabName` di `tabItem()` yang sesuai.
+:::
+
+---
+
+## Ringkasan: Komponen Utama shinydashboard
+
+| Komponen | Fungsi |
+|---|---|
+| `dashboardPage()` | Pembungkus utama aplikasi |
+| `dashboardHeader()` | Bar atas dengan judul |
+| `dashboardSidebar()` + `sidebarMenu()` | Menu navigasi kiri |
+| `menuItem()` | Satu item navigasi |
+| `dashboardBody()` + `tabItems()` | Area konten utama |
+| `tabItem()` | Konten satu tab |
+| `box()` | Kotak konten dengan judul & warna |
+| `valueBox()` | Kotak angka ringkasan |
+| `fluidRow()` | Baris dalam grid 12 kolom |

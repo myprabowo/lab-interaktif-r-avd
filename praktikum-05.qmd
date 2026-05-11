@@ -1,0 +1,359 @@
+---
+title: "Praktikum Analisis Regresi Cara Konfirmasi"
+format: live-html
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Dokumen ini membahas **analisis regresi cara konfirmasi**, yaitu pendekatan yang berangkat dari hipotesis yang sudah ditetapkan sebelum melihat data. Berbeda dari eksplorasi yang bersifat terbuka, konfirmasi bertujuan menguji hipotesis secara formal menggunakan uji statistik.
+
+Yang akan dipelajari:
+
+- Konsep dan rumus garis regresi *least squares*
+- Menghitung koefisien regresi secara manual
+- Melakukan uji hipotesis formal terhadap koefisien regresi
+- Membandingkan model regresi sederhana dan berganda
+
+---
+
+## 1. Konsep: Garis Regresi Least Squares
+
+Metode *least squares* mencari garis $\hat{y} = ax + b$ yang **meminimalkan jumlah kuadrat jarak vertikal** setiap titik data ke garis tersebut.
+
+Rumus koefisiennya:
+
+$$a = \frac{n\sum x_i y_i - \sum x_i \sum y_i}{n\sum x_i^2 - \left(\sum x_i\right)^2}, \quad b = \frac{1}{n}\left(\sum y_i - a \sum x_i\right)$$
+
+```{webr}
+# Data sederhana: 3 titik
+x <- c(2, 1, 3)
+y <- c(1, 1, 2)
+
+n      <- length(x)
+sum_x  <- sum(x)
+sum_y  <- sum(y)
+sum_xy <- sum(x * y)
+sum_x2 <- sum(x^2)
+
+a <- (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x^2)
+b <- (sum_y - a * sum_x) / n
+
+cat("a (slope)    =", round(a, 4), "\n")
+cat("b (intercept)=", round(b, 4), "\n")
+cat("Persamaan: ŷ =", round(a, 4), "x +", round(b, 4), "\n")
+```
+
+```{webr}
+# Visualisasi garis regresi
+plot(x, y,
+     main = "Garis Regresi Least Squares",
+     xlab = "x", ylab = "y",
+     pch = 16, col = "steelblue", cex = 1.5,
+     xlim = c(0, 4), ylim = c(0, 3))
+abline(a = b, b = a, col = "tomato", lwd = 2)
+legend("topleft",
+       legend = paste0("ŷ = ", round(a, 2), "x + ", round(b, 2)),
+       col = "tomato", lwd = 2, bty = "n")
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa kuadrat, bukan nilai absolut?"}
+Mengkuadratkan deviasi membuat fungsi menjadi *smooth* dan *differentiable*, sehingga mudah diminimalkan secara matematis. Nilai absolut menghasilkan fungsi yang tidak mulus di titik nol dan lebih sulit dioptimalkan secara analitik.
+:::
+
+**Pertanyaan:** Mengapa kita meminimalkan kuadrat deviasi, bukan nilai absolutnya?
+
+---
+
+## 2. Studi Kasus: Data Penjualan Perusahaan
+
+Data penjualan produk (dalam miliar IDR) dari tahun 2019–2023:
+
+```{webr}
+tahun     <- c(2019, 2020, 2021, 2022, 2023)
+penjualan <- c(12, 19, 29, 37, 45)
+
+# Re-kode tahun → t = tahun - 2019 agar nilai lebih kecil
+t <- tahun - 2019
+
+data_penjualan <- data.frame(tahun = tahun, t = t, penjualan = penjualan)
+data_penjualan
+```
+
+```{webr}
+# Hitung koefisien manual
+n2     <- length(t)
+sum_t  <- sum(t)
+sum_y2 <- sum(penjualan)
+sum_ty <- sum(t * penjualan)
+sum_t2 <- sum(t^2)
+
+a2 <- (n2 * sum_ty - sum_t * sum_y2) / (n2 * sum_t2 - sum_t^2)
+b2 <- (sum_y2 - a2 * sum_t) / n2
+
+cat("Persamaan: ŷ =", round(a2, 2), "t +", round(b2, 2), "\n")
+```
+
+```{webr}
+# Estimasi penjualan 2024 (t = 5)
+t_2024    <- 2024 - 2019
+pred_2024 <- a2 * t_2024 + b2
+cat("Estimasi penjualan 2024: Rp", round(pred_2024, 2), "miliar\n")
+```
+
+### Verifikasi dengan `lm()`
+
+```{webr}
+model_penjualan <- lm(penjualan ~ t, data = data_penjualan)
+summary(model_penjualan)
+```
+
+```{webr}
+# Bandingkan manual vs lm()
+cat("Manual → a =", round(a2, 4), "| b =", round(b2, 4), "\n")
+cat("lm()   → a =", round(coef(model_penjualan)[2], 4),
+    "| b =", round(coef(model_penjualan)[1], 4), "\n")
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa arti koefisien a dalam konteks ini?"}
+Koefisien $a$ adalah **kemiringan (slope)**. Dalam konteks penjualan, $a \approx 8.3$ artinya setiap tahun berlalu, penjualan diperkirakan naik sekitar Rp 8,3 miliar. Ini adalah perubahan rata-rata per unit waktu.
+:::
+
+**Pertanyaan:** Apa arti nilai $a$ dalam konteks penjualan perusahaan ini?
+
+---
+
+## 3. Uji Hipotesis Formal
+
+Dalam pendekatan konfirmasi, hipotesis ditetapkan **sebelum** melihat data:
+
+- $H_0$: $\beta_1 = 0$ → tidak ada hubungan linear
+- $H_1$: $\beta_1 \neq 0$ → ada hubungan linear yang signifikan
+
+```{webr}
+data(mtcars)
+model_konfirmasi <- lm(mpg ~ wt, data = mtcars)
+summary(model_konfirmasi)
+```
+
+```{webr}
+# Ekstrak nilai penting
+k       <- coef(summary(model_konfirmasi))
+t_stat  <- k["wt", "t value"]
+p_val   <- k["wt", "Pr(>|t|)"]
+r_sq    <- summary(model_konfirmasi)$r.squared
+
+cat("t-statistik:", round(t_stat, 4), "\n")
+cat("p-value    :", format(p_val, scientific = TRUE), "\n")
+cat("R-squared  :", round(r_sq, 4), "\n")
+```
+
+```{webr}
+# Interval kepercayaan 95% untuk koefisien
+confint(model_konfirmasi, level = 0.95)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa artinya jika interval kepercayaan tidak mencakup nol?"}
+Jika interval kepercayaan **tidak** mencakup nol, kita punya bukti kuat bahwa koefisien tersebut berbeda dari nol secara statistik — artinya variabel prediktor memang memiliki pengaruh nyata. Jika interval mencakup nol, kita tidak bisa menyimpulkan hubungan yang signifikan.
+:::
+
+**Pertanyaan:** Interval kepercayaan koefisien `wt` mencakup nol atau tidak? Apa artinya?
+
+---
+
+## 4. Regresi Berganda
+
+Menambahkan prediktor: `hp` (tenaga kuda) dan `cyl` (jumlah silinder).
+
+```{webr}
+model_berganda <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+summary(model_berganda)
+```
+
+```{webr}
+# Uji F: apakah setidaknya satu prediktor signifikan?
+f_stat <- summary(model_berganda)$fstatistic
+p_f    <- pf(f_stat[1], f_stat[2], f_stat[3], lower.tail = FALSE)
+
+cat("F-statistik:", round(f_stat[1], 4), "\n")
+cat("p-value (F):", format(p_f, scientific = TRUE), "\n")
+```
+
+```{webr}
+# Bandingkan model sederhana vs berganda dengan ANOVA
+anova(model_konfirmasi, model_berganda)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa Adjusted R² lebih tepat untuk perbandingan model?"}
+R² selalu naik saat kita menambahkan prediktor baru, bahkan jika prediktor itu tidak relevan. **Adjusted R²** mengoreksi hal ini dengan memberikan penalti untuk setiap prediktor yang ditambahkan. Gunakan Adjusted R² saat membandingkan model dengan jumlah prediktor berbeda.
+:::
+
+**Pertanyaan:** Apakah `wt` tetap signifikan setelah menambahkan `hp` dan `cyl`? Mengapa bisa berubah?
+
+---
+
+## 5. Diagnostik Residual
+
+```{webr}
+par(mfrow = c(2, 2))
+plot(model_berganda)
+par(mfrow = c(1, 1))
+```
+
+**Panduan membaca plot:**
+
+| Plot | Yang Diperiksa |
+|---|---|
+| Residuals vs Fitted | Pola/linearitas, homoskedastisitas |
+| Normal Q-Q | Normalitas residual |
+| Scale-Location | Varians residual konstan |
+| Residuals vs Leverage | Titik ekstrem / *outlier* berpengaruh |
+
+```{webr}
+# Uji normalitas Shapiro-Wilk
+shapiro.test(residuals(model_berganda))
+```
+
+```{webr}
+# Uji multikolinearitas (Variance Inflation Factor)
+library(car)
+vif(model_berganda)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — VIF berapa yang mengkhawatirkan?"}
+**VIF (Variance Inflation Factor):**  
+- VIF < 5 → aman  
+- VIF 5–10 → perlu diwaspadai  
+- VIF > 10 → multikolinearitas serius, perlu tindakan (hapus variabel, PCA, dll.)
+:::
+
+**Pertanyaan:** Berdasarkan VIF, apakah ada multikolinearitas yang perlu dikhawatirkan?
+
+---
+
+## 6. Latihan
+
+### Latihan 1 — Mudah: Hitung Koefisien Manual
+
+Diberikan data berikut. Lengkapi kode untuk menghitung koefisien $a$ dan $b$.
+
+| x | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| y | 2 | 4 | 5 | 4 | 5 |
+
+```{webr}
+x_lat <- c(1, 2, 3, 4, 5)
+y_lat <- c(2, 4, 5, 4, 5)
+
+n_lat  <- length(x_lat)
+sum_xl <- ___          # Hitung jumlah x
+sum_yl <- ___          # Hitung jumlah y
+sum_xl_yl <- ___       # Hitung jumlah x*y
+sum_xl2   <- ___       # Hitung jumlah x^2
+
+a_lat <- (n_lat * sum_xl_yl - sum_xl * sum_yl) / (n_lat * sum_xl2 - sum_xl^2)
+b_lat <- (sum_yl - a_lat * sum_xl) / n_lat
+
+cat("a =", round(a_lat, 4), "| b =", round(b_lat, 4), "\n")
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+```r
+sum_xl    <- sum(x_lat)
+sum_yl    <- sum(y_lat)
+sum_xl_yl <- sum(x_lat * y_lat)
+sum_xl2   <- sum(x_lat^2)
+```
+Hasil: $a \approx 0.7$, $b \approx 1.5$, sehingga $\hat{y} = 0.7x + 1.5$.
+:::
+
+---
+
+### Latihan 2 — Mudah: Verifikasi dengan `lm()`
+
+Setelah menghitung manual di Latihan 1, verifikasi hasilnya menggunakan `lm()`.
+
+```{webr}
+# Lengkapi kode di bawah ini
+model_lat <- lm(___ ~ ___, data = data.frame(x = x_lat, y = y_lat))
+summary(model_lat)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+```r
+model_lat <- lm(y ~ x, data = data.frame(x = x_lat, y = y_lat))
+```
+Koefisien dari `lm()` seharusnya sama dengan hasil perhitungan manual.
+:::
+
+---
+
+### Latihan 3 — Sedang: Prediksi dan Interval Kepercayaan
+
+Gunakan `model_lat` dari Latihan 2. Buat prediksi untuk $x = 6$ dan $x = 7$, **beserta interval kepercayaan 95%**-nya.
+
+```{webr}
+# Buat data baru untuk prediksi
+data_baru <- data.frame(x = c(___, ___))
+
+# Prediksi dengan interval kepercayaan
+predict(model_lat, newdata = ___, interval = "___", level = ___)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+```r
+data_baru <- data.frame(x = c(6, 7))
+predict(model_lat, newdata = data_baru, interval = "confidence", level = 0.95)
+```
+Argumen `interval = "confidence"` menghasilkan interval kepercayaan untuk nilai rata-rata prediksi. Gunakan `"prediction"` untuk interval prediksi individu (lebih lebar).
+:::
+
+---
+
+### Latihan 4 — Sedang: Regresi Berganda + Diagnostik
+
+Bangun model regresi berganda menggunakan dataset `mtcars` dengan `mpg` sebagai variabel dependen dan `disp` serta `drat` sebagai prediktor. Kemudian:
+
+1. Tampilkan ringkasan model
+2. Buat plot diagnostik residual
+
+```{webr}
+# Langkah 1: Bangun model regresi berganda
+model_tugas <- lm(___ ~ ___ + ___, data = mtcars)
+summary(___)
+```
+
+```{webr}
+# Langkah 2: Plot diagnostik (2x2)
+par(mfrow = c(___, ___))
+plot(___)
+par(mfrow = c(1, 1))
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 4"}
+```r
+# Langkah 1
+model_tugas <- lm(mpg ~ disp + drat, data = mtcars)
+summary(model_tugas)
+
+# Langkah 2
+par(mfrow = c(2, 2))
+plot(model_tugas)
+par(mfrow = c(1, 1))
+```
+Perhatikan plot Q-Q untuk memeriksa normalitas residual, dan Residuals vs Fitted untuk memeriksa linearitas.
+:::
+
+---
+
+## Ringkasan
+
+| Konsep | Keterangan |
+|---|---|
+| **Least Squares** | Meminimalkan jumlah kuadrat deviasi vertikal |
+| **Koefisien $a$** | Slope: perubahan $y$ per satu satuan $x$ |
+| **Koefisien $b$** | Intercept: nilai $y$ saat $x = 0$ |
+| **p-value** | Probabilitas hasil seekstrem ini jika $H_0$ benar |
+| **R²** | Proporsi variasi $y$ yang dijelaskan model |
+| **Adjusted R²** | R² yang dikoreksi untuk jumlah prediktor |
+| **VIF** | Ukuran multikolinearitas antar prediktor |

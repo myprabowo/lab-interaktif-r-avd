@@ -1,0 +1,461 @@
+---
+title: "Praktikum Visualisasi Data Teks"
+format: live-html
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Dokumen ini membahas berbagai teknik **visualisasi data teks** menggunakan R — dari word cloud hingga heatmap distribusi kata antar dokumen.
+
+Yang akan dipelajari:
+
+- Word cloud dari frekuensi kata
+- Bar plot frekuensi kata (per koleksi dan per kategori)
+- Visualisasi jaringan bigram
+- Bar plot hasil analisis sentimen
+- Heatmap distribusi kata antar dokumen
+
+---
+
+## 1. Persiapan: Data dan Tokenisasi
+
+```{webr}
+library(tidyverse)
+library(tidytext)
+
+# Dataset: ulasan produk dari 3 kategori
+ulasan <- data.frame(
+  id = 1:8,
+  kategori = c("elektronik", "elektronik", "fashion", "fashion",
+               "makanan", "makanan", "elektronik", "fashion"),
+  teks = c(
+    "Laptop ini sangat cepat dan ringan. Baterai tahan lama.",
+    "Kamera bagus tapi harga mahal. Kualitas gambar luar biasa.",
+    "Baju berkualitas dan jahitan rapi. Warna sesuai foto.",
+    "Sepatu nyaman dan kuat. Desain elegan dan modern.",
+    "Makanan enak dan segar. Kemasan higienis dan rapi.",
+    "Rasa kurang enak. Porsi kecil tapi harga mahal.",
+    "Baterai cepat habis. Layar mudah retak. Sangat kecewa.",
+    "Kain tipis dan mudah kusut. Warna pudar setelah dicuci."
+  ),
+  stringsAsFactors = FALSE
+)
+
+# Stop words Bahasa Indonesia
+stop_indo <- data.frame(
+  kata = c("dan", "atau", "yang", "ini", "itu", "tapi", "juga", "sangat",
+           "ke", "di", "dari", "untuk", "dengan", "sesuai", "luar",
+           "biasa", "harga", "saja", "saya", "setelah", "mudah")
+)
+
+# Tokenisasi + hapus stop words
+token_bersih <- ulasan %>%
+  unnest_tokens(kata, teks) %>%
+  anti_join(stop_indo, by = "kata")
+
+# Hitung frekuensi
+frekuensi <- token_bersih %>%
+  count(kata, sort = TRUE)
+
+head(frekuensi, 10)
+```
+
+---
+
+## 2. Word Cloud
+
+**Word cloud** menampilkan kata-kata yang paling sering muncul. Ukuran kata proporsional dengan frekuensinya — semakin besar, semakin sering muncul.
+
+> **Kapan cocok dipakai:** presentasi umum dan eksplorasi awal. Hindari untuk laporan formal karena tidak presisi secara numerik.
+
+```{webr}
+# Word cloud dengan base R (tanpa paket eksternal)
+par(mar = c(0, 0, 2, 0))
+plot(0, 0, type = "n", xlim = c(0, 10), ylim = c(0, 10),
+     xaxt = "n", yaxt = "n", bty = "n",
+     main = "Word Cloud: Ulasan Produk")
+
+top12  <- head(frekuensi, 12)
+set.seed(42)
+x_pos  <- runif(nrow(top12), 1, 9)
+y_pos  <- runif(nrow(top12), 1, 9)
+ukuran <- 0.8 + (top12$n / max(top12$n)) * 2.2
+warna  <- colorRampPalette(c("#1565C0", "#E91E63", "#2E7D32", "#F57F17"))(nrow(top12))
+
+for (i in seq_len(nrow(top12))) {
+  text(x_pos[i], y_pos[i], top12$kata[i], cex = ukuran[i], col = warna[i], font = 2)
+}
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan word cloud sebaiknya TIDAK digunakan?"}
+Word cloud **tidak cocok** untuk perbandingan atau laporan ilmiah karena:  
+(1) Mata manusia buruk dalam membandingkan ukuran teks yang tidak sejajar  
+(2) Tidak menampilkan nilai numerik pasti  
+(3) Penempatan kata yang acak bisa menyesatkan  
+Gunakan **bar plot** jika butuh perbandingan yang presisi.
+:::
+
+**Pertanyaan:** Kata apa yang paling mendominasi word cloud? Apakah itu mencerminkan topik utama data?
+
+---
+
+## 3. Bar Plot Frekuensi Kata
+
+### 3.1 Bar Plot Keseluruhan
+
+```{webr}
+top10 <- head(frekuensi, 10)
+
+par(mar = c(7, 4, 3, 2))
+barplot(
+  top10$n,
+  names.arg = top10$kata,
+  col  = "steelblue",
+  main = "10 Kata Paling Sering Muncul",
+  ylab = "Frekuensi",
+  las  = 2,
+  cex.names = 0.85
+)
+```
+
+### 3.2 Bar Plot per Kategori
+
+```{webr}
+# Frekuensi kata per kategori (4 kata teratas per kategori)
+frek_per_kat <- token_bersih %>%
+  count(kategori, kata, sort = TRUE) %>%
+  group_by(kategori) %>%
+  slice_max(n, n = 4) %>%
+  ungroup()
+
+frek_per_kat
+```
+
+```{webr}
+# Visualisasi tiga kategori berdampingan
+par(mfrow = c(1, 3), mar = c(7, 3, 3, 1))
+
+for (kat in unique(frek_per_kat$kategori)) {
+  df <- frek_per_kat[frek_per_kat$kategori == kat, ]
+  barplot(df$n, names.arg = df$kata, col = "coral",
+          main = paste("Kategori:", kat), las = 2, cex.names = 0.8)
+}
+
+par(mfrow = c(1, 1))
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan bar plot lebih baik daripada word cloud?"}
+Bar plot lebih baik ketika Anda perlu:  
+(1) Membandingkan frekuensi antar kata secara tepat  
+(2) Menyertakan angka dalam laporan atau presentasi formal  
+(3) Membandingkan distribusi antar kategori/dokumen  
+Ingat prinsip visualisasi: gunakan grafik yang paling jujur dan mudah dibaca sesuai audiens.
+:::
+
+**Pertanyaan:** Apakah kata-kata dominan berbeda antar kategori? Apa yang itu katakan tentang karakteristik masing-masing kategori?
+
+---
+
+## 4. Visualisasi Bigram Network
+
+Bigram (pasangan dua kata) membantu memahami konteks dan frasa yang sering muncul bersama.
+
+```{webr}
+# Buat bigram dari teks asli
+bigram_df <- ulasan %>%
+  unnest_tokens(bigram, teks, token = "ngrams", n = 2) %>%
+  count(bigram, sort = TRUE) %>%
+  separate(bigram, into = c("kata1", "kata2"), sep = " ") %>%
+  filter(!kata1 %in% stop_indo$kata,
+         !kata2 %in% stop_indo$kata,
+         n > 0)
+
+head(bigram_df, 10)
+```
+
+```{webr}
+# Visualisasi bigram sebagai diagram panah
+top_bg <- head(bigram_df, 8)
+
+par(mar = c(1, 1, 3, 1))
+plot(0, 0, type = "n", xlim = c(0, 10), ylim = c(0, nrow(top_bg) + 1),
+     xaxt = "n", yaxt = "n", bty = "n",
+     main = "Bigram Paling Sering Muncul")
+
+for (i in seq_len(nrow(top_bg))) {
+  y <- nrow(top_bg) - i + 1
+  rect(0.3, y - 0.3, 3.5, y + 0.3, col = "#BBDEFB", border = NA)
+  rect(6.5, y - 0.3, 9.5, y + 0.3, col = "#FFCDD2", border = NA)
+  text(1.9, y, top_bg$kata1[i], cex = 0.9, font = 2)
+  text(5,   y, "→",              cex = 1.2, col = "gray50")
+  text(8,   y, top_bg$kata2[i], cex = 0.9, font = 2)
+  text(9.8, y, paste0("(", top_bg$n[i], ")"), cex = 0.7, col = "gray40")
+}
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa manfaat bigram untuk analisis sentimen?"}
+Kata tunggal "tidak" ambigu — bisa diikuti kata positif maupun negatif. Bigram "tidak puas" atau "tidak bagus" menangkap sentimen negatif dengan lebih akurat. Begitu pula "luar biasa" lebih bermakna sebagai satu kesatuan frasa daripada kata "luar" dan "biasa" secara terpisah.
+:::
+
+**Pertanyaan:** Bigram apa yang paling berguna untuk membedakan ulasan positif dan negatif?
+
+---
+
+## 5. Visualisasi Analisis Sentimen
+
+### 5.1 Kamus dan Skor Sentimen
+
+```{webr}
+kamus <- data.frame(
+  kata     = c("bagus", "berkualitas", "rapi", "nyaman", "kuat", "elegan",
+               "enak", "segar", "higienis", "cepat", "ringan",
+               "mahal", "retak", "kecewa", "kusut", "pudar", "kecil", "tipis"),
+  sentimen = c(rep("positif", 11), rep("negatif", 7)),
+  stringsAsFactors = FALSE
+)
+
+skor_sentimen <- token_bersih %>%
+  inner_join(kamus, by = "kata") %>%
+  count(id, sentimen) %>%
+  pivot_wider(names_from = sentimen, values_from = n, values_fill = 0) %>%
+  mutate(
+    skor  = positif - negatif,
+    label = case_when(skor > 0 ~ "Positif", skor < 0 ~ "Negatif", TRUE ~ "Netral")
+  )
+
+skor_sentimen
+```
+
+### 5.2 Bar Plot Skor Sentimen
+
+```{webr}
+warna_bar <- ifelse(skor_sentimen$skor > 0, "steelblue",
+                    ifelse(skor_sentimen$skor < 0, "tomato", "gray60"))
+
+barplot(
+  skor_sentimen$skor,
+  names.arg = paste("U", skor_sentimen$id),
+  col  = warna_bar,
+  main = "Skor Sentimen per Ulasan\n(Biru = Positif, Merah = Negatif)",
+  ylab = "Skor Sentimen",
+  ylim = c(min(skor_sentimen$skor) - 1, max(skor_sentimen$skor) + 1)
+)
+abline(h = 0, lty = 2)
+```
+
+### 5.3 Kata Positif vs Negatif Terbanyak
+
+```{webr}
+kata_skor <- token_bersih %>%
+  inner_join(kamus, by = "kata") %>%
+  count(kata, sentimen, sort = TRUE)
+
+par(mfrow = c(1, 2))
+
+pos <- kata_skor[kata_skor$sentimen == "positif", ]
+barplot(pos$n, names.arg = pos$kata, col = "steelblue",
+        main = "Kata Positif", las = 2, cex.names = 0.75)
+
+neg <- kata_skor[kata_skor$sentimen == "negatif", ]
+barplot(neg$n, names.arg = neg$kata, col = "tomato",
+        main = "Kata Negatif", las = 2, cex.names = 0.75)
+
+par(mfrow = c(1, 1))
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa ulasan tertentu bisa mendapat skor 0 meski kalimatnya terasa negatif?"}
+Skor 0 terjadi karena kata-kata dalam ulasan tersebut tidak ada di kamus sentimen yang kita gunakan. Ini disebut **coverage problem** — kamus tidak lengkap. Solusinya: perluas kamus, gunakan kamus pihak ketiga, atau beralih ke pendekatan machine learning.
+:::
+
+**Pertanyaan:** Ada ulasan yang skornya 0 tapi kalimatnya terasa negatif atau positif? Mengapa hal itu bisa terjadi?
+
+---
+
+## 6. Heatmap Distribusi Kata
+
+**Heatmap** menampilkan seberapa sering kata-kata tertentu muncul di berbagai kategori dokumen — berguna untuk melihat pola distribusi sekaligus.
+
+```{webr}
+# Frekuensi kata per kategori dalam format wide
+heat_data <- token_bersih %>%
+  count(kategori, kata) %>%
+  pivot_wider(names_from = kategori, values_from = n, values_fill = 0) %>%
+  filter(rowSums(select(., -kata)) >= 2)
+
+mat <- as.matrix(heat_data[, -1])
+rownames(mat) <- heat_data$kata
+
+mat
+```
+
+```{webr}
+# Normalisasi dan tampilkan sebagai heatmap
+mat_norm <- apply(mat, 2, function(x) x / (max(x) + 0.001))
+
+par(mar = c(5, 6, 3, 2))
+image(
+  t(mat_norm),
+  axes = FALSE,
+  col  = colorRampPalette(c("white", "#1565C0"))(20),
+  main = "Heatmap: Distribusi Kata per Kategori"
+)
+axis(1, at = seq(0, 1, length.out = ncol(mat_norm)),
+     labels = colnames(mat_norm), las = 2, cex.axis = 0.9)
+axis(2, at = seq(0, 1, length.out = nrow(mat_norm)),
+     labels = rownames(mat_norm), las = 1, cex.axis = 0.8)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa yang ditunjukkan warna gelap di heatmap?"}
+Warna **gelap (biru tua)** berarti kata tersebut sering muncul di kategori tersebut (relatif terhadap maksimumnya). Warna **putih** berarti kata itu jarang atau tidak muncul sama sekali. Pola ini membantu mengidentifikasi kata-kata yang menjadi "ciri khas" setiap kategori.
+:::
+
+**Pertanyaan:** Kata apa yang hanya muncul di satu kategori saja? Apa artinya secara analitis?
+
+---
+
+## 7. Latihan
+
+### Latihan 1 — Mudah: Bar Plot Kata per Kategori
+
+Buat bar plot frekuensi kata **khusus kategori "makanan"** dari dataset `token_bersih`, tampilkan 5 kata teratas.
+
+```{webr}
+# Filter hanya kategori makanan
+token_makanan <- token_bersih %>%
+  filter(kategori == "___")    # isi nama kategori
+
+# Hitung frekuensi
+frek_makanan <- token_makanan %>%
+  count(___, sort = TRUE) %>%
+  head(___)      # isi jumlah kata teratas
+
+# Bar plot
+par(mar = c(6, 4, 3, 2))
+barplot(
+  frek_makanan$n,
+  names.arg = frek_makanan$kata,
+  col  = "___",     # pilih warna
+  main = "Kata Teratas: Kategori Makanan",
+  ylab = "Frekuensi",
+  las  = 2
+)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+```r
+token_makanan <- token_bersih %>%
+  filter(kategori == "makanan")
+
+frek_makanan <- token_makanan %>%
+  count(kata, sort = TRUE) %>%
+  head(5)
+
+par(mar = c(6, 4, 3, 2))
+barplot(
+  frek_makanan$n,
+  names.arg = frek_makanan$kata,
+  col  = "coral",
+  main = "Kata Teratas: Kategori Makanan",
+  ylab = "Frekuensi",
+  las  = 2
+)
+```
+:::
+
+---
+
+### Latihan 2 — Mudah: Visualisasi Skor Sentimen dengan Warna Berbeda
+
+Modifikasi visualisasi skor sentimen di Bagian 5.2 agar:
+- Ulasan positif berwarna **hijau** (`"forestgreen"`)
+- Ulasan negatif berwarna **oranye** (`"darkorange"`)
+- Ulasan netral berwarna **abu-abu**
+
+```{webr}
+warna_baru <- ifelse(skor_sentimen$skor > 0, "___",
+                     ifelse(skor_sentimen$skor < 0, "___", "gray60"))
+
+barplot(
+  skor_sentimen$skor,
+  names.arg = paste("U", skor_sentimen$id),
+  col  = ___,       # gunakan warna_baru
+  main = "Skor Sentimen (Warna Diubah)",
+  ylab = "Skor Sentimen"
+)
+abline(h = 0, lty = 2)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+```r
+warna_baru <- ifelse(skor_sentimen$skor > 0, "forestgreen",
+                     ifelse(skor_sentimen$skor < 0, "darkorange", "gray60"))
+
+barplot(
+  skor_sentimen$skor,
+  names.arg = paste("U", skor_sentimen$id),
+  col  = warna_baru,
+  main = "Skor Sentimen (Warna Diubah)",
+  ylab = "Skor Sentimen"
+)
+abline(h = 0, lty = 2)
+```
+:::
+
+---
+
+### Latihan 3 — Sedang: Bigram dari Teks Baru
+
+Buat analisis bigram dari teks berikut dan tampilkan 5 bigram teratas (setelah membuang stop words).
+
+```{webr}
+teks_baru <- data.frame(
+  id   = 1:3,
+  teks = c(
+    "Data science adalah bidang yang menggabungkan statistik dan pemrograman.",
+    "Analisis data yang baik memerlukan visualisasi yang tepat dan informatif.",
+    "Machine learning dan deep learning adalah teknik canggih dalam data science."
+  )
+)
+
+stop_b <- data.frame(kata = c("adalah", "yang", "dan", "dalam", "memerlukan"))
+
+# Langkah 1: Buat bigram
+bigram_baru <- teks_baru %>%
+  unnest_tokens(___, teks, token = "ngrams", n = ___)   # isi kolom output & n
+
+# Langkah 2: Hitung dan filter
+bigram_baru %>%
+  count(___, sort = TRUE) %>%
+  separate(___, into = c("kata1", "kata2"), sep = " ") %>%
+  filter(!kata1 %in% stop_b$kata,
+         !kata2 %in% stop_b$kata) %>%
+  head(5)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+```r
+bigram_baru <- teks_baru %>%
+  unnest_tokens(bigram, teks, token = "ngrams", n = 2)
+
+bigram_baru %>%
+  count(bigram, sort = TRUE) %>%
+  separate(bigram, into = c("kata1", "kata2"), sep = " ") %>%
+  filter(!kata1 %in% stop_b$kata,
+         !kata2 %in% stop_b$kata) %>%
+  head(5)
+```
+Bigram seperti "data science" atau "machine learning" seharusnya muncul karena merupakan frasa teknis yang khas.
+:::
+
+---
+
+## Ringkasan: Kapan Menggunakan Visualisasi Apa?
+
+| Visualisasi | Keunggulan | Gunakan Untuk |
+|---|---|---|
+| **Word Cloud** | Menarik, cepat dibaca | Eksplorasi awal, presentasi umum |
+| **Bar Plot Frekuensi** | Presisi, mudah dibandingkan | Laporan formal, perbandingan kata |
+| **Bigram Network** | Menampilkan konteks | Analisis frasa dan asosiasi kata |
+| **Bar Plot Sentimen** | Menampilkan polaritas ulasan | Analisis opini, ulasan produk |
+| **Heatmap** | Perbandingan lintas dokumen | Distribusi kata antar kategori |

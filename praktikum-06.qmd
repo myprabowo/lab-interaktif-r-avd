@@ -1,0 +1,374 @@
+---
+title: "Praktikum Analisis Data Teks"
+format: live-html
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Dokumen ini memperkenalkan **analisis data teks** menggunakan R — mulai dari pra-pemrosesan teks mentah hingga mengidentifikasi sentimen dan pola kata dalam korpus.
+
+Yang akan dipelajari:
+
+- Tokenisasi dan penghapusan *stop words*
+- Menghitung frekuensi kata
+- Analisis n-gram (bigram)
+- Analisis sentimen berbasis leksikon
+
+---
+
+## 1. Data Teks dan Pra-Pemrosesan
+
+**Data teks** adalah informasi yang tersimpan dalam bentuk kata dan kalimat. Sebelum dianalisis, teks perlu "dibersihkan" melalui beberapa tahap.
+
+**Tahapan pra-pemrosesan:**
+
+1. **Tokenisasi** — memecah teks menjadi kata-kata individual
+2. **Normalisasi** — mengubah semua huruf menjadi huruf kecil
+3. **Penghapusan stop words** — membuang kata umum tanpa makna analitis
+
+### 1.1 Membuat Data dan Tokenisasi
+
+```{webr}
+library(tidyverse)
+library(tidytext)
+
+# Dataset: ulasan produk
+ulasan <- data.frame(
+  id = 1:5,
+  teks = c(
+    "Produk ini sangat bagus dan berkualitas tinggi. Saya sangat puas.",
+    "Pengiriman lambat tapi produk oke. Harga sesuai kualitas.",
+    "Kualitas buruk dan mengecewakan. Tidak sesuai deskripsi.",
+    "Sangat memuaskan! Produk terbaik yang pernah saya beli.",
+    "Biasa saja. Tidak buruk tapi juga tidak luar biasa."
+  ),
+  stringsAsFactors = FALSE
+)
+
+# Tokenisasi: satu baris = satu kata
+ulasan_token <- ulasan %>%
+  unnest_tokens(kata, teks)
+
+head(ulasan_token, 15)
+```
+
+### 1.2 Menghapus Stop Words
+
+```{webr}
+# Daftar stop words Bahasa Indonesia (sederhana)
+stop_indo <- data.frame(
+  kata = c("dan", "atau", "yang", "ini", "itu", "saya", "tapi", "juga",
+           "tidak", "sangat", "lebih", "oke", "ke", "di", "dari",
+           "untuk", "dengan", "saja", "sesuai", "pernah", "luar", "biasa",
+           "harga", "pengiriman", "tapi")
+)
+
+# Hapus stop words
+ulasan_bersih <- ulasan_token %>%
+  anti_join(stop_indo, by = "kata")
+
+ulasan_bersih
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa stop words perlu dihapus?"}
+Stop words seperti "dan", "atau", "yang" sangat sering muncul di hampir semua teks, sehingga tidak memberi informasi yang berguna tentang *isi* atau *topik* teks. Menghapusnya membuat analisis frekuensi lebih bermakna karena hanya mempertahankan kata-kata yang benar-benar relevan.
+:::
+
+**Pertanyaan:** Kata apa yang masih tersisa setelah stop words dihapus, dan apa yang bisa Anda simpulkan dari kata-kata tersebut?
+
+---
+
+## 2. Analisis Frekuensi Kata
+
+### 2.1 Menghitung Frekuensi
+
+```{webr}
+frekuensi_kata <- ulasan_bersih %>%
+  count(kata, sort = TRUE)
+
+frekuensi_kata
+```
+
+### 2.2 Bar Plot Frekuensi
+
+```{webr}
+top_kata <- head(frekuensi_kata, 8)
+
+par(mar = c(7, 4, 3, 2))
+barplot(
+  top_kata$n,
+  names.arg = top_kata$kata,
+  col       = "steelblue",
+  main      = "Kata Paling Sering Muncul",
+  ylab      = "Frekuensi",
+  las       = 2,
+  cex.names = 0.85
+)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apakah frekuensi tinggi selalu berarti penting?"}
+Tidak selalu. Kata "produk" mungkin sering muncul karena konteks domain (ulasan produk), bukan karena membawa makna sentimen. Frekuensi perlu dikombinasikan dengan analisis konteks atau sentimen agar lebih bermakna.
+:::
+
+**Pertanyaan:** Dari bar plot, kata apa yang paling dominan? Apakah itu kata yang paling "informatif"?
+
+---
+
+## 3. Analisis N-gram (Bigram)
+
+**Bigram** adalah pasangan dua kata yang berdekatan. Ini membantu memahami konteks kata, bukan sekadar frekuensinya secara terpisah.
+
+```{webr}
+# Membuat bigram dari teks asli
+ulasan_bigram <- ulasan %>%
+  unnest_tokens(bigram, teks, token = "ngrams", n = 2)
+
+ulasan_bigram %>%
+  count(bigram, sort = TRUE) %>%
+  head(10)
+```
+
+```{webr}
+# Pisahkan bigram menjadi dua kolom kata
+bigram_pisah <- ulasan_bigram %>%
+  count(bigram, sort = TRUE) %>%
+  separate(bigram, into = c("kata1", "kata2"), sep = " ") %>%
+  filter(!kata1 %in% stop_indo$kata,
+         !kata2 %in% stop_indo$kata)
+
+bigram_pisah
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa keunggulan bigram dibanding kata tunggal?"}
+Kata tunggal "tidak" bisa muncul di konteks positif maupun negatif. Bigram "tidak bagus" atau "tidak puas" menangkap sentimen negatif secara eksplisit. Ini membuat analisis lebih akurat, terutama untuk kalimat yang menggunakan negasi.
+:::
+
+**Pertanyaan:** Bigram apa yang paling bermakna untuk memahami sentimen ulasan?
+
+---
+
+## 4. Analisis Sentimen
+
+**Analisis sentimen** mengklasifikasikan teks sebagai positif atau negatif berdasarkan kata-kata yang digunakan, dengan bantuan **kamus/leksikon sentimen**.
+
+### 4.1 Kamus Sentimen Manual
+
+```{webr}
+kamus_sentimen <- data.frame(
+  kata = c("bagus", "berkualitas", "puas", "memuaskan", "terbaik",
+           "buruk", "mengecewakan", "lambat"),
+  sentimen = c("positif", "positif", "positif", "positif", "positif",
+               "negatif", "negatif", "negatif"),
+  stringsAsFactors = FALSE
+)
+
+kamus_sentimen
+```
+
+### 4.2 Menggabungkan dengan Token
+
+```{webr}
+analisis_sentimen <- ulasan_token %>%
+  inner_join(kamus_sentimen, by = "kata")
+
+analisis_sentimen
+```
+
+### 4.3 Skor Sentimen per Ulasan
+
+```{webr}
+skor <- analisis_sentimen %>%
+  count(id, sentimen) %>%
+  pivot_wider(names_from = sentimen, values_from = n, values_fill = 0) %>%
+  mutate(
+    skor  = positif - negatif,
+    label = case_when(
+      skor > 0  ~ "Positif",
+      skor < 0  ~ "Negatif",
+      TRUE      ~ "Netral"
+    )
+  )
+
+left_join(ulasan, skor, by = "id")
+```
+
+```{webr}
+# Visualisasi skor sentimen
+warna_bar <- ifelse(skor$skor > 0, "steelblue",
+                    ifelse(skor$skor < 0, "tomato", "gray60"))
+
+barplot(
+  skor$skor,
+  names.arg = paste("Ulasan", skor$id),
+  col  = warna_bar,
+  main = "Skor Sentimen per Ulasan\n(Biru = Positif, Merah = Negatif)",
+  ylab = "Skor (Positif − Negatif)"
+)
+abline(h = 0, lty = 2)
+```
+
+::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa keterbatasan pendekatan leksikon?"}
+Pendekatan leksikon bergantung pada daftar kata yang sudah dibuat sebelumnya. Kelemahannya:  
+(1) Tidak bisa menangkap sarkasme ("Bagus sekali... NOT")  
+(2) Kata baru/slang tidak ada di kamus  
+(3) Tidak mempertimbangkan konteks kalimat secara utuh  
+Pendekatan berbasis *machine learning* seperti BERT atau model berbasis deep learning lebih mampu menangkap nuansa konteks.
+:::
+
+**Pertanyaan:** Ulasan nomor berapa yang paling positif? Apakah hasilnya sesuai dengan membaca teks aslinya?
+
+---
+
+## 5. Latihan
+
+### Latihan 1 — Mudah: Tokenisasi Teks Baru
+
+Tokenisasi kalimat berikut dan hitung frekuensi katanya.
+
+```{webr}
+teks_baru <- data.frame(
+  id   = 1:3,
+  teks = c(
+    "R adalah bahasa pemrograman yang powerful untuk analisis data.",
+    "Visualisasi data dengan R sangat mudah dan fleksibel.",
+    "Analisis teks di R menggunakan paket tidytext yang sangat berguna."
+  )
+)
+
+# Langkah 1: Tokenisasi
+token_baru <- teks_baru %>%
+  unnest_tokens(___, ___)    # isi: (nama_kolom_output, nama_kolom_teks)
+
+# Langkah 2: Hitung frekuensi
+token_baru %>%
+  count(___, sort = TRUE) %>%
+  head(10)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+```r
+token_baru <- teks_baru %>%
+  unnest_tokens(kata, teks)
+
+token_baru %>%
+  count(kata, sort = TRUE) %>%
+  head(10)
+```
+Kata "data" dan "r" kemungkinan akan mendominasi karena sering muncul dalam ketiga kalimat.
+:::
+
+---
+
+### Latihan 2 — Mudah: Hapus Stop Words dan Buat Bar Plot
+
+Lanjutkan dari Latihan 1: hapus stop words, lalu buat bar plot 5 kata teratas.
+
+```{webr}
+# Daftar stop words tambahan untuk teks di atas
+stop_tambahan <- data.frame(
+  kata = c("yang", "dan", "di", "untuk", "dengan", "adalah", "sangat")
+)
+
+# Hapus stop words
+token_bersih2 <- token_baru %>%
+  anti_join(___, by = "kata")   # isi nama data frame stop words
+
+# Hitung frekuensi
+frek2 <- token_bersih2 %>%
+  count(kata, sort = TRUE)
+
+# Bar plot 5 kata teratas
+top5 <- head(frek2, ___)   # isi jumlah kata
+
+par(mar = c(5, 4, 3, 2))
+barplot(
+  top5$n,
+  names.arg = top5$kata,
+  col  = "___",        # pilih warna: "steelblue", "coral", dll.
+  main = "5 Kata Teratas",
+  ylab = "Frekuensi",
+  las  = 2
+)
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+```r
+token_bersih2 <- token_baru %>%
+  anti_join(stop_tambahan, by = "kata")
+
+frek2 <- token_bersih2 %>%
+  count(kata, sort = TRUE)
+
+top5 <- head(frek2, 5)
+
+par(mar = c(5, 4, 3, 2))
+barplot(
+  top5$n,
+  names.arg = top5$kata,
+  col  = "steelblue",
+  main = "5 Kata Teratas",
+  ylab = "Frekuensi",
+  las  = 2
+)
+```
+:::
+
+---
+
+### Latihan 3 — Sedang: Tambahkan Kata ke Kamus dan Hitung Skor Sentimen
+
+Tambahkan kata "mudah" dan "powerful" (positif), serta "sulit" dan "lambat" (negatif) ke kamus sentimen yang sudah ada. Kemudian hitung skor sentimen untuk `teks_baru`.
+
+```{webr}
+# Tambahkan entri ke kamus sentimen yang sudah ada
+kamus_baru <- rbind(
+  kamus_sentimen,
+  data.frame(
+    kata     = c("___", "___", "___", "___"),   # isi 4 kata
+    sentimen = c("___", "___", "___", "___")    # isi sentimennya
+  )
+)
+
+# Hitung sentimen untuk teks_baru
+skor_baru <- token_baru %>%
+  inner_join(___, by = "kata") %>%   # isi nama kamus baru
+  count(id, sentimen) %>%
+  pivot_wider(names_from = sentimen, values_from = n, values_fill = 0) %>%
+  mutate(skor = positif - negatif)
+
+skor_baru
+```
+
+::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+```r
+kamus_baru <- rbind(
+  kamus_sentimen,
+  data.frame(
+    kata     = c("mudah", "powerful", "sulit", "lambat"),
+    sentimen = c("positif", "positif", "negatif", "negatif")
+  )
+)
+
+skor_baru <- token_baru %>%
+  inner_join(kamus_baru, by = "kata") %>%
+  count(id, sentimen) %>%
+  pivot_wider(names_from = sentimen, values_from = n, values_fill = 0) %>%
+  mutate(skor = positif - negatif)
+
+skor_baru
+```
+Semua kalimat seharusnya mendapat skor positif karena konteksnya positif tentang R.
+:::
+
+---
+
+## Ringkasan
+
+| Konsep | Fungsi R | Keterangan |
+|---|---|---|
+| **Tokenisasi** | `unnest_tokens()` | Memecah teks menjadi kata |
+| **Hapus stop words** | `anti_join()` | Membuang kata umum tanpa makna |
+| **Frekuensi kata** | `count()` | Menghitung kemunculan setiap kata |
+| **Bigram** | `unnest_tokens(..., token = "ngrams", n = 2)` | Pasangan dua kata berurutan |
+| **Sentimen** | `inner_join()` + `pivot_wider()` | Menggabungkan dengan kamus sentimen |
