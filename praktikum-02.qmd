@@ -30,9 +30,9 @@ Transformasi data sering dipakai ketika:
 ### Pertanyaan Reflektif
 
 -   Sebelum melihat grafik, menurut Anda data pendapatan biasanya condong ke kiri atau ke kanan? Mengapa?
-    *(Hint: Pendapatan umumnya condong ke kanan/positif karena ada segelintir orang berpenghasilan sangat tinggi yang menarik rata-rata ke atas.)*
+    [💡 Hint]{title='Pendapatan umumnya condong ke kanan/positif karena ada segelintir orang berpenghasilan sangat tinggi yang menarik rata-rata ke atas.'}
 -   Jika kita ingin membuat hubungan lebih “linear”, transformasi apa yang paling masuk akal?
-    *(Hint: Transformasi logaritma sangat umum digunakan untuk menekan rentang ekstrem agar data lebih menyebar proporsional.)*
+    [💡 Hint]{title='Transformasi logaritma sangat umum digunakan untuk menekan rentang ekstrem agar data lebih menyebar proporsional.'}
 
 ------------------------------------------------------------------------
 
@@ -76,11 +76,11 @@ par(mfrow = c(1, 1))
 ### Pertanyaan Reflektif
 
 -   Sebelum menjalankan histogram kedua: apakah Anda memprediksi distribusi akan “lebih simetris”? Kenapa?
-    *(Hint: Ya, karena sifat logaritma yang menekan rentang nilai ekstrem besar secara asimtotik.)*
+    [💡 Hint]{title='Ya, karena sifat logaritma yang menekan rentang nilai ekstrem besar secara asimtotik.'}
 -   Setelah melihat histogram: perubahan apa yang paling jelas (rentang, puncak, kemiringan)?
-    *(Hint: Rentang sumbu X menyusut drastis, puncak lebih bergeser ke tengah, dan kemiringan/skewness ke kanan berkurang signifikan.)*
+    [💡 Hint]{title='Rentang sumbu X menyusut drastis, puncak lebih bergeser ke tengah, dan kemiringan/skewness ke kanan berkurang signifikan.'}
 -   Jika Anda memakai log10, apakah bentuk histogram *secara umum* berubah dibanding ln? (Petunjuk: basis log mengubah skala, bukan bentuk relatif.)
-    *(Hint: Bentuk relatif histogramnya identik, hanya nilai rentang di sumbu X yang berubah mengikuti basis 10 dibanding basis alamiah e.)*
+    [💡 Hint]{title='Bentuk relatif histogramnya identik, hanya nilai rentang di sumbu X yang berubah mengikuti basis 10 dibanding basis alamiah e.'}
 
 ------------------------------------------------------------------------
 
@@ -112,9 +112,9 @@ data.frame(x=x, x_plus_k=x+k, ln_shift=log_x_shift)
 ### Pertanyaan Reflektif
 
 -   Apa konsekuensi interpretasi ketika kita menambahkan konstanta sebelum log?
-    *(Hint: Kita memodelkan log(X+1), sehingga nol menjadi log(1)=0. Ini mempermudah kalkulasi numerik tapi interpretasi elastisitas persentase murninya bisa sedikit meleset terutama pada nilai-nilai kecil.)*
+    [💡 Hint]{title='Kita memodelkan log(X+1), sehingga nol menjadi log(1)=0. Ini mempermudah kalkulasi numerik tapi interpretasi elastisitas persentase murninya bisa sedikit meleset terutama pada nilai-nilai kecil.'}
 -   Dalam konteks data nyata, kapan strategi ini “cukup”, dan kapan perlu metode lain (mis. model khusus, transformasi lain)?
-    *(Hint: Cukup bila angka 0 hanya insidental. Tapi perlu metode khusus seperti Zero-Inflated Model jika nilai 0 sangat mendominasi atau punya arti struktural khusus.)*
+    [💡 Hint]{title='Cukup bila angka 0 hanya insidental. Tapi perlu metode khusus seperti Zero-Inflated Model jika nilai 0 sangat mendominasi atau punya arti struktural khusus.'}
 
 ------------------------------------------------------------------------
 
@@ -159,11 +159,11 @@ par(mfrow = c(1, 1))
 ### Pertanyaan Reflektif
 
 -   Transformasi kuadrat membuat nilai besar makin besar. Menurut Anda ini cocok untuk mengatasi skewness ke arah mana (kiri/kanan)?
-    *(Hint: Cocok untuk data yang condong ke kiri (negatif skew) agar "ekor" atas ikut tertarik memanjang secara proporsional.)*
+    [💡 Hint]{title='Cocok untuk data yang condong ke kiri (negatif skew) agar "ekor" atas ikut tertarik memanjang secara proporsional.'}
 -   Transformasi akar (sqrt) “mengecilkan” nilai besar. Kapan transformasi ini lebih tepat?
-    *(Hint: Tepat untuk variabel tipe jumlah/count atau data condong ke kanan ringan, yang tidak se-ekstrem hingga butuh logaritma.)*
+    [💡 Hint]{title='Tepat untuk variabel tipe jumlah/count atau data condong ke kanan ringan, yang tidak se-ekstrem hingga butuh logaritma.'}
 -   Bandingkan efek `^2` vs `sqrt()` terhadap jarak antar-nilai.
-    *(Hint: `^2` meregangkan jarak antar-nilai besar, sedangkan `sqrt()` menyusutkan jarak antar-nilai besar (memampatkan).)*
+    [💡 Hint]{title='`^2` meregangkan jarak antar-nilai besar, sedangkan `sqrt()` menyusutkan jarak antar-nilai besar (memampatkan).'}
 
 ------------------------------------------------------------------------
 
