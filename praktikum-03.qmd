@@ -4,6 +4,7 @@ format: live-html
 engine: knitr
 ---
 
+::: {.callout-note}
 ## Tujuan Praktikum
 
 Setelah menyelesaikan praktikum ini, mahasiswa mampu:
@@ -14,7 +15,8 @@ Setelah menyelesaikan praktikum ini, mahasiswa mampu:
 4. Membandingkan hasil analisis regresi sebelum dan sesudah penanganan data hilang.
 5. Merefleksikan pilihan teknik imputasi berdasarkan konteks analisis.
 
-> **Catatan:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
+**Catatan:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
+:::
 
 ---
 
@@ -29,9 +31,16 @@ Data hilang dapat menyebabkan:
 ### Pertanyaan Reflektif
 
 - Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
-  <details><summary>💡 Hint</summary>Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.
+:::
 - Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
-  <details><summary>💡 Hint</summary>Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.
+:::
+
 
 ---
 
@@ -61,9 +70,16 @@ vis_miss(airquality)
 ### Pertanyaan Reflektif
 
 - Variabel mana yang paling banyak memiliki data hilang?
-  <details><summary>💡 Hint</summary>Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.
+:::
 - Apakah pola data hilang terlihat acak atau terstruktur?
-  <details><summary>💡 Hint</summary>Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.
+:::
+
 
 ---
 
@@ -79,9 +95,16 @@ dim(airquality_omit)
 
 ### Refleksi
 - Berapa banyak observasi yang hilang setelah `na.omit()`?
-  <details><summary>💡 Hint</summary>Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.
+:::
 - Dalam konteks regresi, apa risiko utama pendekatan ini?
-  <details><summary>💡 Hint</summary>Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.
+:::
+
 
 ---
 
@@ -101,9 +124,16 @@ airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
 
 ### Refleksi
 - Apa asumsi implisit saat menggunakan mean/median?
-  <details><summary>💡 Hint</summary>Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.
+:::
 - Variabilitas data bertambah atau berkurang?
-  <details><summary>💡 Hint</summary>Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.
+:::
+
 
 ---
 
@@ -127,9 +157,16 @@ airquality_mice <- complete(imp, 1)
 ### Refleksi
 
 - Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
-  <details><summary>💡 Hint</summary>Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.
+:::
 - Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
-  <details><summary>💡 Hint</summary>`mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+`mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.
+:::
+
 
 ---
 
@@ -159,9 +196,16 @@ summary(model_mice)
 ### Pertanyaan Reflektif
 
 - Bandingkan koefisien dan R-squared ketiga model.
-  <details><summary>💡 Hint</summary>R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.
+:::
 - Model mana yang paling masuk akal secara substantif?
-  <details><summary>💡 Hint</summary>Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.</details>
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.
+:::
+
 
 ---
 
