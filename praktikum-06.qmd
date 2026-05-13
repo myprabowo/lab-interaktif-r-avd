@@ -6,14 +6,17 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini memperkenalkan **analisis data teks** menggunakan R — mulai dari pra-pemrosesan teks mentah hingga mengidentifikasi sentimen dan pola kata dalam korpus.
+::: {.callout-note}
+## Tujuan Praktikum
 
-Yang akan dipelajari:
+Setelah praktikum ini, Anda mampu:
 
-- Tokenisasi dan penghapusan *stop words*
-- Menghitung frekuensi kata
-- Analisis n-gram (bigram)
-- Analisis sentimen berbasis leksikon
+1. Melakukan pra-pemrosesan teks (tokenisasi, normalisasi, penghapusan *stop words*).
+2. Menghitung dan menafsirkan frekuensi kata dalam suatu korpus.
+3. Membangun dan menganalisis n-gram (bigram) untuk menemukan pola pasangan kata.
+4. Melakukan analisis sentimen berbasis leksikon pada data teks.
+5. Menginterpretasikan hasil analisis teks dalam konteks yang bermakna.
+:::
 
 ---
 

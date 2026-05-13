@@ -6,16 +6,19 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini berisi praktikum singkat untuk memahami dasar-dasar pemrograman R.
+::: {.callout-note}
+## Tujuan Praktikum
 
-Yang akan dipelajari:
+Setelah praktikum ini, Anda mampu:
 
-- Operasi sederhana (aritmetika & fungsi dasar)
-- Jenis-jenis variabel dan tipe data di R
-- Analisis statistik sederhana (vektor dan data frame)
-- Pembuatan grafik dasar dengan `plot()`
+1. Menjalankan operasi aritmetika dan fungsi dasar di R.
+2. Mendeklarasikan variabel dan memahami tipe data (numerik, karakter, logika).
+3. Membuat dan memanipulasi vektor serta data frame.
+4. Melakukan analisis statistik sederhana (mean, median, sd, summary).
+5. Membuat grafik dasar dengan `plot()` dan `hist()`.
 
-> **Cara belajar yang disarankan:** jalankan blok kode satu per satu, amati outputnya, lalu modifikasi nilai/argumen untuk melihat efeknya.
+**Cara belajar yang disarankan:** jalankan blok kode satu per satu, amati outputnya, lalu modifikasi nilai/argumen untuk melihat efeknya.
+:::
 
 ---
 

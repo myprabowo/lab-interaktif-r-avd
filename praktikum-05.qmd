@@ -6,14 +6,19 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini membahas **analisis regresi cara konfirmasi**, yaitu pendekatan yang berangkat dari hipotesis yang sudah ditetapkan sebelum melihat data. Berbeda dari eksplorasi yang bersifat terbuka, konfirmasi bertujuan menguji hipotesis secara formal menggunakan uji statistik.
+::: {.callout-note}
+## Tujuan Praktikum
 
-Yang akan dipelajari:
+Setelah praktikum ini, Anda mampu:
 
-- Konsep dan rumus garis regresi *least squares*
-- Menghitung koefisien regresi secara manual
-- Melakukan uji hipotesis formal terhadap koefisien regresi
-- Membandingkan model regresi sederhana dan berganda
+1. Menjelaskan konsep analisis regresi cara konfirmasi dan perbedaannya dengan eksplorasi.
+2. Menurunkan dan menghitung koefisien regresi *least squares* secara manual.
+3. Melakukan uji hipotesis formal terhadap koefisien regresi.
+4. Menginterpretasikan hasil uji signifikansi pada model regresi sederhana dan berganda.
+5. Membandingkan performa model regresi sederhana dan berganda secara statistik.
+
+**Catatan:** Pendekatan konfirmasi berangkat dari hipotesis yang sudah ditetapkan sebelum melihat data — berbeda dari eksplorasi yang bersifat terbuka.
+:::
 
 ---
 

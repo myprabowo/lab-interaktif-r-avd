@@ -6,16 +6,19 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini membahas cara membangun **dashboard interaktif** di R menggunakan **Shiny** dan paket `shinydashboard` — tampilan yang lebih terstruktur dibanding aplikasi Shiny biasa.
+::: {.callout-note}
+## Tujuan Praktikum
 
-> **Catatan:** Kode di halaman ini dijalankan di **RStudio**. Salin blok kode ke file `app.R`, lalu klik **Run App**.
+Setelah praktikum ini, Anda mampu:
 
-Yang akan dipelajari:
+1. Menjelaskan perbedaan antara Shiny biasa dan `shinydashboard`.
+2. Membangun struktur layout dashboard (header, sidebar, body).
+3. Menampilkan beberapa visualisasi sekaligus dalam satu dashboard.
+4. Mengintegrasikan elemen interaktif (input dan output reaktif) dalam dashboard.
+5. Mendistribusikan aplikasi dashboard ke shinyapps.io.
 
-- Perbedaan Shiny biasa dan `shinydashboard`
-- Struktur layout dashboard (header, sidebar, body)
-- Menampilkan beberapa visualisasi sekaligus dalam satu dashboard
-- Mendistribusikan aplikasi ke shinyapps.io
+**Catatan:** Kode di halaman ini dijalankan di **RStudio**. Salin blok kode ke file `app.R`, lalu klik **Run App**.
+:::
 
 ---
 

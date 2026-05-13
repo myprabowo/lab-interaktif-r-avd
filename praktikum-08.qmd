@@ -6,16 +6,19 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini memperkenalkan **visualisasi data interaktif** menggunakan **Shiny** — framework R untuk membangun aplikasi web yang bisa dioperasikan oleh pengguna tanpa menulis kode.
+::: {.callout-note}
+## Tujuan Praktikum
 
-> **Catatan Penting:** Kode Shiny di halaman ini **tidak dapat dijalankan langsung di browser**. Salin setiap blok kode ke **RStudio**, simpan sebagai `app.R`, lalu klik **Run App**.
+Setelah praktikum ini, Anda mampu:
 
-Yang akan dipelajari:
+1. Menjelaskan struktur dasar aplikasi Shiny (UI + Server).
+2. Menggunakan elemen input Shiny: dropdown, slider, dan checkbox.
+3. Menampilkan output berupa plot, teks, dan tabel yang reaktif.
+4. Membuat plot interaktif yang merespons perubahan input pengguna.
+5. Menjalankan aplikasi Shiny dari RStudio.
 
-- Struktur dasar aplikasi Shiny (UI + Server)
-- Elemen input: dropdown, slider, checkbox
-- Output: plot, teks, tabel
-- Membuat plot interaktif yang merespons input pengguna
+**Catatan Penting:** Kode Shiny di halaman ini **tidak dapat dijalankan langsung di browser**. Salin setiap blok kode ke **RStudio**, simpan sebagai `app.R`, lalu klik **Run App**.
+:::
 
 ---
 

@@ -6,15 +6,17 @@ engine: knitr
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-Dokumen ini membahas berbagai teknik **visualisasi data teks** menggunakan R — dari word cloud hingga heatmap distribusi kata antar dokumen.
+::: {.callout-note}
+## Tujuan Praktikum
 
-Yang akan dipelajari:
+Setelah praktikum ini, Anda mampu:
 
-- Word cloud dari frekuensi kata
-- Bar plot frekuensi kata (per koleksi dan per kategori)
-- Visualisasi jaringan bigram
-- Bar plot hasil analisis sentimen
-- Heatmap distribusi kata antar dokumen
+1. Membuat word cloud dari frekuensi kata menggunakan R.
+2. Membuat bar plot frekuensi kata per koleksi dan per kategori.
+3. Memvisualisasikan jaringan bigram untuk menemukan pola asosiasi kata.
+4. Membuat bar plot hasil analisis sentimen.
+5. Membuat heatmap distribusi kata antar dokumen.
+:::
 
 ---
 
