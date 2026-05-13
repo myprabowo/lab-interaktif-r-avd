@@ -29,9 +29,9 @@ Data hilang dapat menyebabkan:
 ### Pertanyaan Reflektif
 
 - Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
-  [💡 Hint]{title='Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.'}
+  <details><summary>💡 Hint</summary>Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.</details>
 - Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
-  [💡 Hint]{title='Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.'}
+  <details><summary>💡 Hint</summary>Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.</details>
 
 ---
 
@@ -61,9 +61,9 @@ vis_miss(airquality)
 ### Pertanyaan Reflektif
 
 - Variabel mana yang paling banyak memiliki data hilang?
-  [💡 Hint]{title='Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.'}
+  <details><summary>💡 Hint</summary>Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.</details>
 - Apakah pola data hilang terlihat acak atau terstruktur?
-  [💡 Hint]{title='Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.'}
+  <details><summary>💡 Hint</summary>Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.</details>
 
 ---
 
@@ -79,9 +79,9 @@ dim(airquality_omit)
 
 ### Refleksi
 - Berapa banyak observasi yang hilang setelah `na.omit()`?
-  [💡 Hint]{title='Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.'}
+  <details><summary>💡 Hint</summary>Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.</details>
 - Dalam konteks regresi, apa risiko utama pendekatan ini?
-  [💡 Hint]{title='Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.'}
+  <details><summary>💡 Hint</summary>Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.</details>
 
 ---
 
@@ -101,9 +101,9 @@ airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
 
 ### Refleksi
 - Apa asumsi implisit saat menggunakan mean/median?
-  [💡 Hint]{title='Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.'}
+  <details><summary>💡 Hint</summary>Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.</details>
 - Variabilitas data bertambah atau berkurang?
-  [💡 Hint]{title='Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.'}
+  <details><summary>💡 Hint</summary>Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.</details>
 
 ---
 
@@ -127,9 +127,9 @@ airquality_mice <- complete(imp, 1)
 ### Refleksi
 
 - Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
-  [💡 Hint]{title='Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.'}
+  <details><summary>💡 Hint</summary>Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.</details>
 - Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
-  [💡 Hint]{title='`mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.'}
+  <details><summary>💡 Hint</summary>`mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.</details>
 
 ---
 
@@ -159,9 +159,9 @@ summary(model_mice)
 ### Pertanyaan Reflektif
 
 - Bandingkan koefisien dan R-squared ketiga model.
-  [💡 Hint]{title='R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.'}
+  <details><summary>💡 Hint</summary>R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.</details>
 - Model mana yang paling masuk akal secara substantif?
-  [💡 Hint]{title='Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.'}
+  <details><summary>💡 Hint</summary>Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.</details>
 
 ---
 

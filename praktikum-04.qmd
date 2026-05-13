@@ -32,9 +32,9 @@ head(mtcars)
 ### Pertanyaan
 
 - Variabel mana yang paling masuk akal menjadi **variabel dependen** (Y) jika konteksnya efisiensi kendaraan?
-  [💡 Hint]{title='"mpg" atau Miles Per Gallon, karena ini adalah metrik utama efisiensi bahan bakar.'}
+  <details><summary>💡 Hint</summary>"mpg" atau Miles Per Gallon, karena ini adalah metrik utama efisiensi bahan bakar.</details>
 - Sebelum menghitung apa pun, menurut Anda hubungan **mpg** dengan **wt** (berat) cenderung positif atau negatif? Mengapa?
-  [💡 Hint]{title='Negatif. Semakin berat kendaraan (wt naik), semakin banyak bahan bakar yang dibutuhkan sehingga efisiensi (mpg) menurun.'}
+  <details><summary>💡 Hint</summary>Negatif. Semakin berat kendaraan (wt naik), semakin banyak bahan bakar yang dibutuhkan sehingga efisiensi (mpg) menurun.</details>
 
 ---
 
@@ -57,9 +57,9 @@ plot(mtcars$wt, mtcars$mpg, main="Scatter: mpg vs wt", xlab="wt", ylab="mpg")
 ### Pertanyaan
 
 - Dari scatter plot, apakah hubungan mpg–wt tampak cukup linear?
-  [💡 Hint]{title='Ya, titik-titik membentuk pola menurun yang relatif lurus membentang dari kiri atas ke kanan bawah.'}
+  <details><summary>💡 Hint</summary>Ya, titik-titik membentuk pola menurun yang relatif lurus membentang dari kiri atas ke kanan bawah.</details>
 - Adakah titik yang terlihat “menyimpang” (calon outlier)? Apa dampaknya pada regresi?
-  [💡 Hint]{title='Outlier adalah titik yang menjauh dari pola bergerombol. Outlier dapat "menarik" garis regresi sehingga kemiringannya menjadi meleset dan kurang akurat.'}
+  <details><summary>💡 Hint</summary>Outlier adalah titik yang menjauh dari pola bergerombol. Outlier dapat "menarik" garis regresi sehingga kemiringannya menjadi meleset dan kurang akurat.</details>
 
 ---
 
@@ -80,9 +80,9 @@ heatmap(cor_mtcars, symm = TRUE)
 
 ### Pertanyaan
 - Variabel apa yang korelasinya paling kuat (positif/negatif) dengan mpg?
-  [💡 Hint]{title='Biasanya variabel wt (berat) dan cyl (jumlah silinder) memiliki korelasi negatif yang sangat kuat dengan mpg.'}
+  <details><summary>💡 Hint</summary>Biasanya variabel wt (berat) dan cyl (jumlah silinder) memiliki korelasi negatif yang sangat kuat dengan mpg.</details>
 - Apakah korelasi kuat selalu berarti hubungan kausal? Jelaskan singkat.
-  [💡 Hint]{title='Tidak. Korelasi hanya menunjukkan adanya hubungan pola angka secara statistik, bukan hubungan sebab-akibat (causation).'}
+  <details><summary>💡 Hint</summary>Tidak. Korelasi hanya menunjukkan adanya hubungan pola angka secara statistik, bukan hubungan sebab-akibat (causation).</details>
 
 ---
 
@@ -104,9 +104,9 @@ coef(model_simple)
 ### Pertanyaan
 
 - Jika koefisien `wt` bernilai negatif, artinya apa (dalam konteks kendaraan)?
-  [💡 Hint]{title='Setiap peningkatan berat kendaraan sebesar 1 satuan (1000 lbs), jarak tempuh per galon bahan bakar (mpg) rata-rata akan berkurang sebesar angka koefisien tersebut.'}
+  <details><summary>💡 Hint</summary>Setiap peningkatan berat kendaraan sebesar 1 satuan (1000 lbs), jarak tempuh per galon bahan bakar (mpg) rata-rata akan berkurang sebesar angka koefisien tersebut.</details>
 - Apa perbedaan makna **p-value** vs **R-squared** pada output `summary()`?
-  [💡 Hint]{title='P-value mengukur apakah kita punya cukup bukti statistik untuk menganggap hubungannya nyata. R-squared mengukur proporsi keragaman (variasi) Y yang bisa dijelaskan oleh model ini.'}
+  <details><summary>💡 Hint</summary>P-value mengukur apakah kita punya cukup bukti statistik untuk menganggap hubungannya nyata. R-squared mengukur proporsi keragaman (variasi) Y yang bisa dijelaskan oleh model ini.</details>
 
 ---
 
@@ -122,9 +122,9 @@ summary(model_multiple)
 ### Pertanyaan
 
 - Apakah `wt` tetap signifikan setelah menambahkan `hp` dan `cyl`? Jika berubah, kira-kira kenapa?
-  [💡 Hint]{title='Signifikansi sebuah prediktor bisa merosot saat ditambah prediktor baru jika kedua prediktor itu saling terkait kuat (multikolinearitas), sehingga mereka "berebut" dalam menjelaskan variasi Y.'}
+  <details><summary>💡 Hint</summary>Signifikansi sebuah prediktor bisa merosot saat ditambah prediktor baru jika kedua prediktor itu saling terkait kuat (multikolinearitas), sehingga mereka "berebut" dalam menjelaskan variasi Y.</details>
 - Jika R-squared meningkat pada model berganda, apakah itu otomatis berarti model lebih baik?
-  [💡 Hint]{title='Belum tentu. R-squared biasa akan selalu naik bila prediktor ditambah. Parameter Adjusted R-squared lebih jujur menilai apakah tambahan variabel itu benar-benar menguntungkan.'}
+  <details><summary>💡 Hint</summary>Belum tentu. R-squared biasa akan selalu naik bila prediktor ditambah. Parameter Adjusted R-squared lebih jujur menilai apakah tambahan variabel itu benar-benar menguntungkan.</details>
 
 ---
 
@@ -146,9 +146,9 @@ par(mfrow = c(1, 1))
 
 ### Pertanyaan
 - Plot mana yang paling “mengkhawatirkan” jika tujuan Anda inferensi (uji hipotesis koefisien)?
-  [💡 Hint]{title='Plot Normal Q-Q, karena penghitungan p-value pada regresi linier standar berasumsi bahwa residual harus berdistribusi normal.'}
+  <details><summary>💡 Hint</summary>Plot Normal Q-Q, karena penghitungan p-value pada regresi linier standar berasumsi bahwa residual harus berdistribusi normal.</details>
 - Jika residual tidak normal, apakah regresi selalu “tidak boleh dipakai”? Dalam konteks apa masih bisa diterima?
-  [💡 Hint]{title='Tidak mutlak terlarang. Asalkan ukuran sampel sangat besar, Teorema Limit Pusat (CLT) melindungi perhitungan kita. Masalah ini lebih fatal pada sampel kecil.'}
+  <details><summary>💡 Hint</summary>Tidak mutlak terlarang. Asalkan ukuran sampel sangat besar, Teorema Limit Pusat (CLT) melindungi perhitungan kita. Masalah ini lebih fatal pada sampel kecil.</details>
 
 ---
 
@@ -175,9 +175,9 @@ summary(model_robust)
 
 ### Pertanyaan
 - Kapan transformasi log lebih masuk akal daripada menambah prediktor baru?
-  [💡 Hint]{title='Saat hubungan antara X dan Y melengkung/eksponensial alih-alih linier lurus, atau ketika varians residual semakin melebar di nilai X yang tinggi.'}
+  <details><summary>💡 Hint</summary>Saat hubungan antara X dan Y melengkung/eksponensial alih-alih linier lurus, atau ketika varians residual semakin melebar di nilai X yang tinggi.</details>
 - Mengapa regresi robust bisa membantu ketika ada outlier?
-  [💡 Hint]{title='Regresi robust sengaja memberi "bobot" yang sangat kecil pada observasi-observasi outlier sehingga garis regresi tidak melengkung ketarik arah mereka.'}
+  <details><summary>💡 Hint</summary>Regresi robust sengaja memberi "bobot" yang sangat kecil pada observasi-observasi outlier sehingga garis regresi tidak melengkung ketarik arah mereka.</details>
 
 ---
 
@@ -213,9 +213,9 @@ abline(a = 0, b = 1)
 ### Pertanyaan
 
 - Jika MSE kecil, apa artinya secara praktis?
-  [💡 Hint]{title='Rata-rata error kesalahan tebakan prediksinya rendah, yang berarti model kita cukup canggih untuk memprediksi data-data baru ke depannya.'}
+  <details><summary>💡 Hint</summary>Rata-rata error kesalahan tebakan prediksinya rendah, yang berarti model kita cukup canggih untuk memprediksi data-data baru ke depannya.</details>
 - Jika model sangat bagus di training tetapi buruk di test, itu indikasi apa?
-  [💡 Hint]{title='Overfitting. Model terlalu sibuk "menghafal" data training sampai ke noise-noisenya, namun kebingungan ketika diminta memprediksi pola asli pada data baru.'}
+  <details><summary>💡 Hint</summary>Overfitting. Model terlalu sibuk "menghafal" data training sampai ke noise-noisenya, namun kebingungan ketika diminta memprediksi pola asli pada data baru.</details>
 
 ---
 
