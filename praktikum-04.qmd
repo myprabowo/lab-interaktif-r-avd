@@ -110,6 +110,13 @@ Adakah titik yang terlihat “menyimpang” (calon outlier)? Apa dampaknya pada 
 Outlier adalah titik yang menjauh dari pola bergerombol. Outlier dapat "menarik" garis regresi sehingga kemiringannya menjadi meleset dan kurang akurat.
 :::
 
+Jika fungsi regresi kedua variabel tersebut menunjukkan y = -5.3x + 37, apa maknanya?
+
+::: {.callout-tip collapse="true"}
+## 💡 Hint
+Persamaan y = -5.3x + 37 berarti: setiap kenaikan berat kendaraan (wt) sebesar 1 satuan (1000 lbs), efisiensi bahan bakar (mpg) rata-rata **turun sebesar 5.3 mpg**. Angka 37 adalah intersep, yaitu prediksi mpg ketika berat kendaraan = 0 (nilai teoretis). Tanda negatif pada koefisien (-5.3) mengonfirmasi hubungan **negatif**: semakin berat kendaraan, semakin boros bahan bakarnya.
+:::
+
 ---
 
 ## 3. Analisis Korelasi
