@@ -98,9 +98,7 @@ Word cloud **tidak cocok** untuk perbandingan atau laporan ilmiah karena:
 Gunakan **bar plot** jika butuh perbandingan yang presisi.
 :::
 
-**Pertanyaan:** Kata apa yang paling mendominasi word cloud? Apakah itu mencerminkan topik utama data?
-
-::: {.callout-tip collapse="true" title="Hint"}
+::: {.callout-tip collapse="true" title="Kata apa yang paling mendominasi word cloud? Apakah itu mencerminkan topik utama data?"}
 Dari word cloud di atas, kata **"rapi"** tampil paling besar karena muncul di dua ulasan berbeda — satu di kategori fashion ("jahitan rapi") dan satu di kategori makanan ("kemasan rapi"). Ini mencerminkan bahwa **kerapian/keteraturan** adalah atribut kualitas yang diperhatikan pelanggan lintas kategori produk.
 
 Kata-kata berukuran besar lainnya seperti **"cepat"**, **"warna"**, **"enak"**, dan **"bagus"** menunjukkan tema utama data: ulasan yang berfokus pada **kinerja, tampilan, dan rasa** — sesuai dengan tiga kategori dataset (elektronik, fashion, makanan).

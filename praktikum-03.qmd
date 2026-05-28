@@ -30,17 +30,11 @@ Data hilang dapat menyebabkan:
 
 ### Pertanyaan Reflektif
 
-Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Jika data hilang hanya sedikit, apakah selalu aman untuk menghapusnya?"}
 Tergantung polanya. Jika hilangnya tidak acak, menghapusnya tetap bisa menyebabkan bias walaupun jumlahnya sedikit.
 :::
 
-Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Menurut Anda, bagian analisis regresi mana yang paling terdampak oleh missing data?"}
 Ukuran sampel yang mengecil akan menurunkan power statistik, sehingga variabel yang sebenarnya signifikan bisa menjadi tidak signifikan, dan estimasi koefisien bisa menjadi bias.
 :::
 
@@ -71,17 +65,11 @@ vis_miss(airquality)
 
 ### Pertanyaan Reflektif
 
-Variabel mana yang paling banyak memiliki data hilang?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Variabel mana yang paling banyak memiliki data hilang?"}
 **Ozone** adalah variabel dengan data hilang terbanyak — terlihat dari banyaknya garis hitam yang tersebar di hampir seluruh rentang observasi. **Solar.R** juga memiliki beberapa data hilang, namun lebih sedikit dan terkonsentrasi di observasi awal. Variabel lain (Wind, Temp, Month, Day) **tidak memiliki data hilang sama sekali** (seluruhnya abu-abu). Secara keseluruhan, hanya **4,8%** dari total data yang hilang.
 :::
 
-Apakah pola data hilang terlihat acak atau terstruktur?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Apakah pola data hilang terlihat acak atau terstruktur?"}
 Polanya **tidak sepenuhnya acak**. Dari visualisasi terlihat bahwa beberapa baris observasi memiliki Ozone dan Solar.R yang kosong **secara bersamaan**, mengindikasikan kemungkinan adanya pola terstruktur (misalnya kondisi cuaca tertentu yang menyulitkan pengukuran keduanya). Ini penting: jika hilangnya bukan acak murni (*MCAR*), menghapus begitu saja bisa memperkenalkan bias ke analisis.
 :::
 
@@ -98,17 +86,12 @@ dim(airquality_omit)
 ```
 
 ### Refleksi
-Berapa banyak observasi yang hilang setelah `na.omit()`?
 
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Berapa banyak observasi yang hilang setelah na.omit()?"}
 Jumlah baris akan berkurang drastis, misal dari 153 menjadi 111 observasi.
 :::
 
-Dalam konteks regresi, apa risiko utama pendekatan ini?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Dalam konteks regresi, apa risiko utama pendekatan ini?"}
 Kehilangan banyak data akan sangat mengurangi informasi, power statistik, dan bisa mengubah distribusi model secara artifisial.
 :::
 
@@ -171,17 +154,12 @@ par(mfrow = c(1, 1))
 ```
 
 ### Refleksi
-Apa asumsi implisit saat menggunakan mean/median?
 
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Apa asumsi implisit saat menggunakan mean/median?"}
 Asumsinya adalah seluruh observasi yang hilang sangat mirip dengan observasi tipikal (rata-rata), yang mana sering tidak realistis.
 :::
 
-Variabilitas data bertambah atau berkurang?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Variabilitas data bertambah atau berkurang?"}
 Berkurang. Karena kita memasukkan angka konstan berulang kali, varians data akan mengecil secara semu.
 :::
 
@@ -206,17 +184,11 @@ airquality_mice <- complete(imp, 1)
 
 ### Refleksi
 
-Apa keunggulan imputasi multivariat dibanding imputasi sederhana?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Apa keunggulan imputasi multivariat dibanding imputasi sederhana?"}
 Imputasi multivariat memanfaatkan korelasi antar variabel untuk menebak nilai kosong, sehingga struktur interaksi data tetap terjaga.
 :::
 
-Mengapa `mice` sering direkomendasikan untuk analisis inferensial?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Mengapa mice sering direkomendasikan untuk analisis inferensial?"}
 `mice` membuat beberapa versi dataset (multiple) yang kemudian digabungkan, sehingga ketidakpastian (uncertainty) akibat proses tebak-tebakan data ini ikut masuk perhitungan standar error.
 :::
 
@@ -247,17 +219,11 @@ summary(model_mice)
 
 ### Pertanyaan Reflektif
 
-Bandingkan koefisien dan R-squared ketiga model.
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Bandingkan koefisien dan R-squared ketiga model."}
 R-squared pada model yang diimputasi mean sering kali menurun, tapi R-squared tinggi dari na.omit bisa jadi ilusi karena sampel menjadi homogen.
 :::
 
-Model mana yang paling masuk akal secara substantif?
-
-::: {.callout-tip collapse="true"}
-## Hint
+::: {.callout-tip collapse="true" title="Model mana yang paling masuk akal secara substantif?"}
 Secara statistik, model dari `mice` umumnya paling bisa diandalkan untuk inferensi populasi karena menghindari bias seleksi dan meremehkan standar error.
 :::
 

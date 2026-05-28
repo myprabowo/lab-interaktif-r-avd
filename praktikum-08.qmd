@@ -457,9 +457,7 @@ Cukup ganti tiga hal:
 3. **Judul aplikasi**: sesuaikan `titlePanel()` dan teks `main` di setiap plot.
 :::
 
-**Pertanyaan:** Apa yang terjadi jika `switch()` tidak menemukan nilai yang cocok dengan `input$jenis_plot`? Bagaimana cara menambahkan fallback (nilai default)?
-
-::: {.callout-tip collapse="true" title="Hint"}
+::: {.callout-tip collapse="true" title="Apa yang terjadi jika switch() tidak menemukan nilai yang cocok dengan input$jenis_plot? Bagaimana cara menambahkan fallback (nilai default)?"}
 Jika `switch()` tidak menemukan nilai yang cocok, fungsi ini mengembalikan **`NULL`** secara diam-diam — tidak ada error, tapi `renderPlot()` akan menghasilkan plot kosong atau error tak terduga.
 
 Cara menambahkan **fallback (nilai default)** adalah dengan meletakkan ekspresi tanpa nama di posisi terakhir `switch()`:
