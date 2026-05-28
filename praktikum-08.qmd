@@ -459,6 +459,24 @@ Cukup ganti tiga hal:
 
 **Pertanyaan:** Apa yang terjadi jika `switch()` tidak menemukan nilai yang cocok dengan `input$jenis_plot`? Bagaimana cara menambahkan fallback (nilai default)?
 
+::: {.callout-tip collapse="true" title="Hint"}
+Jika `switch()` tidak menemukan nilai yang cocok, fungsi ini mengembalikan **`NULL`** secara diam-diam — tidak ada error, tapi `renderPlot()` akan menghasilkan plot kosong atau error tak terduga.
+
+Cara menambahkan **fallback (nilai default)** adalah dengan meletakkan ekspresi tanpa nama di posisi terakhir `switch()`:
+
+```r
+switch(input$jenis_plot,
+  "Scatter Plot" = { plot(...) },
+  "Line Plot"    = { plot(..., type = "l") },
+  "Bar Plot"     = { barplot(...) },
+  # Fallback: dijalankan jika tidak ada yang cocok
+  plot(seq_along(y), y, main = "Plot Default", xlab = "Index", ylab = lab)
+)
+```
+
+Argumen terakhir tanpa label string berfungsi seperti `default` di `switch` bahasa lain. Ini berguna sebagai pengaman jika daftar `choices` di UI tidak sinkron dengan kondisi di server.
+:::
+
 ---
 
 ## 7. Referensi Elemen Input Shiny
