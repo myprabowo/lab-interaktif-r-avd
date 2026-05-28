@@ -90,7 +90,7 @@ for (i in seq_len(nrow(top12))) {
 }
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan word cloud sebaiknya TIDAK digunakan?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Kapan word cloud sebaiknya TIDAK digunakan?"}
 Word cloud **tidak cocok** untuk perbandingan atau laporan ilmiah karena:  
 (1) Mata manusia buruk dalam membandingkan ukuran teks yang tidak sejajar  
 (2) Tidak menampilkan nilai numerik pasti  
@@ -99,6 +99,14 @@ Gunakan **bar plot** jika butuh perbandingan yang presisi.
 :::
 
 **Pertanyaan:** Kata apa yang paling mendominasi word cloud? Apakah itu mencerminkan topik utama data?
+
+::: {.callout-tip collapse="true" title="Hint"}
+Dari word cloud di atas, kata **"rapi"** tampil paling besar karena muncul di dua ulasan berbeda — satu di kategori fashion ("jahitan rapi") dan satu di kategori makanan ("kemasan rapi"). Ini mencerminkan bahwa **kerapian/keteraturan** adalah atribut kualitas yang diperhatikan pelanggan lintas kategori produk.
+
+Kata-kata berukuran besar lainnya seperti **"cepat"**, **"warna"**, **"enak"**, dan **"bagus"** menunjukkan tema utama data: ulasan yang berfokus pada **kinerja, tampilan, dan rasa** — sesuai dengan tiga kategori dataset (elektronik, fashion, makanan).
+
+> **Catatan:** Word cloud dibuat dengan `set.seed(42)` sehingga posisi kata konsisten setiap kali dijalankan, tetapi ukuran kata tetap mencerminkan frekuensi relatifnya.
+:::
 
 ---
 
@@ -147,7 +155,7 @@ for (kat in unique(frek_per_kat$kategori)) {
 par(mfrow = c(1, 1))
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan bar plot lebih baik daripada word cloud?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Kapan bar plot lebih baik daripada word cloud?"}
 Bar plot lebih baik ketika Anda perlu:  
 (1) Membandingkan frekuensi antar kata secara tepat  
 (2) Menyertakan angka dalam laporan atau presentasi formal  
@@ -196,7 +204,7 @@ for (i in seq_len(nrow(top_bg))) {
 }
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa manfaat bigram untuk analisis sentimen?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa manfaat bigram untuk analisis sentimen?"}
 Kata tunggal "tidak" ambigu — bisa diikuti kata positif maupun negatif. Bigram "tidak puas" atau "tidak bagus" menangkap sentimen negatif dengan lebih akurat. Begitu pula "luar biasa" lebih bermakna sebagai satu kesatuan frasa daripada kata "luar" dan "biasa" secara terpisah.
 :::
 
@@ -266,7 +274,7 @@ barplot(neg$n, names.arg = neg$kata, col = "tomato",
 par(mfrow = c(1, 1))
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa ulasan tertentu bisa mendapat skor 0 meski kalimatnya terasa negatif?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa ulasan tertentu bisa mendapat skor 0 meski kalimatnya terasa negatif?"}
 Skor 0 terjadi karena kata-kata dalam ulasan tersebut tidak ada di kamus sentimen yang kita gunakan. Ini disebut **coverage problem** — kamus tidak lengkap. Solusinya: perluas kamus, gunakan kamus pihak ketiga, atau beralih ke pendekatan machine learning.
 :::
 
@@ -308,7 +316,7 @@ axis(2, at = seq(0, 1, length.out = nrow(mat_norm)),
      labels = rownames(mat_norm), las = 1, cex.axis = 0.8)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa yang ditunjukkan warna gelap di heatmap?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa yang ditunjukkan warna gelap di heatmap?"}
 Warna **gelap (biru tua)** berarti kata tersebut sering muncul di kategori tersebut (relatif terhadap maksimumnya). Warna **putih** berarti kata itu jarang atau tidak muncul sama sekali. Pola ini membantu mengidentifikasi kata-kata yang menjadi "ciri khas" setiap kategori.
 :::
 
@@ -344,7 +352,7 @@ barplot(
 )
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 1"}
 ```r
 token_makanan <- token_bersih %>%
   filter(kategori == "makanan")
@@ -388,7 +396,7 @@ barplot(
 abline(h = 0, lty = 2)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 2"}
 ```r
 warna_baru <- ifelse(skor_sentimen$skor > 0, "forestgreen",
                      ifelse(skor_sentimen$skor < 0, "darkorange", "gray60"))
@@ -435,7 +443,7 @@ bigram_baru %>%
   head(5)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
 bigram_baru <- teks_baru %>%
   unnest_tokens(bigram, teks, token = "ngrams", n = 2)

@@ -292,7 +292,7 @@ b_lat <- (sum_yl - a_lat * sum_xl) / n_lat
 cat("a =", round(a_lat, 4), "| b =", round(b_lat, 4), "\n")
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 1"}
 ```r
 sum_xl    <- sum(x_lat)
 sum_yl    <- sum(y_lat)
@@ -314,7 +314,7 @@ model_lat <- lm(___ ~ ___, data = data.frame(x = x_lat, y = y_lat))
 summary(model_lat)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 2"}
 ```r
 model_lat <- lm(y ~ x, data = data.frame(x = x_lat, y = y_lat))
 ```
@@ -335,7 +335,7 @@ data_baru <- data.frame(x = c(___, ___))
 predict(model_lat, newdata = ___, interval = "___", level = ___)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
 data_baru <- data.frame(x = c(6, 7))
 predict(model_lat, newdata = data_baru, interval = "confidence", level = 0.95)
@@ -365,7 +365,7 @@ plot(___)
 par(mfrow = c(1, 1))
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 4"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 4"}
 ```r
 # Langkah 1
 model_tugas <- lm(mpg ~ disp + drat, data = mtcars)

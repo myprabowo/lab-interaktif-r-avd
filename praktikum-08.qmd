@@ -39,7 +39,7 @@ Visualisasi **statis** (seperti `plot()` atau `ggplot2`) menghasilkan gambar tet
 | Kebutuhan | `plot()` / `ggplot2` | `library(shiny)` |
 | Cocok untuk | Laporan, paper | Dashboard, eksplorasi |
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan interaktif lebih baik dari statis?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Kapan interaktif lebih baik dari statis?"}
 Pilih visualisasi **interaktif** ketika:  
 (1) Pengguna perlu menjelajahi berbagai subset data  
 (2) Ada banyak variabel yang bisa dipilih  
@@ -90,7 +90,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa UI dan Server dipisahkan?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa UI dan Server dipisahkan?"}
 Pemisahan UI dan Server mengikuti prinsip **separation of concerns**:  
 - **UI** mendeskripsikan *apa* yang ditampilkan  
 - **Server** mendeskripsikan *bagaimana* data diproses  
@@ -174,7 +174,7 @@ shinyApp(ui = ui, server = server)
 2. Shiny mendeteksi perubahan pada `data_dipilih` (reactive)
 3. `output$histogram` otomatis di-*render* ulang dengan data baru
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa itu reactive() dan mengapa digunakan?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa itu reactive() dan mengapa digunakan?"}
 `reactive()` membuat "blok kode yang otomatis dijalankan ulang" saat input yang digunakannya berubah. Tanpa `reactive()`, Anda harus menduplikasi kode pemrosesan di setiap `renderXxx()`. Dengan `reactive()`, perhitungan cukup dilakukan sekali dan hasilnya bisa dipakai di banyak output.
 :::
 
@@ -229,7 +229,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa keunggulan tabsetPanel?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa keunggulan tabsetPanel?"}
 `tabsetPanel()` memisahkan beberapa output ke dalam tab berbeda, sehingga halaman tidak terlalu penuh. Pengguna bisa fokus pada satu tampilan sekaligus tanpa scrolling berlebihan. Ini praktik UI yang baik ketika ada beberapa jenis output (plot, tabel, ringkasan).
 :::
 
@@ -292,7 +292,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa itu checkboxInput dan bagaimana membacanya di server?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa itu checkboxInput dan bagaimana membacanya di server?"}
 `checkboxInput()` mengembalikan nilai `TRUE` (dicentang) atau `FALSE` (tidak dicentang). Di server, nilai ini diakses via `input$garis`. Pernyataan `if (input$garis) { ... }` berarti "jalankan kode di dalam kurung kurawal hanya jika kotak dicentang".
 :::
 
@@ -522,7 +522,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 1"}
 ```r
 # Bagian UI — tambahkan di sidebarPanel:
 selectInput(
@@ -559,7 +559,7 @@ output$statistik <- renderText({
 })
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 2"}
 ```r
 # UI — di dalam mainPanel():
 plotOutput("histogram"),
@@ -627,7 +627,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
 # Di selectInput untuk grup:
 choices = var_kategori

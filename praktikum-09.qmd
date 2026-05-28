@@ -46,7 +46,7 @@ install.packages("DT")
 | Konten | Bebas | Dalam `box()` |
 | Tampilan | Minimalis | Dashboard profesional |
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Kapan perlu pakai shinydashboard?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Kapan perlu pakai shinydashboard?"}
 Gunakan `shinydashboard` ketika:  
 (1) Ada banyak visualisasi yang perlu diatur dalam satu halaman  
 (2) Dibutuhkan navigasi antar halaman/tab  
@@ -130,7 +130,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa fungsi status dan solidHeader pada box()?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa fungsi status dan solidHeader pada box()?"}
 - `status`: warna garis atas box — `"primary"` (biru), `"warning"` (kuning), `"danger"` (merah), `"success"` (hijau)  
 - `solidHeader = TRUE`: mengisi header box dengan warna penuh (lebih mencolok)  
 - `width`: lebar dalam grid 12 kolom Bootstrap — `width = 6` artinya setengah layar
@@ -238,7 +238,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Cara membaca tab dari sidebar yang dipilih"}
+::: {.callout-tip collapse="true" title="Petunjuk — Cara membaca tab dari sidebar yang dipilih"}
 `tabName` di `menuItem()` harus **persis sama** dengan `tabName` di `tabItem()`. Shiny menggunakan string ini sebagai penghubung antara klik menu dan konten yang ditampilkan. Kesalahan ejaan akan membuat tab tidak muncul tanpa pesan error.
 :::
 
@@ -271,7 +271,7 @@ rsconnect::setAccountInfo(
 rsconnect::deployApp("path/ke/folder/app")
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Di mana mendapatkan token shinyapps.io?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Di mana mendapatkan token shinyapps.io?"}
 1. Buka [shinyapps.io](https://www.shinyapps.io) dan buat akun gratis  
 2. Login → klik nama pengguna di pojok kanan atas → **Tokens**  
 3. Klik **Show** untuk melihat token dan secret  
@@ -323,7 +323,7 @@ output$min_val  <- renderText({ round(___(faithful$eruptions), 2) })   # isi fun
 output$max_val  <- renderText({ round(___(faithful$eruptions), 2) })   # isi fungsi
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 1"}
 ```r
 # UI:
 icon("calculator"), color = "blue"
@@ -371,7 +371,7 @@ output$boxplot_out <- renderPlot({
 })
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 2"}
 ```r
 # tabName yang konsisten antara menuItem dan tabItem:
 tabName = "boxplot"
@@ -471,7 +471,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
 # Header:
 dashboardHeader(title = "Dashboard Iris")

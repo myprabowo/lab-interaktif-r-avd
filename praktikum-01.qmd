@@ -59,7 +59,7 @@ ___
 ___(10, 5, 20)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 1"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 1"}
 ```r
 10 / 4
 10 ^ 2
@@ -96,7 +96,7 @@ class(logika)
 class(kategori)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa perbedaan Character dan Factor?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa perbedaan Character dan Factor?"}
 **Character** murni hanya menyimpan teks. **Factor** menyimpan teks sebagai kategori yang memiliki level (kelompok). Factor sangat penting dalam analisis statistik untuk merepresentasikan variabel seperti "Jenis Kelamin" atau "Tingkat Pendidikan".
 :::
 
@@ -118,7 +118,7 @@ apakah_mahasiswa <- ___
 class(___)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 2"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 2"}
 ```r
 umur <- 20
 nama <- "Budi" # (Atau nama Anda)
@@ -169,7 +169,7 @@ data_frame_1
 sd(data_frame_1$data_1)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa kita menggunakan simbol $ ?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa kita menggunakan simbol $ ?"}
 Simbol `$` adalah operator penunjuk di R. Tulisannya dibaca: "Dari `data_frame_1`, tolong ambilkan kolom bernama `data_1` saja".
 :::
 
@@ -188,7 +188,7 @@ ___(data_frame_1$data_3)
 ___(data_frame_1)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 3"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
 sd(data_frame_1$data_2)
 mean(data_frame_1$data_3)
@@ -249,7 +249,7 @@ plot(1:15,
      pch  = ___)
 ```
 
-::: {.callout-tip collapse="true" title="✅ Jawaban Latihan 4"}
+::: {.callout-tip collapse="true" title="Jawaban Latihan 4"}
 ```r
 plot(1:15, 
      main = "Grafik Merah", 
