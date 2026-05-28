@@ -128,6 +128,48 @@ airquality_median$Ozone[is.na(airquality_median$Ozone)] <-
   median(airquality_median$Ozone, na.rm = TRUE)
 ```
 
+```{webr}
+# Verifikasi: apakah NA sudah tidak ada?
+cat("NA sebelum imputasi :", sum(is.na(airquality$Ozone)), "\n")
+cat("NA setelah imputasi mean  :", sum(is.na(airquality_mean$Ozone)), "\n")
+cat("NA setelah imputasi median:", sum(is.na(airquality_median$Ozone)), "\n\n")
+
+# Perbandingan statistik ringkas
+cat("--- Ozone: Sebelum Imputasi ---\n")
+cat("Mean:", round(mean(airquality$Ozone, na.rm = TRUE), 2),
+    "| SD:", round(sd(airquality$Ozone, na.rm = TRUE), 2), "\n\n")
+
+cat("--- Ozone: Setelah Imputasi Mean ---\n")
+cat("Mean:", round(mean(airquality_mean$Ozone), 2),
+    "| SD:", round(sd(airquality_mean$Ozone), 2), "\n\n")
+
+cat("--- Ozone: Setelah Imputasi Median ---\n")
+cat("Mean:", round(mean(airquality_median$Ozone), 2),
+    "| SD:", round(sd(airquality_median$Ozone), 2), "\n")
+```
+
+```{webr}
+# Visualisasi perbandingan distribusi Ozone
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+
+hist(airquality$Ozone,
+     main = "Sebelum Imputasi\n(ada NA)",
+     xlab = "Ozone", col = "gray80", border = "white",
+     ylim = c(0, 40))
+
+hist(airquality_mean$Ozone,
+     main = "Setelah Imputasi Mean\n(lonjakan di tengah)",
+     xlab = "Ozone", col = "steelblue", border = "white",
+     ylim = c(0, 40))
+
+hist(airquality_median$Ozone,
+     main = "Setelah Imputasi Median\n(lonjakan di bawah mean)",
+     xlab = "Ozone", col = "tomato", border = "white",
+     ylim = c(0, 40))
+
+par(mfrow = c(1, 1))
+```
+
 ### Refleksi
 Apa asumsi implisit saat menggunakan mean/median?
 
