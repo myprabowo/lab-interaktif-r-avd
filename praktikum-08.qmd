@@ -300,7 +300,168 @@ shinyApp(ui = ui, server = server)
 
 ---
 
-## 6. Referensi Elemen Input Shiny
+## 6. Aplikasi Multi-Plot: Satu Dropdown, Banyak Jenis Visualisasi
+
+Bagian ini mencontohkan pola yang sering dibutuhkan dalam tugas dan proyek nyata: **satu aplikasi Shiny dengan dua dropdown** — satu untuk memilih *variabel*, satu untuk memilih *jenis visualisasi*. Output berubah secara reaktif mengikuti kedua pilihan.
+
+Dataset yang digunakan: `airquality` (bawaan R) — berisi pengukuran kualitas udara harian (Ozone, Solar.R, Wind, Temp, dll.) yang strukturnya mirip dengan data observasi lapangan multi-kolom.
+
+::: {.callout-tip collapse="true" title="Petunjuk — Bagaimana jika data saya bersumber dari file Excel?"}
+Jika data Anda bersumber dari file `.xlsx`, gunakan paket `readxl`:
+
+```r
+install.packages("readxl")   # jalankan sekali
+library(readxl)
+
+# Letakkan file .xlsx di folder yang sama dengan app.R, lalu:
+data_saya <- read_excel("nama_file.xlsx")
+```
+
+Setelah `data_saya` terbaca, gunakan persis seperti data frame biasa di semua kode Shiny di bawah ini — ganti saja nama `airquality` dengan `data_saya`.
+:::
+
+### 6.1 Kerangka Lengkap
+
+```{webr}
+#| eval: false
+
+library(shiny)
+library(DT)
+
+# ── Persiapan data ──────────────────────────────────────────
+# Gunakan airquality; hapus baris yang ada NA agar plot tidak error
+data_plot <- na.omit(airquality)
+
+# Kolom numerik yang bisa divisualisasikan
+var_numerik <- c("Ozone", "Solar.R", "Wind", "Temp")
+
+# ── UI ──────────────────────────────────────────────────────
+ui <- fluidPage(
+  titlePanel("Eksplorasi Data Kualitas Udara"),
+
+  sidebarLayout(
+    sidebarPanel(
+
+      # Dropdown 1: pilih variabel
+      selectInput(
+        inputId  = "variabel",
+        label    = "Pilih Variabel:",
+        choices  = var_numerik,
+        selected = "Temp"
+      ),
+
+      # Dropdown 2: pilih jenis plot
+      selectInput(
+        inputId  = "jenis_plot",
+        label    = "Jenis Visualisasi:",
+        choices  = c("Scatter Plot", "Line Plot", "Bar Plot", "Tabel Data"),
+        selected = "Scatter Plot"
+      )
+    ),
+
+    mainPanel(
+      # Output plot ATAU tabel, ditampilkan secara kondisional
+      uiOutput("output_utama")
+    )
+  )
+)
+
+# ── Server ───────────────────────────────────────────────────
+server <- function(input, output) {
+
+  # Ambil kolom yang dipilih sebagai vektor
+  data_dipilih <- reactive({
+    data_plot[[input$variabel]]
+  })
+
+  # Render output yang sesuai berdasarkan jenis plot
+  output$output_utama <- renderUI({
+    if (input$jenis_plot == "Tabel Data") {
+      DTOutput("tabel")         # tampilkan tabel DT
+    } else {
+      plotOutput("plot_grafik") # tampilkan grafik
+    }
+  })
+
+  # Render grafik (scatter / line / bar)
+  output$plot_grafik <- renderPlot({
+    x   <- seq_along(data_dipilih())   # indeks baris sebagai sumbu X
+    y   <- data_dipilih()
+    lab <- input$variabel
+
+    switch(input$jenis_plot,
+
+      "Scatter Plot" = {
+        plot(x, y,
+             pch  = 16, col = "steelblue", cex = 1.1,
+             main = paste("Scatter Plot:", lab),
+             xlab = "Observasi ke-", ylab = lab)
+      },
+
+      "Line Plot" = {
+        plot(x, y,
+             type = "l", col = "tomato", lwd = 2,
+             main = paste("Line Plot:", lab),
+             xlab = "Observasi ke-", ylab = lab)
+        points(x, y, pch = 16, col = "tomato", cex = 0.7)
+      },
+
+      "Bar Plot" = {
+        # Bar plot: tampilkan 20 observasi pertama agar tidak terlalu padat
+        barplot(head(y, 20),
+                col    = "steelblue",
+                border = "white",
+                main   = paste("Bar Plot:", lab, "(20 observasi pertama)"),
+                ylab   = lab,
+                xlab   = "Observasi ke-",
+                names.arg = seq_len(min(20, length(y))))
+      }
+    )
+  })
+
+  # Render tabel
+  output$tabel <- renderDT({
+    datatable(
+      data_plot,
+      options = list(pageLength = 10, scrollX = TRUE),
+      caption = "Dataset: airquality (NA sudah dihapus)"
+    )
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+### Cara Kerja Pola Ini
+
+| Komponen | Fungsi |
+|---|---|
+| `selectInput("jenis_plot", ...)` | Dropdown kedua untuk memilih jenis visualisasi |
+| `uiOutput("output_utama")` | Placeholder yang bisa berubah antara plot dan tabel |
+| `renderUI({ if (...) DTOutput else plotOutput })` | Menentukan *jenis* output secara kondisional |
+| `switch(input$jenis_plot, ...)` | Memilih kode plot yang dijalankan |
+| `reactive({ data_plot[[input$variabel]] })` | Kolom data yang dipilih, dihitung sekali, dipakai ulang |
+
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa renderUI diperlukan di sini?"}
+`plotOutput` dan `DTOutput` adalah **dua jenis elemen HTML yang berbeda** — tidak bisa ditukar hanya dengan kondisi di server. `renderUI()` memungkinkan kita mengganti *elemen UI itu sendiri* secara dinamis dari server, sehingga tabel dan plot bisa benar-benar saling menggantikan di area yang sama.
+:::
+
+::: {.callout-tip collapse="true" title="Petunjuk — Bagaimana cara menyesuaikan pola ini untuk data saya sendiri?"}
+Cukup ganti tiga hal:
+
+1. **Nama dataset**: ganti `airquality` dan `data_plot` dengan nama data frame Anda.
+2. **Daftar variabel**: ganti isi `var_numerik` dengan nama kolom numerik di data Anda. Cara otomatis:
+   ```r
+   var_numerik <- colnames(data_saya)[sapply(data_saya, is.numeric)]
+   ```
+3. **Judul aplikasi**: sesuaikan `titlePanel()` dan teks `main` di setiap plot.
+:::
+
+**Pertanyaan:** Apa yang terjadi jika `switch()` tidak menemukan nilai yang cocok dengan `input$jenis_plot`? Bagaimana cara menambahkan fallback (nilai default)?
+
+---
+
+## 7. Referensi Elemen Input Shiny
 
 | Fungsi | Jenis Kontrol | Nilai yang Dikembalikan |
 |---|---|---|
@@ -313,7 +474,7 @@ shinyApp(ui = ui, server = server)
 
 ---
 
-## 7. Latihan
+## 8. Latihan
 
 ### Latihan 1 — Mudah: Tambahkan Input Warna
 
