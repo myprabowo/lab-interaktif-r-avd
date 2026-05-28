@@ -1,5 +1,5 @@
 ---
-title: "Praktikum Analisis Regresi"
+title: "Praktikum Analisis Regresi Eksplorasi"
 format: live-html
 engine: knitr
 ---
@@ -17,6 +17,20 @@ Setelah praktikum ini, Anda mampu:
 6. Menulis interpretasi hasil regresi secara ringkas dan tepat.
 
 **Rujukan alur praktikum:** mengikuti langkah "cara eksplorasi" untuk analisis regresi: persiapan data → eksplorasi → korelasi → model → uji asumsi → validasi → pelaporan.
+:::
+
+::: {.callout-important}
+## Apa itu Metode Eksplorasi?
+
+**Metode eksplorasi** adalah pendekatan analisis yang dilakukan *tanpa* hipotesis awal yang kaku. Tujuannya adalah **menemukan pola, hubungan, dan anomali** dalam data secara terbuka sebelum menarik kesimpulan apa pun.
+
+Dalam praktikum ini, Anda akan:
+
+- Menjelajahi data secara visual dan deskriptif untuk memahami distribusi dan hubungan antar variabel.
+- Menggunakan korelasi dan scatter plot sebagai "sinyal awal" sebelum membangun model.
+- Membangun model regresi dan menguji asumsinya — bukan untuk "membuktikan" hipotesis, melainkan untuk memahami data lebih dalam.
+
+> **Perbandingan:** Jika metode eksplorasi ibarat *detektif yang mencari petunjuk*, maka metode konfirmasi (Praktikum 05) ibarat *hakim yang menguji bukti secara formal*.
 :::
 
 ---

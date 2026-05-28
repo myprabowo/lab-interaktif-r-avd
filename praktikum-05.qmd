@@ -20,6 +20,20 @@ Setelah praktikum ini, Anda mampu:
 **Catatan:** Pendekatan konfirmasi berangkat dari hipotesis yang sudah ditetapkan sebelum melihat data — berbeda dari eksplorasi yang bersifat terbuka.
 :::
 
+::: {.callout-important}
+## Apa itu Metode Konfirmasi?
+
+**Metode konfirmasi** adalah pendekatan analisis yang dimulai dari **hipotesis yang sudah dirumuskan terlebih dahulu**, kemudian data dikumpulkan dan dianalisis untuk menguji apakah hipotesis tersebut didukung atau ditolak secara statistik.
+
+Dalam praktikum ini, Anda akan:
+
+- Merumuskan $H_0$ dan $H_1$ sebelum melihat data.
+- Menghitung statistik uji (t-statistik, F-statistik) dan membandingkannya dengan nilai kritis.
+- Mengambil keputusan berdasarkan p-value dan interval kepercayaan, bukan intuisi visual semata.
+
+> **Perbandingan:** Jika metode eksplorasi (Praktikum 04) ibarat *detektif yang mencari petunjuk*, maka metode konfirmasi ini ibarat *hakim yang menguji bukti secara formal* menggunakan kriteria yang telah ditetapkan.
+:::
+
 ---
 
 ## 1. Konsep: Garis Regresi Least Squares
@@ -62,7 +76,7 @@ legend("topleft",
        col = "tomato", lwd = 2, bty = "n")
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa kuadrat, bukan nilai absolut?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa kuadrat, bukan nilai absolut?"}
 Mengkuadratkan deviasi membuat fungsi menjadi *smooth* dan *differentiable*, sehingga mudah diminimalkan secara matematis. Nilai absolut menghasilkan fungsi yang tidak mulus di titik nol dan lebih sulit dioptimalkan secara analitik.
 :::
 
@@ -120,7 +134,7 @@ cat("lm()   → a =", round(coef(model_penjualan)[2], 4),
     "| b =", round(coef(model_penjualan)[1], 4), "\n")
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa arti koefisien a dalam konteks ini?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa arti koefisien a dalam konteks ini?"}
 Koefisien $a$ adalah **kemiringan (slope)**. Dalam konteks penjualan, $a \approx 8.3$ artinya setiap tahun berlalu, penjualan diperkirakan naik sekitar Rp 8,3 miliar. Ini adalah perubahan rata-rata per unit waktu.
 :::
 
@@ -132,8 +146,16 @@ Koefisien $a$ adalah **kemiringan (slope)**. Dalam konteks penjualan, $a \approx
 
 Dalam pendekatan konfirmasi, hipotesis ditetapkan **sebelum** melihat data:
 
-- $H_0$: $\beta_1 = 0$ → tidak ada hubungan linear
+- $H_0$: $\beta_1 = 0$ → tidak ada hubungan linear antara prediktor dan respons
 - $H_1$: $\beta_1 \neq 0$ → ada hubungan linear yang signifikan
+
+**Langkah-langkah uji hipotesis:**
+
+1. **Tetapkan hipotesis** ($H_0$ dan $H_1$) dan tingkat signifikansi $\alpha$ (biasanya 0.05).
+2. **Hitung statistik uji** — untuk koefisien regresi digunakan t-statistik: $t = \hat{\beta}_1 / SE(\hat{\beta}_1)$.
+3. **Tentukan nilai kritis** atau hitung p-value.
+4. **Buat keputusan**: tolak $H_0$ jika p-value $< \alpha$.
+5. **Interpretasikan** dalam konteks masalah.
 
 ```{webr}
 data(mtcars)
@@ -151,6 +173,14 @@ r_sq    <- summary(model_konfirmasi)$r.squared
 cat("t-statistik:", round(t_stat, 4), "\n")
 cat("p-value    :", format(p_val, scientific = TRUE), "\n")
 cat("R-squared  :", round(r_sq, 4), "\n")
+
+# Keputusan otomatis
+alpha <- 0.05
+if (p_val < alpha) {
+  cat("Keputusan  : Tolak H0 — wt berpengaruh signifikan terhadap mpg (p <", alpha, ")\n")
+} else {
+  cat("Keputusan  : Gagal tolak H0 — tidak cukup bukti pengaruh signifikan (p >=", alpha, ")\n")
+}
 ```
 
 ```{webr}
@@ -158,7 +188,7 @@ cat("R-squared  :", round(r_sq, 4), "\n")
 confint(model_konfirmasi, level = 0.95)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Apa artinya jika interval kepercayaan tidak mencakup nol?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Apa artinya jika interval kepercayaan tidak mencakup nol?"}
 Jika interval kepercayaan **tidak** mencakup nol, kita punya bukti kuat bahwa koefisien tersebut berbeda dari nol secara statistik — artinya variabel prediktor memang memiliki pengaruh nyata. Jika interval mencakup nol, kita tidak bisa menyimpulkan hubungan yang signifikan.
 :::
 
@@ -189,7 +219,7 @@ cat("p-value (F):", format(p_f, scientific = TRUE), "\n")
 anova(model_konfirmasi, model_berganda)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — Mengapa Adjusted R² lebih tepat untuk perbandingan model?"}
+::: {.callout-tip collapse="true" title="Petunjuk — Mengapa Adjusted R² lebih tepat untuk perbandingan model?"}
 R² selalu naik saat kita menambahkan prediktor baru, bahkan jika prediktor itu tidak relevan. **Adjusted R²** mengoreksi hal ini dengan memberikan penalti untuk setiap prediktor yang ditambahkan. Gunakan Adjusted R² saat membandingkan model dengan jumlah prediktor berbeda.
 :::
 
@@ -225,7 +255,7 @@ library(car)
 vif(model_berganda)
 ```
 
-::: {.callout-tip collapse="true" title="💡 Petunjuk — VIF berapa yang mengkhawatirkan?"}
+::: {.callout-tip collapse="true" title="Petunjuk — VIF berapa yang mengkhawatirkan?"}
 **VIF (Variance Inflation Factor):**  
 - VIF < 5 → aman  
 - VIF 5–10 → perlu diwaspadai  
