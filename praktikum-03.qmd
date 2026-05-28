@@ -75,14 +75,14 @@ Variabel mana yang paling banyak memiliki data hilang?
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Biasanya terlihat jelas pada visualisasi naniar, misal Ozone dan Solar.R.
+**Ozone** adalah variabel dengan data hilang terbanyak — terlihat dari banyaknya garis hitam yang tersebar di hampir seluruh rentang observasi. **Solar.R** juga memiliki beberapa data hilang, namun lebih sedikit dan terkonsentrasi di observasi awal. Variabel lain (Wind, Temp, Month, Day) **tidak memiliki data hilang sama sekali** (seluruhnya abu-abu). Secara keseluruhan, hanya **4,8%** dari total data yang hilang.
 :::
 
 Apakah pola data hilang terlihat acak atau terstruktur?
 
 ::: {.callout-tip collapse="true"}
 ## Hint
-Coba perhatikan apakah kombinasi missing value antarkolom sering terjadi bersamaan atau tidak.
+Polanya **tidak sepenuhnya acak**. Dari visualisasi terlihat bahwa beberapa baris observasi memiliki Ozone dan Solar.R yang kosong **secara bersamaan**, mengindikasikan kemungkinan adanya pola terstruktur (misalnya kondisi cuaca tertentu yang menyulitkan pengukuran keduanya). Ini penting: jika hilangnya bukan acak murni (*MCAR*), menghapus begitu saja bisa memperkenalkan bias ke analisis.
 :::
 
 ---
