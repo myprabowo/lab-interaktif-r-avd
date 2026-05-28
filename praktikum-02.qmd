@@ -266,4 +266,8 @@ par(mfrow=c(1,1))
 
 ### Jurnal Refleksi
 
-Jawab singkat: 1. Transformasi mana yang paling “masuk akal” untuk data pendapatan? Mengapa? 2. Kesalahan apa yang paling mungkin terjadi saat melakukan log transform? 3. Jika grafik sudah tampak normal setelah transformasi, apa langkah analisis berikutnya yang Anda usulkan?
+Jawab singkat pertanyaan berikut:
+
+1. Transformasi mana yang paling "masuk akal" untuk data pendapatan? Mengapa?
+2. Kesalahan apa yang paling mungkin terjadi saat melakukan log transform?
+3. Jika grafik sudah tampak normal setelah transformasi, apa langkah analisis berikutnya yang Anda usulkan?
