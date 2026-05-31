@@ -44,6 +44,79 @@ max(1, 4, 7)
 - `1 + 2` menghasilkan `3`
 - `max(1, 4, 7)` menghasilkan `7` (nilai terbesar)
 
+### 1.1 Fungsi Statistik Deskriptif
+
+R menyediakan fungsi-fungsi siap pakai untuk merangkum data. Berikut adalah yang paling sering digunakan:
+
+| Fungsi | Keterangan | Contoh |
+|---|---|---|
+| `mean(x)` | Rata-rata | `mean(c(2, 4, 6))` → `4` |
+| `median(x)` | Nilai tengah | `median(c(1, 3, 9))` → `3` |
+| `min(x)` | Nilai terkecil | `min(c(5, 1, 8))` → `1` |
+| `max(x)` | Nilai terbesar | `max(c(5, 1, 8))` → `8` |
+| `sd(x)` | Standar deviasi | `sd(c(2, 4, 6))` → `2` |
+| `summary(x)` | Ringkasan lengkap | min, Q1, median, mean, Q3, max |
+
+```{webr}
+nilai <- c(72, 85, 60, 90, 78, 55, 88, 95, 70, 65)
+
+mean(nilai)     # rata-rata
+median(nilai)   # nilai tengah
+min(nilai)      # nilai terkecil
+max(nilai)      # nilai terbesar
+sd(nilai)       # standar deviasi
+summary(nilai)  # ringkasan sekaligus
+```
+
+### 1.2 Cara Memasukkan Data ke R
+
+Ada tiga cara utama untuk memasukkan data ke R:
+
+**A. Input langsung sebagai vektor** — cocok untuk data kecil:
+
+```{webr}
+# Vektor satu variabel
+tinggi_badan <- c(165, 170, 158, 172, 160, 168, 155, 175)
+
+mean(tinggi_badan)
+sd(tinggi_badan)
+```
+
+**B. Membaca dari file CSV** — paling umum untuk data tabel:
+
+```r
+# Membaca file CSV dari komputer lokal
+data_csv <- read.csv("nama_file.csv")
+
+# Jika pemisah desimal koma (format Eropa/Indonesia)
+data_csv <- read.csv2("nama_file.csv")
+
+# Menampilkan 6 baris pertama
+head(data_csv)
+```
+
+**C. Membaca dari file Excel** — memerlukan paket `readxl`:
+
+```r
+# Install paket (cukup sekali)
+install.packages("readxl")
+
+# Muat paket
+library(readxl)
+
+# Baca file Excel (sheet pertama secara default)
+data_excel <- read_excel("nama_file.xlsx")
+data_excel <- read_excel("nama_file.xlsx", sheet = "NamaSheet")
+
+head(data_excel)
+```
+
+::: {.callout-tip collapse="true" title="Petunjuk — Kapan menggunakan masing-masing cara input?"}
+- **Vektor `c()`**: Data sedikit, diketik langsung di skrip. Cocok untuk latihan dan contoh singkat.
+- **`read.csv()`**: Data sudah tersimpan sebagai file `.csv` (bisa diekspor dari Excel). Tidak perlu paket tambahan.
+- **`read_excel()`**: Data asli berformat `.xlsx` dan tidak ingin dikonversi terlebih dahulu. Membutuhkan paket `readxl`.
+:::
+
 ### Latihan 1 — Mudah: Operasi Dasar
 
 Hitung `10` dibagi `4`, lalu hitung `10` pangkat `2`! Cari nilai minimum dari `10, 5, 20`.
@@ -136,64 +209,78 @@ Dalam R, data sering disimpan dalam:
 - **Vektor (vector):** kumpulan nilai 1 dimensi yang memiliki tipe data yang sama.
 - **Data frame:** tabel yang terdiri dari baris dan kolom.
 
-Di bagian ini kita fokus pada **standar deviasi** (`sd()`), yaitu ukuran sebaran data, dan **rata-rata** (`mean()`).
+Di bagian ini kita menerapkan fungsi-fungsi statistik deskriptif — `mean()`, `median()`, `min()`, `max()`, `sd()`, dan `summary()` — pada data nyata.
 
-### 3.1 Standar Deviasi pada Vektor
+### 3.1 Statistik Deskriptif pada Vektor
 
-Gunakan `c()` (kombinasi) untuk membuat vektor.
+Gunakan `c()` (kombinasi) untuk membuat vektor, lalu terapkan berbagai fungsi statistik sekaligus.
 
 ```{webr}
-# Membuat vektor numeric
-data_nilai <- c(2, 3, 5, 6, 10, 13, 18, 22, 24, 25)
+# Data suhu harian (°C) selama dua minggu
+suhu <- c(28, 31, 29, 33, 30, 27, 32, 35, 28, 30, 26, 34, 31, 29)
 
-# Menghitung standar deviasi
-sd(data_nilai)
+mean(suhu)    # rata-rata suhu
+median(suhu)  # suhu nilai tengah
+min(suhu)     # suhu terendah
+max(suhu)     # suhu tertinggi
+sd(suhu)      # seberapa bervariasi suhu harian
 ```
 
-### 3.2 Standar Deviasi pada Kolom Data Frame
+**Interpretasi:** Perhatikan selisih antara `mean` dan `median`. Jika keduanya dekat, distribusi data cenderung simetris. Jika `mean` jauh lebih besar dari `median`, ada kemungkinan nilai ekstrem (outlier) yang menarik rata-rata ke atas.
+
+### 3.2 Statistik Deskriptif pada Kolom Data Frame
 
 `data.frame()` membentuk tabel. Setiap kolom adalah vektor. Untuk mengambil kolom tertentu dari sebuah data frame, gunakan tanda dolar `$`, misalnya `tabel_data$kolom1`.
 
 ```{webr}
-data_frame_1 <- data.frame(
-  data_1 = c(1, 3, 4, 6, 8, 9),
-  data_2 = c(7, 8, 8, 7, 13, 16),
-  data_3 = c(11, 13, 13, 18, 19, 22),
-  data_4 = c(12, 16, 18, 22, 29, 38)
+# Data hasil ujian mahasiswa dari 3 kelas
+hasil_ujian <- data.frame(
+  kelas_A = c(72, 85, 60, 90, 78, 55),
+  kelas_B = c(88, 76, 91, 83, 70, 95),
+  kelas_C = c(65, 58, 74, 80, 62, 71)
 )
 
 # Menampilkan data frame
-data_frame_1
+hasil_ujian
 
-# Menghitung standar deviasi hanya untuk kolom data_1
-sd(data_frame_1$data_1)
+# Statistik untuk kelas_A
+mean(hasil_ujian$kelas_A)
+sd(hasil_ujian$kelas_A)
+
+# Ringkasan semua kolom sekaligus
+summary(hasil_ujian)
 ```
 
 ::: {.callout-tip collapse="true" title="Petunjuk — Mengapa kita menggunakan simbol $ ?"}
-Simbol `$` adalah operator penunjuk di R. Tulisannya dibaca: "Dari `data_frame_1`, tolong ambilkan kolom bernama `data_1` saja".
+Simbol `$` adalah operator penunjuk di R. Tulisannya dibaca: "Dari `hasil_ujian`, tolong ambilkan kolom bernama `kelas_A` saja". `summary()` tanpa `$` merangkum seluruh data frame sekaligus.
 :::
 
 ### Latihan 3 — Sedang: Menghitung Statistik Data Frame
 
-Hitung standar deviasi untuk kolom `data_2`, rata-rata untuk kolom `data_3`, dan tampilkan ringkasan (`summary()`) untuk seluruh tabel!
+Gunakan data `hasil_ujian` di atas. Hitung **median** dan **nilai maksimum** untuk `kelas_B`, hitung **standar deviasi** `kelas_C`, lalu tampilkan ringkasan seluruh tabel!
 
 ```{webr}
-# Hitung sd kolom data_2
-sd(data_frame_1$___)
+# Median kelas_B
+___(hasil_ujian$___)
 
-# Hitung rata-rata kolom data_3
-___(data_frame_1$data_3)
+# Nilai maksimum kelas_B
+___(hasil_ujian$kelas_B)
 
-# Tampilkan ringkasan tabel
-___(data_frame_1)
+# Standar deviasi kelas_C
+sd(hasil_ujian$___)
+
+# Ringkasan seluruh tabel
+___(hasil_ujian)
 ```
 
 ::: {.callout-tip collapse="true" title="Jawaban Latihan 3"}
 ```r
-sd(data_frame_1$data_2)
-mean(data_frame_1$data_3)
-summary(data_frame_1)
+median(hasil_ujian$kelas_B)
+max(hasil_ujian$kelas_B)
+sd(hasil_ujian$kelas_C)
+summary(hasil_ujian)
 ```
+Bandingkan standar deviasi ketiga kelas — kelas mana yang nilai ujiannya paling seragam?
 :::
 
 ---
@@ -234,6 +321,29 @@ plot(1:15,
      pch = 16)
 ```
 
+### 4.3 Histogram
+
+**Histogram** menampilkan distribusi frekuensi data — seberapa sering nilai jatuh di setiap interval. Gunakan fungsi `hist()`.
+
+```{webr}
+# Data jam belajar mahasiswa per minggu
+jam_belajar <- c(5, 8, 12, 7, 15, 10, 6, 14, 9, 11,
+                 13, 8, 7, 16, 10, 5, 12, 9, 11, 14)
+
+hist(jam_belajar,
+     main   = "Distribusi Jam Belajar Mahasiswa",
+     xlab   = "Jam per Minggu",
+     ylab   = "Frekuensi",
+     col    = "steelblue",
+     breaks = 6)
+```
+
+**Cara membaca histogram:**
+
+- **Batang tertinggi** → rentang nilai yang paling sering muncul
+- **Distribusi simetris** → data terpusat di tengah, tidak ada nilai ekstrem dominan
+- **Condong kanan (*right-skewed*)** → sebagian besar data kecil, ada ekor panjang ke nilai besar
+
 ### Latihan 4 — Mudah: Modifikasi Grafik
 
 Ganti bentuk titik menjadi bentuk segitiga (`pch = 17`), warnanya menjadi merah (`"red"`), dan ubah judulnya menjadi `"Grafik Merah"`!
@@ -260,4 +370,91 @@ plot(1:15,
      cex  = 2, 
      pch  = 17)
 ```
+:::
+
+### Latihan 5 — Sedang: Scatter Plot dan Histogram dari Data Sendiri
+
+Berikut adalah data **tinggi badan** (cm) dan **berat badan** (kg) dari sekelompok mahasiswa. Input data sebagai vektor, lalu buat visualisasinya.
+
+```{webr}
+# Input data sebagai vektor
+tinggi <- c(158, 165, 172, 160, 175, 168, 155, 170, 163, 178,
+            162, 169, 174, 157, 171, 166, 180, 159, 167, 173)
+berat  <- c(50, 60, 70, 55, 75, 65, 48, 68, 58, 80,
+            54, 63, 72, 47, 69, 61, 85, 52, 64, 71)
+
+# a. Hitung statistik deskriptif tinggi badan
+mean(tinggi)
+median(tinggi)
+sd(tinggi)
+```
+
+### Pertanyaan Reflektif
+
+::: {.callout-tip collapse="true" title="Dari nilai mean dan median di atas, apakah distribusi tinggi badan terlihat simetris?"}
+Jika `mean` dan `median` nilainya berdekatan, distribusi cenderung simetris — tidak ada nilai ekstrem yang mendominasi ke satu sisi. Perhatikan apakah perbedaannya kecil atau besar.
+:::
+
+Sekarang buat **scatter plot** tinggi vs. berat badan:
+
+```{webr}
+# b. Lengkapi scatter plot berikut
+plot(
+  x    = ___,          # sumbu X: tinggi badan
+  y    = ___,          # sumbu Y: berat badan
+  main = "___",        # beri judul yang informatif
+  xlab = "Tinggi Badan (cm)",
+  ylab = "Berat Badan (kg)",
+  col  = "steelblue",
+  pch  = 16
+)
+```
+
+::: {.callout-tip collapse="true" title="Dari scatter plot: apakah ada pola hubungan antara tinggi dan berat badan?"}
+Perhatikan arah sebaran titik. Jika titik-titik cenderung naik dari kiri ke kanan, ada hubungan positif — orang lebih tinggi cenderung lebih berat. Jika menyebar acak, hubungannya lemah atau tidak ada.
+:::
+
+Dan buat **histogram** distribusi tinggi badan:
+
+```{webr}
+# c. Lengkapi histogram berikut
+hist(
+  ___,                 # vektor data
+  main   = "___",      # beri judul
+  xlab   = "Tinggi Badan (cm)",
+  ylab   = "Frekuensi",
+  col    = "coral",
+  breaks = ___         # coba 5 atau 8
+)
+```
+
+::: {.callout-tip collapse="true" title="Dari histogram: pada kisaran berapa tinggi badan paling banyak? Apakah distribusinya simetris?"}
+Perhatikan batang yang paling tinggi — itulah rentang yang paling sering muncul. Jika bentuk histogram menyerupai lonceng simetris, distribusinya mendekati normal. Jika condong ke salah satu sisi, ada dominasi nilai rendah atau tinggi.
+:::
+
+
+::: {.callout-tip collapse="true" title="Jawaban Latihan 5"}
+```r
+# Scatter plot
+plot(
+  x    = tinggi,
+  y    = berat,
+  main = "Hubungan Tinggi dan Berat Badan Mahasiswa",
+  xlab = "Tinggi Badan (cm)",
+  ylab = "Berat Badan (kg)",
+  col  = "steelblue",
+  pch  = 16
+)
+
+# Histogram
+hist(
+  tinggi,
+  main   = "Distribusi Tinggi Badan Mahasiswa",
+  xlab   = "Tinggi Badan (cm)",
+  ylab   = "Frekuensi",
+  col    = "coral",
+  breaks = 6
+)
+```
+Scatter plot menunjukkan **hubungan positif** — semakin tinggi badan, berat badan cenderung semakin besar. Histogram tinggi badan terlihat **cukup simetris** dengan puncak di kisaran 165–175 cm.
 :::
