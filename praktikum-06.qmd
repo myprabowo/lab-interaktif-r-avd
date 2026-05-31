@@ -225,7 +225,7 @@ Pendekatan berbasis *machine learning* seperti BERT atau model berbasis deep lea
 
 ## 5. Latihan
 
-### Latihan 1 — Mudah: Tokenisasi Teks Baru
+### Latihan 1: Tokenisasi Teks Baru
 
 Tokenisasi kalimat berikut dan hitung frekuensi katanya.
 
@@ -263,7 +263,7 @@ Kata "data" dan "r" kemungkinan akan mendominasi karena sering muncul dalam keti
 
 ---
 
-### Latihan 2 — Mudah: Hapus Stop Words dan Buat Bar Plot
+### Latihan 2: Hapus Stop Words dan Buat Bar Plot
 
 Lanjutkan dari Latihan 1: hapus stop words, lalu buat bar plot 5 kata teratas.
 
@@ -319,7 +319,7 @@ barplot(
 
 ---
 
-### Latihan 3 — Sedang: Tambahkan Kata ke Kamus dan Hitung Skor Sentimen
+### Latihan 3: Tambahkan Kata ke Kamus dan Hitung Skor Sentimen
 
 Tambahkan kata "mudah" dan "powerful" (positif), serta "sulit" dan "lambat" (negatif) ke kamus sentimen yang sudah ada. Kemudian hitung skor sentimen untuk `teks_baru`.
 

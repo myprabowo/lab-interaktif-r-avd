@@ -28,8 +28,7 @@ Setelah praktikum ini, Anda mampu:
 
 ### Instalasi
 
-```{webr}
-#| eval: false
+```r
 
 install.packages("shiny")
 install.packages("shinydashboard")
@@ -61,8 +60,7 @@ Cukup gunakan `shiny` biasa untuk aplikasi dengan satu atau dua visualisasi sede
 
 ## 2. Struktur Dasar Dashboard
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 library(shinydashboard)
@@ -142,8 +140,7 @@ shinyApp(ui = ui, server = server)
 
 ## 3. Dashboard dengan Beberapa Tab dan Visualisasi
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 library(shinydashboard)
@@ -252,8 +249,7 @@ Setelah dashboard selesai, Anda bisa membagikannya melalui internet menggunakan 
 
 ### Langkah-langkah
 
-```{webr}
-#| eval: false
+```r
 
 # Langkah 1: Install paket rsconnect
 install.packages("rsconnect")
@@ -273,7 +269,7 @@ rsconnect::deployApp("path/ke/folder/app")
 
 ::: {.callout-tip collapse="true" title="Petunjuk — Di mana mendapatkan token shinyapps.io?"}
 1. Buka [shinyapps.io](https://www.shinyapps.io) dan buat akun gratis  
-2. Login → klik nama pengguna di pojok kanan atas → **Tokens**  
+2. Login: klik nama pengguna di pojok kanan atas: **Tokens**  
 3. Klik **Show** untuk melihat token dan secret  
 4. Salin dan tempel ke `rsconnect::setAccountInfo()`  
 
@@ -286,14 +282,13 @@ Alternatif: di RStudio, klik **Publish** (ikon biru) di pojok kanan atas editor 
 
 ## 5. Latihan
 
-### Latihan 1 — Mudah: Tambahkan `valueBox` di Beranda
+### Latihan 1: Tambahkan `valueBox` di Beranda
 
 `valueBox` menampilkan angka ringkasan (seperti total, rata-rata) di kotak kecil yang mencolok — umum dalam dashboard bisnis.
 
 Tambahkan tiga `valueBox` di Tab "Beranda" pada dashboard Bagian 2 yang menampilkan **mean**, **min**, dan **max** dari variabel yang dipilih.
 
-```{webr}
-#| eval: false
+```r
 
 # Tambahkan di fluidRow baru di Tab beranda (UI):
 fluidRow(
@@ -338,12 +333,11 @@ Warna yang tersedia: `"blue"`, `"black"`, `"purple"`, `"green"`, `"yellow"`, `"r
 
 ---
 
-### Latihan 2 — Mudah: Tambahkan Tab Baru "Boxplot"
+### Latihan 2: Tambahkan Tab Baru "Boxplot"
 
 Tambahkan tab ketiga pada dashboard Bagian 3 yang menampilkan **boxplot** dari variabel mtcars yang dipilih pengguna.
 
-```{webr}
-#| eval: false
+```r
 
 # Di dashboardSidebar, tambahkan:
 menuItem("Boxplot", tabName = "___", icon = icon("box"))
@@ -390,7 +384,7 @@ output$boxplot_out <- renderPlot({
 
 ---
 
-### Latihan 3 — Sedang: Dashboard Lengkap dari Awal
+### Latihan 3: Dashboard Lengkap dari Awal
 
 Buat dashboard baru menggunakan dataset `iris` (bawaan R) dengan spesifikasi:
 
@@ -398,8 +392,7 @@ Buat dashboard baru menggunakan dataset `iris` (bawaan R) dengan spesifikasi:
 - **Tab 2 "Distribusi"**: histogram salah satu variabel numerik (bisa dipilih lewat dropdown)
 - **Tab 3 "Data"**: tabel lengkap dataset `iris`
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 library(shinydashboard)

@@ -324,7 +324,7 @@ Warna **gelap (biru tua)** berarti kata tersebut sering muncul di kategori terse
 
 ## 7. Latihan
 
-### Latihan 1 — Mudah: Bar Plot Kata per Kategori
+### Latihan 1: Bar Plot Kata per Kategori
 
 Buat bar plot frekuensi kata **khusus kategori "makanan"** dari dataset `token_bersih`, tampilkan 5 kata teratas.
 
@@ -373,7 +373,7 @@ barplot(
 
 ---
 
-### Latihan 2 — Mudah: Visualisasi Skor Sentimen dengan Warna Berbeda
+### Latihan 2: Visualisasi Skor Sentimen dengan Warna Berbeda
 
 Modifikasi visualisasi skor sentimen di Bagian 5.2 agar:
 - Ulasan positif berwarna **hijau** (`"forestgreen"`)
@@ -412,7 +412,7 @@ abline(h = 0, lty = 2)
 
 ---
 
-### Latihan 3 — Sedang: Bigram dari Teks Baru
+### Latihan 3: Bigram dari Teks Baru
 
 Buat analisis bigram dari teks berikut dan tampilkan 5 bigram teratas (setelah membuang stop words).
 

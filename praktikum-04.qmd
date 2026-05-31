@@ -16,7 +16,7 @@ Setelah praktikum ini, Anda mampu:
 5. Mengevaluasi performa model dengan *train-test split* dan MSE.
 6. Menulis interpretasi hasil regresi secara ringkas dan tepat.
 
-**Rujukan alur praktikum:** mengikuti langkah "cara eksplorasi" untuk analisis regresi: persiapan data → eksplorasi → korelasi → model → uji asumsi → validasi → pelaporan.
+**Rujukan alur praktikum:** mengikuti langkah "cara eksplorasi" untuk analisis regresi: persiapan data: eksplorasi: korelasi: model: uji asumsi: validasi: pelaporan.
 :::
 
 ::: {.callout-important}

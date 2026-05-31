@@ -15,7 +15,7 @@ Setelah menyelesaikan praktikum ini, mahasiswa mampu:
 4. Membandingkan hasil analisis regresi sebelum dan sesudah penanganan data hilang.
 5. Merefleksikan pilihan teknik imputasi berdasarkan konteks analisis.
 
-**Catatan:** Pada setiap tahap, lakukan *prediksi → eksekusi kode → refleksi*.
+**Catatan:** Pada setiap tahap, lakukan *prediksi: eksekusi kode: refleksi*.
 :::
 
 ---

@@ -64,8 +64,7 @@ app.R
 
 ### 2.1 Template Paling Minimal
 
-```{webr}
-#| eval: false
+```r
 
 # Salin ke RStudio → simpan sebagai app.R → klik Run App
 library(shiny)
@@ -106,8 +105,7 @@ Ini membuat kode lebih mudah dibaca, diuji, dan dimodifikasi. Perubahan tampilan
 
 Aplikasi ini memungkinkan pengguna memilih variabel dari `mtcars` dan mengatur jumlah bin histogram.
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 
@@ -170,7 +168,7 @@ shinyApp(ui = ui, server = server)
 
 ### Yang Terjadi Saat Anda Mengubah Input
 
-1. Pengguna geser slider → nilai `input$bins` berubah
+1. Pengguna geser slider: nilai `input$bins` berubah
 2. Shiny mendeteksi perubahan pada `data_dipilih` (reactive)
 3. `output$histogram` otomatis di-*render* ulang dengan data baru
 
@@ -186,8 +184,7 @@ shinyApp(ui = ui, server = server)
 
 Paket `DT` menampilkan data frame sebagai tabel yang bisa dicari, diurutkan, dan difilter.
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 library(DT)
@@ -241,8 +238,7 @@ shinyApp(ui = ui, server = server)
 
 Pengguna bisa memilih variabel untuk sumbu X dan Y, serta mengaktifkan garis regresi.
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 
@@ -322,8 +318,7 @@ Setelah `data_saya` terbaca, gunakan persis seperti data frame biasa di semua ko
 
 ### 6.1 Kerangka Lengkap
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 library(DT)
@@ -492,12 +487,11 @@ Argumen terakhir tanpa label string berfungsi seperti `default` di `switch` baha
 
 ## 8. Latihan
 
-### Latihan 1 — Mudah: Tambahkan Input Warna
+### Latihan 1: Tambahkan Input Warna
 
 Modifikasi aplikasi **Bagian 3** (Histogram) dengan menambahkan dropdown untuk memilih warna histogram.
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 
@@ -555,12 +549,11 @@ col = input$warna,
 
 ---
 
-### Latihan 2 — Mudah: Tambahkan Output Teks Mean dan Median
+### Latihan 2: Tambahkan Output Teks Mean dan Median
 
 Lanjutkan dari Latihan 1. Tambahkan `textOutput("statistik")` di UI dan `renderText()` di server yang menampilkan nilai **mean** dan **median** variabel yang dipilih.
 
-```{webr}
-#| eval: false
+```r
 
 # Di bagian mainPanel (UI), tambahkan:
 # textOutput("statistik")
@@ -594,12 +587,11 @@ output$statistik <- renderText({
 
 ---
 
-### Latihan 3 — Sedang: Scatter Plot dengan Pilihan Kelompok Warna
+### Latihan 3: Scatter Plot dengan Pilihan Kelompok Warna
 
 Modifikasi aplikasi Scatter Plot (Bagian 5) agar titik-titik diwarnai berdasarkan variabel kategori yang dipilih pengguna (misalnya `cyl` atau `gear`).
 
-```{webr}
-#| eval: false
+```r
 
 library(shiny)
 

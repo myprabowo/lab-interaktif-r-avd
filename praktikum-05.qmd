@@ -146,8 +146,8 @@ Koefisien $a$ adalah **kemiringan (slope)**. Dalam konteks penjualan, $a \approx
 
 Dalam pendekatan konfirmasi, hipotesis ditetapkan **sebelum** melihat data:
 
-- $H_0$: $\beta_1 = 0$ → tidak ada hubungan linear antara prediktor dan respons
-- $H_1$: $\beta_1 \neq 0$ → ada hubungan linear yang signifikan
+- $H_0$: $\beta_1 = 0$: tidak ada hubungan linear antara prediktor dan respons
+- $H_1$: $\beta_1 \neq 0$: ada hubungan linear yang signifikan
 
 **Langkah-langkah uji hipotesis:**
 
@@ -257,9 +257,9 @@ vif(model_berganda)
 
 ::: {.callout-tip collapse="true" title="Petunjuk — VIF berapa yang mengkhawatirkan?"}
 **VIF (Variance Inflation Factor):**  
-- VIF < 5 → aman  
-- VIF 5–10 → perlu diwaspadai  
-- VIF > 10 → multikolinearitas serius, perlu tindakan (hapus variabel, PCA, dll.)
+- VIF < 5: aman  
+- VIF 5–10: perlu diwaspadai  
+- VIF > 10: multikolinearitas serius, perlu tindakan (hapus variabel, PCA, dll.)
 :::
 
 **Pertanyaan:** Berdasarkan VIF, apakah ada multikolinearitas yang perlu dikhawatirkan?
@@ -268,7 +268,7 @@ vif(model_berganda)
 
 ## 6. Latihan
 
-### Latihan 1 — Mudah: Hitung Koefisien Manual
+### Latihan 1: Hitung Koefisien Manual
 
 Diberikan data berikut. Lengkapi kode untuk menghitung koefisien $a$ dan $b$.
 
@@ -304,7 +304,7 @@ Hasil: $a \approx 0.7$, $b \approx 1.5$, sehingga $\hat{y} = 0.7x + 1.5$.
 
 ---
 
-### Latihan 2 — Mudah: Verifikasi dengan `lm()`
+### Latihan 2: Verifikasi dengan `lm()`
 
 Setelah menghitung manual di Latihan 1, verifikasi hasilnya menggunakan `lm()`.
 
@@ -323,7 +323,7 @@ Koefisien dari `lm()` seharusnya sama dengan hasil perhitungan manual.
 
 ---
 
-### Latihan 3 — Sedang: Prediksi dan Interval Kepercayaan
+### Latihan 3: Prediksi dan Interval Kepercayaan
 
 Gunakan `model_lat` dari Latihan 2. Buat prediksi untuk $x = 6$ dan $x = 7$, **beserta interval kepercayaan 95%**-nya.
 
@@ -345,7 +345,7 @@ Argumen `interval = "confidence"` menghasilkan interval kepercayaan untuk nilai 
 
 ---
 
-### Latihan 4 — Sedang: Regresi Berganda + Diagnostik
+### Latihan 4: Regresi Berganda + Diagnostik
 
 Bangun model regresi berganda menggunakan dataset `mtcars` dengan `mpg` sebagai variabel dependen dan `disp` serta `drat` sebagai prediktor. Kemudian:
 

@@ -50,11 +50,11 @@ R menyediakan fungsi-fungsi siap pakai untuk merangkum data. Berikut adalah yang
 
 | Fungsi | Keterangan | Contoh |
 |---|---|---|
-| `mean(x)` | Rata-rata | `mean(c(2, 4, 6))` → `4` |
-| `median(x)` | Nilai tengah | `median(c(1, 3, 9))` → `3` |
-| `min(x)` | Nilai terkecil | `min(c(5, 1, 8))` → `1` |
-| `max(x)` | Nilai terbesar | `max(c(5, 1, 8))` → `8` |
-| `sd(x)` | Standar deviasi | `sd(c(2, 4, 6))` → `2` |
+| `mean(x)` | Rata-rata | `mean(c(2, 4, 6))` = `4` |
+| `median(x)` | Nilai tengah | `median(c(1, 3, 9))` = `3` |
+| `min(x)` | Nilai terkecil | `min(c(5, 1, 8))` = `1` |
+| `max(x)` | Nilai terbesar | `max(c(5, 1, 8))` = `8` |
+| `sd(x)` | Standar deviasi | `sd(c(2, 4, 6))` = `2` |
 | `summary(x)` | Ringkasan lengkap | min, Q1, median, mean, Q3, max |
 
 ```{webr}
@@ -117,7 +117,7 @@ head(data_excel)
 - **`read_excel()`**: Data asli berformat `.xlsx` dan tidak ingin dikonversi terlebih dahulu. Membutuhkan paket `readxl`.
 :::
 
-### Latihan 1 — Mudah: Operasi Dasar
+### Latihan 1: Operasi Dasar
 
 Hitung `10` dibagi `4`, lalu hitung `10` pangkat `2`! Cari nilai minimum dari `10, 5, 20`.
 
@@ -173,7 +173,7 @@ class(kategori)
 **Character** murni hanya menyimpan teks. **Factor** menyimpan teks sebagai kategori yang memiliki level (kelompok). Factor sangat penting dalam analisis statistik untuk merepresentasikan variabel seperti "Jenis Kelamin" atau "Tingkat Pendidikan".
 :::
 
-### Latihan 2 — Sedang: Membuat Variabel
+### Latihan 2: Membuat Variabel
 
 Lengkapi kode di bawah ini untuk membuat variabel dengan tipe data yang sesuai!
 
@@ -255,7 +255,7 @@ summary(hasil_ujian)
 Simbol `$` adalah operator penunjuk di R. Tulisannya dibaca: "Dari `hasil_ujian`, tolong ambilkan kolom bernama `kelas_A` saja". `summary()` tanpa `$` merangkum seluruh data frame sekaligus.
 :::
 
-### Latihan 3 — Sedang: Menghitung Statistik Data Frame
+### Latihan 3: Menghitung Statistik Data Frame
 
 Gunakan data `hasil_ujian` di atas. Hitung **median** dan **nilai maksimum** untuk `kelas_B`, hitung **standar deviasi** `kelas_C`, lalu tampilkan ringkasan seluruh tabel!
 
@@ -340,11 +340,11 @@ hist(jam_belajar,
 
 **Cara membaca histogram:**
 
-- **Batang tertinggi** → rentang nilai yang paling sering muncul
-- **Distribusi simetris** → data terpusat di tengah, tidak ada nilai ekstrem dominan
-- **Condong kanan (*right-skewed*)** → sebagian besar data kecil, ada ekor panjang ke nilai besar
+- **Batang tertinggi**: rentang nilai yang paling sering muncul
+- **Distribusi simetris**: data terpusat di tengah, tidak ada nilai ekstrem dominan
+- **Condong kanan (*right-skewed*)**: sebagian besar data kecil, ada ekor panjang ke nilai besar
 
-### Latihan 4 — Mudah: Modifikasi Grafik
+### Latihan 4: Modifikasi Grafik
 
 Ganti bentuk titik menjadi bentuk segitiga (`pch = 17`), warnanya menjadi merah (`"red"`), dan ubah judulnya menjadi `"Grafik Merah"`!
 
@@ -372,7 +372,7 @@ plot(1:15,
 ```
 :::
 
-### Latihan 5 — Sedang: Scatter Plot dan Histogram dari Data Sendiri
+### Latihan 5: Scatter Plot dan Histogram dari Data Sendiri
 
 Berikut adalah data **tinggi badan** (cm) dan **berat badan** (kg) dari sekelompok mahasiswa. Input data sebagai vektor, lalu buat visualisasinya.
 

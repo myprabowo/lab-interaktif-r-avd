@@ -185,7 +185,7 @@ Tepat untuk variabel tipe jumlah/count atau data condong ke kanan ringan, yang t
 
 ------------------------------------------------------------------------
 
-## 5. Mini-Tugas Praktikum: Prediksi → Jalankan → Jelaskan
+## 5. Mini-Tugas Praktikum: Prediksi: Jalankan: Jelaskan
 
 ### Tugas A — Coba Log2 dan Log10 + Bandingkan
 
