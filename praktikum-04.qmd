@@ -75,6 +75,15 @@ plot(mtcars$wt, mtcars$mpg, main="Scatter: mpg vs wt", xlab="wt", ylab="mpg")
 
 ### 2.3 Visualisasi dengan ggplot2
 
+Visualisasi dasar di atas sudah cukup untuk eksplorasi cepat. Gunakan `ggplot2` ketika Anda perlu:
+
+- **Lapisan bertumpuk** — misalnya titik data + garis regresi + label persamaan dalam satu grafik,
+- **Konsistensi estetika** — tema, warna, dan tipografi yang seragam untuk laporan atau publikasi,
+- **Faceting** — membuat panel grafik terpisah per kelompok tanpa menulis loop,
+- **Kontrol penuh** — ukuran teks, legenda, grid, dan margin yang presisi.
+
+Untuk referensi cepat semua fungsi `ggplot2`, lihat [ggplot2 Cheatsheet (Posit)](https://rstudio.github.io/cheatsheets/html/data-visualization.html).
+
 ```{webr}
 library(ggplot2)
 library(ggpubr)
