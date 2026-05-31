@@ -67,7 +67,7 @@ head(frekuensi, 10)
 
 ## 2. Word Cloud
 
-**Word cloud** menampilkan kata-kata yang paling sering muncul. Ukuran kata proporsional dengan frekuensinya — semakin besar, semakin sering muncul.
+**Word cloud** menampilkan kata-kata yang paling sering muncul. Ukuran kata proporsional dengan frekuensinya, semakin besar, semakin sering muncul.
 
 > **Kapan cocok dipakai:** presentasi umum dan eksplorasi awal. Hindari untuk laporan formal karena tidak presisi secara numerik.
 
@@ -90,7 +90,7 @@ for (i in seq_len(nrow(top12))) {
 }
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Kapan word cloud sebaiknya TIDAK digunakan?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Kapan word cloud sebaiknya TIDAK digunakan?"}
 Word cloud **tidak cocok** untuk perbandingan atau laporan ilmiah karena:  
 (1) Mata manusia buruk dalam membandingkan ukuran teks yang tidak sejajar  
 (2) Tidak menampilkan nilai numerik pasti  
@@ -99,9 +99,9 @@ Gunakan **bar plot** jika butuh perbandingan yang presisi.
 :::
 
 ::: {.callout-tip collapse="true" title="Kata apa yang paling mendominasi word cloud? Apakah itu mencerminkan topik utama data?"}
-Dari word cloud di atas, kata **"rapi"** tampil paling besar karena muncul di dua ulasan berbeda — satu di kategori fashion ("jahitan rapi") dan satu di kategori makanan ("kemasan rapi"). Ini mencerminkan bahwa **kerapian/keteraturan** adalah atribut kualitas yang diperhatikan pelanggan lintas kategori produk.
+Dari word cloud di atas, kata **"rapi"** tampil paling besar karena muncul di dua ulasan berbeda, satu di kategori fashion ("jahitan rapi") dan satu di kategori makanan ("kemasan rapi"). Ini mencerminkan bahwa **kerapian/keteraturan** adalah atribut kualitas yang diperhatikan pelanggan lintas kategori produk.
 
-Kata-kata berukuran besar lainnya seperti **"cepat"**, **"warna"**, **"enak"**, dan **"bagus"** menunjukkan tema utama data: ulasan yang berfokus pada **kinerja, tampilan, dan rasa** — sesuai dengan tiga kategori dataset (elektronik, fashion, makanan).
+Kata-kata berukuran besar lainnya seperti **"cepat"**, **"warna"**, **"enak"**, dan **"bagus"** menunjukkan tema utama data: ulasan yang berfokus pada **kinerja, tampilan, dan rasa**: sesuai dengan tiga kategori dataset (elektronik, fashion, makanan).
 
 > **Catatan:** Word cloud dibuat dengan `set.seed(42)` sehingga posisi kata konsisten setiap kali dijalankan, tetapi ukuran kata tetap mencerminkan frekuensi relatifnya.
 :::
@@ -153,7 +153,7 @@ for (kat in unique(frek_per_kat$kategori)) {
 par(mfrow = c(1, 1))
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Kapan bar plot lebih baik daripada word cloud?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Kapan bar plot lebih baik daripada word cloud?"}
 Bar plot lebih baik ketika Anda perlu:  
 (1) Membandingkan frekuensi antar kata secara tepat  
 (2) Menyertakan angka dalam laporan atau presentasi formal  
@@ -202,8 +202,8 @@ for (i in seq_len(nrow(top_bg))) {
 }
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa manfaat bigram untuk analisis sentimen?"}
-Kata tunggal "tidak" ambigu — bisa diikuti kata positif maupun negatif. Bigram "tidak puas" atau "tidak bagus" menangkap sentimen negatif dengan lebih akurat. Begitu pula "luar biasa" lebih bermakna sebagai satu kesatuan frasa daripada kata "luar" dan "biasa" secara terpisah.
+::: {.callout-tip collapse="true" title="Petunjuk: Apa manfaat bigram untuk analisis sentimen?"}
+Kata tunggal "tidak" ambigu, bisa diikuti kata positif maupun negatif. Bigram "tidak puas" atau "tidak bagus" menangkap sentimen negatif dengan lebih akurat. Begitu pula "luar biasa" lebih bermakna sebagai satu kesatuan frasa daripada kata "luar" dan "biasa" secara terpisah.
 :::
 
 **Pertanyaan:** Bigram apa yang paling berguna untuk membedakan ulasan positif dan negatif?
@@ -272,8 +272,8 @@ barplot(neg$n, names.arg = neg$kata, col = "tomato",
 par(mfrow = c(1, 1))
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Mengapa ulasan tertentu bisa mendapat skor 0 meski kalimatnya terasa negatif?"}
-Skor 0 terjadi karena kata-kata dalam ulasan tersebut tidak ada di kamus sentimen yang kita gunakan. Ini disebut **coverage problem** — kamus tidak lengkap. Solusinya: perluas kamus, gunakan kamus pihak ketiga, atau beralih ke pendekatan machine learning.
+::: {.callout-tip collapse="true" title="Petunjuk: Mengapa ulasan tertentu bisa mendapat skor 0 meski kalimatnya terasa negatif?"}
+Skor 0 terjadi karena kata-kata dalam ulasan tersebut tidak ada di kamus sentimen yang kita gunakan. Ini disebut **coverage problem**: kamus tidak lengkap. Solusinya: perluas kamus, gunakan kamus pihak ketiga, atau beralih ke pendekatan machine learning.
 :::
 
 **Pertanyaan:** Ada ulasan yang skornya 0 tapi kalimatnya terasa negatif atau positif? Mengapa hal itu bisa terjadi?
@@ -282,7 +282,7 @@ Skor 0 terjadi karena kata-kata dalam ulasan tersebut tidak ada di kamus sentime
 
 ## 6. Heatmap Distribusi Kata
 
-**Heatmap** menampilkan seberapa sering kata-kata tertentu muncul di berbagai kategori dokumen — berguna untuk melihat pola distribusi sekaligus.
+**Heatmap** menampilkan seberapa sering kata-kata tertentu muncul di berbagai kategori dokumen, berguna untuk melihat pola distribusi sekaligus.
 
 ```{webr}
 # Frekuensi kata per kategori dalam format wide
@@ -314,7 +314,7 @@ axis(2, at = seq(0, 1, length.out = nrow(mat_norm)),
      labels = rownames(mat_norm), las = 1, cex.axis = 0.8)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa yang ditunjukkan warna gelap di heatmap?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa yang ditunjukkan warna gelap di heatmap?"}
 Warna **gelap (biru tua)** berarti kata tersebut sering muncul di kategori tersebut (relatif terhadap maksimumnya). Warna **putih** berarti kata itu jarang atau tidak muncul sama sekali. Pola ini membantu mengidentifikasi kata-kata yang menjadi "ciri khas" setiap kategori.
 :::
 

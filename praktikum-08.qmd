@@ -39,7 +39,7 @@ Visualisasi **statis** (seperti `plot()` atau `ggplot2`) menghasilkan gambar tet
 | Kebutuhan | `plot()` / `ggplot2` | `library(shiny)` |
 | Cocok untuk | Laporan, paper | Dashboard, eksplorasi |
 
-::: {.callout-tip collapse="true" title="Petunjuk — Kapan interaktif lebih baik dari statis?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Kapan interaktif lebih baik dari statis?"}
 Pilih visualisasi **interaktif** ketika:  
 (1) Pengguna perlu menjelajahi berbagai subset data  
 (2) Ada banyak variabel yang bisa dipilih  
@@ -48,7 +48,7 @@ Pilih visualisasi **interaktif** ketika:
 Tetap gunakan visualisasi **statis** untuk laporan akademis, jurnal, atau ketika hanya ada satu tampilan yang perlu dikomunikasikan.
 :::
 
-**Pertanyaan:** Untuk presentasi hasil skripsi, mana yang lebih tepat — statis atau interaktif?
+**Pertanyaan:** Untuk presentasi hasil skripsi, mana yang lebih tepat, statis atau interaktif?
 
 ---
 
@@ -89,7 +89,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Mengapa UI dan Server dipisahkan?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Mengapa UI dan Server dipisahkan?"}
 Pemisahan UI dan Server mengikuti prinsip **separation of concerns**:  
 - **UI** mendeskripsikan *apa* yang ditampilkan  
 - **Server** mendeskripsikan *bagaimana* data diproses  
@@ -172,7 +172,7 @@ shinyApp(ui = ui, server = server)
 2. Shiny mendeteksi perubahan pada `data_dipilih` (reactive)
 3. `output$histogram` otomatis di-*render* ulang dengan data baru
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa itu reactive() dan mengapa digunakan?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa itu reactive() dan mengapa digunakan?"}
 `reactive()` membuat "blok kode yang otomatis dijalankan ulang" saat input yang digunakannya berubah. Tanpa `reactive()`, Anda harus menduplikasi kode pemrosesan di setiap `renderXxx()`. Dengan `reactive()`, perhitungan cukup dilakukan sekali dan hasilnya bisa dipakai di banyak output.
 :::
 
@@ -226,7 +226,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa keunggulan tabsetPanel?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa keunggulan tabsetPanel?"}
 `tabsetPanel()` memisahkan beberapa output ke dalam tab berbeda, sehingga halaman tidak terlalu penuh. Pengguna bisa fokus pada satu tampilan sekaligus tanpa scrolling berlebihan. Ini praktik UI yang baik ketika ada beberapa jenis output (plot, tabel, ringkasan).
 :::
 
@@ -288,7 +288,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa itu checkboxInput dan bagaimana membacanya di server?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa itu checkboxInput dan bagaimana membacanya di server?"}
 `checkboxInput()` mengembalikan nilai `TRUE` (dicentang) atau `FALSE` (tidak dicentang). Di server, nilai ini diakses via `input$garis`. Pernyataan `if (input$garis) { ... }` berarti "jalankan kode di dalam kurung kurawal hanya jika kotak dicentang".
 :::
 
@@ -298,11 +298,11 @@ shinyApp(ui = ui, server = server)
 
 ## 6. Aplikasi Multi-Plot: Satu Dropdown, Banyak Jenis Visualisasi
 
-Bagian ini mencontohkan pola yang sering dibutuhkan dalam tugas dan proyek nyata: **satu aplikasi Shiny dengan dua dropdown** — satu untuk memilih *variabel*, satu untuk memilih *jenis visualisasi*. Output berubah secara reaktif mengikuti kedua pilihan.
+Bagian ini mencontohkan pola yang sering dibutuhkan dalam tugas dan proyek nyata: **satu aplikasi Shiny dengan dua dropdown**: satu untuk memilih *variabel*, satu untuk memilih *jenis visualisasi*. Output berubah secara reaktif mengikuti kedua pilihan.
 
-Dataset yang digunakan: `airquality` (bawaan R) — berisi pengukuran kualitas udara harian (Ozone, Solar.R, Wind, Temp, dll.) yang strukturnya mirip dengan data observasi lapangan multi-kolom.
+Dataset yang digunakan: `airquality` (bawaan R), berisi pengukuran kualitas udara harian (Ozone, Solar.R, Wind, Temp, dll.) yang strukturnya mirip dengan data observasi lapangan multi-kolom.
 
-::: {.callout-tip collapse="true" title="Petunjuk — Bagaimana jika data saya bersumber dari file Excel?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Bagaimana jika data saya bersumber dari file Excel?"}
 Jika data Anda bersumber dari file `.xlsx`, gunakan paket `readxl`:
 
 ```r
@@ -313,7 +313,7 @@ library(readxl)
 data_saya <- read_excel("nama_file.xlsx")
 ```
 
-Setelah `data_saya` terbaca, gunakan persis seperti data frame biasa di semua kode Shiny di bawah ini — ganti saja nama `airquality` dengan `data_saya`.
+Setelah `data_saya` terbaca, gunakan persis seperti data frame biasa di semua kode Shiny di bawah ini, ganti saja nama `airquality` dengan `data_saya`.
 :::
 
 ### 6.1 Kerangka Lengkap
@@ -437,11 +437,11 @@ shinyApp(ui = ui, server = server)
 | `switch(input$jenis_plot, ...)` | Memilih kode plot yang dijalankan |
 | `reactive({ data_plot[[input$variabel]] })` | Kolom data yang dipilih, dihitung sekali, dipakai ulang |
 
-::: {.callout-tip collapse="true" title="Petunjuk — Mengapa renderUI diperlukan di sini?"}
-`plotOutput` dan `DTOutput` adalah **dua jenis elemen HTML yang berbeda** — tidak bisa ditukar hanya dengan kondisi di server. `renderUI()` memungkinkan kita mengganti *elemen UI itu sendiri* secara dinamis dari server, sehingga tabel dan plot bisa benar-benar saling menggantikan di area yang sama.
+::: {.callout-tip collapse="true" title="Petunjuk: Mengapa renderUI diperlukan di sini?"}
+`plotOutput` dan `DTOutput` adalah **dua jenis elemen HTML yang berbeda**: tidak bisa ditukar hanya dengan kondisi di server. `renderUI()` memungkinkan kita mengganti *elemen UI itu sendiri* secara dinamis dari server, sehingga tabel dan plot bisa benar-benar saling menggantikan di area yang sama.
 :::
 
-::: {.callout-tip collapse="true" title="Petunjuk — Bagaimana cara menyesuaikan pola ini untuk data saya sendiri?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Bagaimana cara menyesuaikan pola ini untuk data saya sendiri?"}
 Cukup ganti tiga hal:
 
 1. **Nama dataset**: ganti `airquality` dan `data_plot` dengan nama data frame Anda.
@@ -453,7 +453,7 @@ Cukup ganti tiga hal:
 :::
 
 ::: {.callout-tip collapse="true" title="Apa yang terjadi jika switch() tidak menemukan nilai yang cocok dengan input$jenis_plot? Bagaimana cara menambahkan fallback (nilai default)?"}
-Jika `switch()` tidak menemukan nilai yang cocok, fungsi ini mengembalikan **`NULL`** secara diam-diam — tidak ada error, tapi `renderPlot()` akan menghasilkan plot kosong atau error tak terduga.
+Jika `switch()` tidak menemukan nilai yang cocok, fungsi ini mengembalikan **`NULL`** secara diam-diam, tidak ada error, tapi `renderPlot()` akan menghasilkan plot kosong atau error tak terduga.
 
 Cara menambahkan **fallback (nilai default)** adalah dengan meletakkan ekspresi tanpa nama di posisi terakhir `switch()`:
 

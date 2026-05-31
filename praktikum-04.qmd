@@ -28,7 +28,7 @@ Dalam praktikum ini, Anda akan:
 
 - Menjelajahi data secara visual dan deskriptif untuk memahami distribusi dan hubungan antar variabel.
 - Menggunakan korelasi dan scatter plot sebagai "sinyal awal" sebelum membangun model.
-- Membangun model regresi dan menguji asumsinya — bukan untuk "membuktikan" hipotesis, melainkan untuk memahami data lebih dalam.
+- Membangun model regresi dan menguji asumsinya, bukan untuk "membuktikan" hipotesis, melainkan untuk memahami data lebih dalam.
 
 > **Perbandingan:** Jika metode eksplorasi ibarat *detektif yang mencari petunjuk*, maka metode konfirmasi (Praktikum 05) ibarat *hakim yang menguji bukti secara formal*.
 :::
@@ -77,12 +77,15 @@ plot(mtcars$wt, mtcars$mpg, main="Scatter: mpg vs wt", xlab="wt", ylab="mpg")
 
 Visualisasi dasar di atas sudah cukup untuk eksplorasi cepat. Gunakan `ggplot2` ketika Anda perlu:
 
-- **Lapisan bertumpuk** — misalnya titik data + garis regresi + label persamaan dalam satu grafik,
-- **Konsistensi estetika** — tema, warna, dan tipografi yang seragam untuk laporan atau publikasi,
-- **Faceting** — membuat panel grafik terpisah per kelompok tanpa menulis loop,
-- **Kontrol penuh** — ukuran teks, legenda, grid, dan margin yang presisi.
+- **Lapisan bertumpuk**: misalnya titik data + garis regresi + label persamaan dalam satu grafik,
+- **Konsistensi estetika**: tema, warna, dan tipografi yang seragam untuk laporan atau publikasi,
+- **Faceting**: membuat panel grafik terpisah per kelompok tanpa menulis loop,
+- **Kontrol penuh**: ukuran teks, legenda, grid, dan margin yang presisi.
 
-Untuk referensi cepat semua fungsi `ggplot2`, lihat [ggplot2 Cheatsheet (Posit)](https://rstudio.github.io/cheatsheets/html/data-visualization.html).
+Referensi yang berguna:
+
+- [ggplot2 Cheatsheet (Posit)](https://rstudio.github.io/cheatsheets/html/data-visualization.html): daftar lengkap fungsi dan argumen `ggplot2`
+- [R Graph Gallery: ggplot2](https://r-graph-gallery.com/ggplot2-package.html): koleksi contoh grafik siap pakai dengan kode yang bisa langsung diadaptasi
 
 ```{webr}
 library(ggplot2)

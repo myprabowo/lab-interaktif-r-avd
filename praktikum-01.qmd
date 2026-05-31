@@ -72,7 +72,7 @@ summary(nilai)  # ringkasan sekaligus
 
 Ada tiga cara utama untuk memasukkan data ke R:
 
-**A. Input langsung sebagai vektor** — cocok untuk data kecil:
+**A. Input langsung sebagai vektor**: cocok untuk data kecil:
 
 ```{webr}
 # Vektor satu variabel
@@ -82,7 +82,7 @@ mean(tinggi_badan)
 sd(tinggi_badan)
 ```
 
-**B. Membaca dari file CSV** — paling umum untuk data tabel:
+**B. Membaca dari file CSV**: paling umum untuk data tabel:
 
 ```r
 # Membaca file CSV dari komputer lokal
@@ -95,7 +95,7 @@ data_csv <- read.csv2("nama_file.csv")
 head(data_csv)
 ```
 
-**C. Membaca dari file Excel** — memerlukan paket `readxl`:
+**C. Membaca dari file Excel**: memerlukan paket `readxl`:
 
 ```r
 # Install paket (cukup sekali)
@@ -111,7 +111,7 @@ data_excel <- read_excel("nama_file.xlsx", sheet = "NamaSheet")
 head(data_excel)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Kapan menggunakan masing-masing cara input?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Kapan menggunakan masing-masing cara input?"}
 - **Vektor `c()`**: Data sedikit, diketik langsung di skrip. Cocok untuk latihan dan contoh singkat.
 - **`read.csv()`**: Data sudah tersimpan sebagai file `.csv` (bisa diekspor dari Excel). Tidak perlu paket tambahan.
 - **`read_excel()`**: Data asli berformat `.xlsx` dan tidak ingin dikonversi terlebih dahulu. Membutuhkan paket `readxl`.
@@ -169,7 +169,7 @@ class(logika)
 class(kategori)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa perbedaan Character dan Factor?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa perbedaan Character dan Factor?"}
 **Character** murni hanya menyimpan teks. **Factor** menyimpan teks sebagai kategori yang memiliki level (kelompok). Factor sangat penting dalam analisis statistik untuk merepresentasikan variabel seperti "Jenis Kelamin" atau "Tingkat Pendidikan".
 :::
 
@@ -209,7 +209,7 @@ Dalam R, data sering disimpan dalam:
 - **Vektor (vector):** kumpulan nilai 1 dimensi yang memiliki tipe data yang sama.
 - **Data frame:** tabel yang terdiri dari baris dan kolom.
 
-Di bagian ini kita menerapkan fungsi-fungsi statistik deskriptif — `mean()`, `median()`, `min()`, `max()`, `sd()`, dan `summary()` — pada data nyata.
+Di bagian ini kita menerapkan fungsi-fungsi statistik deskriptif, `mean()`, `median()`, `min()`, `max()`, `sd()`, dan `summary()`, pada data nyata.
 
 ### 3.1 Statistik Deskriptif pada Vektor
 
@@ -251,7 +251,7 @@ sd(hasil_ujian$kelas_A)
 summary(hasil_ujian)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Mengapa kita menggunakan simbol $ ?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Mengapa kita menggunakan simbol $ ?"}
 Simbol `$` adalah operator penunjuk di R. Tulisannya dibaca: "Dari `hasil_ujian`, tolong ambilkan kolom bernama `kelas_A` saja". `summary()` tanpa `$` merangkum seluruh data frame sekaligus.
 :::
 
@@ -280,7 +280,7 @@ max(hasil_ujian$kelas_B)
 sd(hasil_ujian$kelas_C)
 summary(hasil_ujian)
 ```
-Bandingkan standar deviasi ketiga kelas — kelas mana yang nilai ujiannya paling seragam?
+Bandingkan standar deviasi ketiga kelas, kelas mana yang nilai ujiannya paling seragam?
 :::
 
 ---
@@ -323,7 +323,7 @@ plot(1:15,
 
 ### 4.3 Histogram
 
-**Histogram** menampilkan distribusi frekuensi data — seberapa sering nilai jatuh di setiap interval. Gunakan fungsi `hist()`.
+**Histogram** menampilkan distribusi frekuensi data, seberapa sering nilai jatuh di setiap interval. Gunakan fungsi `hist()`.
 
 ```{webr}
 # Data jam belajar mahasiswa per minggu
@@ -392,7 +392,7 @@ sd(tinggi)
 ### Pertanyaan Reflektif
 
 ::: {.callout-tip collapse="true" title="Dari nilai mean dan median di atas, apakah distribusi tinggi badan terlihat simetris?"}
-Jika `mean` dan `median` nilainya berdekatan, distribusi cenderung simetris — tidak ada nilai ekstrem yang mendominasi ke satu sisi. Perhatikan apakah perbedaannya kecil atau besar.
+Jika `mean` dan `median` nilainya berdekatan, distribusi cenderung simetris, tidak ada nilai ekstrem yang mendominasi ke satu sisi. Perhatikan apakah perbedaannya kecil atau besar.
 :::
 
 Sekarang buat **scatter plot** tinggi vs. berat badan:
@@ -411,7 +411,7 @@ plot(
 ```
 
 ::: {.callout-tip collapse="true" title="Dari scatter plot: apakah ada pola hubungan antara tinggi dan berat badan?"}
-Perhatikan arah sebaran titik. Jika titik-titik cenderung naik dari kiri ke kanan, ada hubungan positif — orang lebih tinggi cenderung lebih berat. Jika menyebar acak, hubungannya lemah atau tidak ada.
+Perhatikan arah sebaran titik. Jika titik-titik cenderung naik dari kiri ke kanan, ada hubungan positif, orang lebih tinggi cenderung lebih berat. Jika menyebar acak, hubungannya lemah atau tidak ada.
 :::
 
 Dan buat **histogram** distribusi tinggi badan:
@@ -429,7 +429,7 @@ hist(
 ```
 
 ::: {.callout-tip collapse="true" title="Dari histogram: pada kisaran berapa tinggi badan paling banyak? Apakah distribusinya simetris?"}
-Perhatikan batang yang paling tinggi — itulah rentang yang paling sering muncul. Jika bentuk histogram menyerupai lonceng simetris, distribusinya mendekati normal. Jika condong ke salah satu sisi, ada dominasi nilai rendah atau tinggi.
+Perhatikan batang yang paling tinggi, itulah rentang yang paling sering muncul. Jika bentuk histogram menyerupai lonceng simetris, distribusinya mendekati normal. Jika condong ke salah satu sisi, ada dominasi nilai rendah atau tinggi.
 :::
 
 
@@ -456,5 +456,5 @@ hist(
   breaks = 6
 )
 ```
-Scatter plot menunjukkan **hubungan positif** — semakin tinggi badan, berat badan cenderung semakin besar. Histogram tinggi badan terlihat **cukup simetris** dengan puncak di kisaran 165–175 cm.
+Scatter plot menunjukkan **hubungan positif**: semakin tinggi badan, berat badan cenderung semakin besar. Histogram tinggi badan terlihat **cukup simetris** dengan puncak di kisaran 165–175 cm.
 :::

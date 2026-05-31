@@ -24,7 +24,7 @@ Setelah praktikum ini, Anda mampu:
 
 ## 1. Shinydashboard vs Shiny Biasa
 
-`shinydashboard` adalah ekstensi Shiny yang menyediakan template dashboard siap pakai — lengkap dengan header, sidebar menu, dan kotak konten (*box*).
+`shinydashboard` adalah ekstensi Shiny yang menyediakan template dashboard siap pakai, lengkap dengan header, sidebar menu, dan kotak konten (*box*).
 
 ### Instalasi
 
@@ -45,7 +45,7 @@ install.packages("DT")
 | Konten | Bebas | Dalam `box()` |
 | Tampilan | Minimalis | Dashboard profesional |
 
-::: {.callout-tip collapse="true" title="Petunjuk — Kapan perlu pakai shinydashboard?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Kapan perlu pakai shinydashboard?"}
 Gunakan `shinydashboard` ketika:  
 (1) Ada banyak visualisasi yang perlu diatur dalam satu halaman  
 (2) Dibutuhkan navigasi antar halaman/tab  
@@ -128,10 +128,10 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa fungsi status dan solidHeader pada box()?"}
-- `status`: warna garis atas box — `"primary"` (biru), `"warning"` (kuning), `"danger"` (merah), `"success"` (hijau)  
+::: {.callout-tip collapse="true" title="Petunjuk: Apa fungsi status dan solidHeader pada box()?"}
+- `status`: warna garis atas box, `"primary"` (biru), `"warning"` (kuning), `"danger"` (merah), `"success"` (hijau)  
 - `solidHeader = TRUE`: mengisi header box dengan warna penuh (lebih mencolok)  
-- `width`: lebar dalam grid 12 kolom Bootstrap — `width = 6` artinya setengah layar
+- `width`: lebar dalam grid 12 kolom Bootstrap, `width = 6` artinya setengah layar
 :::
 
 **Pertanyaan:** Apa yang terjadi jika dua box dalam satu `fluidRow()` memiliki `width = 8` dan `width = 6`? (Total > 12)
@@ -235,7 +235,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Cara membaca tab dari sidebar yang dipilih"}
+::: {.callout-tip collapse="true" title="Petunjuk: Cara membaca tab dari sidebar yang dipilih"}
 `tabName` di `menuItem()` harus **persis sama** dengan `tabName` di `tabItem()`. Shiny menggunakan string ini sebagai penghubung antara klik menu dan konten yang ditampilkan. Kesalahan ejaan akan membuat tab tidak muncul tanpa pesan error.
 :::
 
@@ -267,7 +267,7 @@ rsconnect::setAccountInfo(
 rsconnect::deployApp("path/ke/folder/app")
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Di mana mendapatkan token shinyapps.io?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Di mana mendapatkan token shinyapps.io?"}
 1. Buka [shinyapps.io](https://www.shinyapps.io) dan buat akun gratis  
 2. Login: klik nama pengguna di pojok kanan atas: **Tokens**  
 3. Klik **Show** untuk melihat token dan secret  
@@ -284,7 +284,7 @@ Alternatif: di RStudio, klik **Publish** (ikon biru) di pojok kanan atas editor 
 
 ### Latihan 1: Tambahkan `valueBox` di Beranda
 
-`valueBox` menampilkan angka ringkasan (seperti total, rata-rata) di kotak kecil yang mencolok — umum dalam dashboard bisnis.
+`valueBox` menampilkan angka ringkasan (seperti total, rata-rata) di kotak kecil yang mencolok, umum dalam dashboard bisnis.
 
 Tambahkan tiga `valueBox` di Tab "Beranda" pada dashboard Bagian 2 yang menampilkan **mean**, **min**, dan **max** dari variabel yang dipilih.
 

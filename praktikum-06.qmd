@@ -26,9 +26,9 @@ Setelah praktikum ini, Anda mampu:
 
 **Tahapan pra-pemrosesan:**
 
-1. **Tokenisasi** — memecah teks menjadi kata-kata individual
-2. **Normalisasi** — mengubah semua huruf menjadi huruf kecil
-3. **Penghapusan stop words** — membuang kata umum tanpa makna analitis
+1. **Tokenisasi**: memecah teks menjadi kata-kata individual
+2. **Normalisasi**: mengubah semua huruf menjadi huruf kecil
+3. **Penghapusan stop words**: membuang kata umum tanpa makna analitis
 
 ### 1.1 Membuat Data dan Tokenisasi
 
@@ -74,7 +74,7 @@ ulasan_bersih <- ulasan_token %>%
 ulasan_bersih
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Mengapa stop words perlu dihapus?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Mengapa stop words perlu dihapus?"}
 Stop words seperti "dan", "atau", "yang" sangat sering muncul di hampir semua teks, sehingga tidak memberi informasi yang berguna tentang *isi* atau *topik* teks. Menghapusnya membuat analisis frekuensi lebih bermakna karena hanya mempertahankan kata-kata yang benar-benar relevan.
 :::
 
@@ -110,7 +110,7 @@ barplot(
 )
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apakah frekuensi tinggi selalu berarti penting?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apakah frekuensi tinggi selalu berarti penting?"}
 Tidak selalu. Kata "produk" mungkin sering muncul karena konteks domain (ulasan produk), bukan karena membawa makna sentimen. Frekuensi perlu dikombinasikan dengan analisis konteks atau sentimen agar lebih bermakna.
 :::
 
@@ -143,7 +143,7 @@ bigram_pisah <- ulasan_bigram %>%
 bigram_pisah
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa keunggulan bigram dibanding kata tunggal?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa keunggulan bigram dibanding kata tunggal?"}
 Kata tunggal "tidak" bisa muncul di konteks positif maupun negatif. Bigram "tidak bagus" atau "tidak puas" menangkap sentimen negatif secara eksplisit. Ini membuat analisis lebih akurat, terutama untuk kalimat yang menggunakan negasi.
 :::
 
@@ -211,7 +211,7 @@ barplot(
 abline(h = 0, lty = 2)
 ```
 
-::: {.callout-tip collapse="true" title="Petunjuk — Apa keterbatasan pendekatan leksikon?"}
+::: {.callout-tip collapse="true" title="Petunjuk: Apa keterbatasan pendekatan leksikon?"}
 Pendekatan leksikon bergantung pada daftar kata yang sudah dibuat sebelumnya. Kelemahannya:  
 (1) Tidak bisa menangkap sarkasme ("Bagus sekali... NOT")  
 (2) Kata baru/slang tidak ada di kamus  

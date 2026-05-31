@@ -66,7 +66,7 @@ vis_miss(airquality)
 ### Pertanyaan Reflektif
 
 ::: {.callout-tip collapse="true" title="Variabel mana yang paling banyak memiliki data hilang?"}
-**Ozone** adalah variabel dengan data hilang terbanyak — terlihat dari banyaknya garis hitam yang tersebar di hampir seluruh rentang observasi. **Solar.R** juga memiliki beberapa data hilang, namun lebih sedikit dan terkonsentrasi di observasi awal. Variabel lain (Wind, Temp, Month, Day) **tidak memiliki data hilang sama sekali** (seluruhnya abu-abu). Secara keseluruhan, hanya **4,8%** dari total data yang hilang.
+**Ozone** adalah variabel dengan data hilang terbanyak, terlihat dari banyaknya garis hitam yang tersebar di hampir seluruh rentang observasi. **Solar.R** juga memiliki beberapa data hilang, namun lebih sedikit dan terkonsentrasi di observasi awal. Variabel lain (Wind, Temp, Month, Day) **tidak memiliki data hilang sama sekali** (seluruhnya abu-abu). Secara keseluruhan, hanya **4,8%** dari total data yang hilang.
 :::
 
 ::: {.callout-tip collapse="true" title="Apakah pola data hilang terlihat acak atau terstruktur?"}
