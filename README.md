@@ -85,5 +85,5 @@ Politeknik Keuangan Negara STAN
 
 ## 📜 Lisensi / License
 
-Materi ini disediakan untuk tujuan pendidikan dan dapat digunakan kembali dengan atribusi.\
-*This material is provided for educational purposes and can be reused with attribution.*
+Materi ini didistribusikan di bawah [MIT License](LICENSE). Anda bebas untuk menggunakan, menyalin, memodifikasi, dan mendistribusikan ulang materi ini dengan syarat menyertakan atribusi kepada pembuat aslinya.
+*This material is distributed under the [MIT License](LICENSE). You are free to use, copy, modify, and redistribute this material provided that you include attribution to the original creator.*
