@@ -2,47 +2,110 @@ project:
   type: website
 
 website:
-  title: "Lab Interaktif R" # Judul di pojok kiri
-  description: "Lab Interaktif R"
-  
-  page-footer:
-    right: "© Muhammad Yoga Prabowo"
-    background: light
-    
-  # Bagian Header/Navbar
+  title: "Lab Interaktif R"
+  description: "Platform interaktif untuk belajar Analisis dan Visualisasi Data dengan R secara praktis, modern, dan tanpa instalasi."
+
+  # ── Open Graph / SEO ────────────────────────────────────────
+  open-graph:
+    title: "Lab Interaktif R — Analisis & Visualisasi Data"
+    description: "Belajar analisis data secara interaktif, jalankan kode langsung di browser, dan eksplorasi visualisasi modern tanpa instalasi."
+
+  # ── Navbar ──────────────────────────────────────────────────
   navbar:
-    background: "#447099" # Warna biru khas RStudio/Quarto (atau gunakan 'primary')
-    search: true          # Menambahkan kolom pencarian
-    
+    background: light
+    foreground: dark
+    search: true
+    pinned: true
+
     left:
       - text: "Home"
         href: index.qmd
+        icon: house-fill
+
+      - text: "Modul"
+        menu:
+          - text: "1 — Prinsip Dasar Penyajian Data"
+            href: praktikum-01.qmd
+            icon: bar-chart-fill
+          - text: "2 — Transformasi Data"
+            href: praktikum-02.qmd
+            icon: arrow-repeat
+          - text: "3 — Penanganan Data Hilang"
+            href: praktikum-03.qmd
+            icon: patch-exclamation-fill
+          - text: "4 — Analisis Regresi Eksplorasi"
+            href: praktikum-04.qmd
+            icon: graph-up
+          - text: "5 — Analisis Regresi Konfirmasi"
+            href: praktikum-05.qmd
+            icon: graph-up-arrow
+          - text: "6 — Analisis Data Teks"
+            href: praktikum-06.qmd
+            icon: chat-text-fill
+          - text: "7 — Visualisasi Data Teks"
+            href: praktikum-07.qmd
+            icon: diagram-3-fill
+          - text: "8 — Visualisasi Interaktif"
+            href: praktikum-08.qmd
+            icon: display-fill
+          - text: "9 — Dashboard Interaktif"
+            href: praktikum-09.qmd
+            icon: layout-wtf
+
       - text: "Praktikum"
         menu:
-          - href: praktikum-01.qmd
-            text: Praktikum 01 – Dasar R
-          - href: praktikum-02.qmd
-            text: Praktikum 02 – Transformasi Data
-          - href: praktikum-03.qmd
-            text: Praktikum 03 – Penanganan Data Hilang
-          - href: praktikum-04.qmd
-            text: Praktikum 04 – Analisis Regresi Eksplorasi
-          - href: praktikum-05.qmd
-            text: Praktikum 05 – Analisis Regresi Konfirmasi
-          - href: praktikum-06.qmd
-            text: Praktikum 06 – Analisis Data Teks
-          - href: praktikum-07.qmd
-            text: Praktikum 07 – Visualisasi Data Teks
-          - href: praktikum-08.qmd
-            text: Praktikum 08 – Visualisasi Interaktif
-          - href: praktikum-09.qmd
-            text: Praktikum 09 – Dashboard Interaktif
-        
+          - text: "Praktikum 01 — Dasar R"
+            href: praktikum-01.qmd
+          - text: "Praktikum 02 — Transformasi Data"
+            href: praktikum-02.qmd
+          - text: "Praktikum 03 — Data Hilang"
+            href: praktikum-03.qmd
+          - text: "Praktikum 04 — Regresi Eksplorasi"
+            href: praktikum-04.qmd
+          - text: "Praktikum 05 — Regresi Konfirmasi"
+            href: praktikum-05.qmd
+          - text: "Praktikum 06 — Analisis Teks"
+            href: praktikum-06.qmd
+          - text: "Praktikum 07 — Visualisasi Teks"
+            href: praktikum-07.qmd
+          - text: "Praktikum 08 — Visualisasi Interaktif"
+            href: praktikum-08.qmd
+          - text: "Praktikum 09 — Dashboard"
+            href: praktikum-09.qmd
+
+      - text: "Tentang"
+        href: index.qmd
+
     right:
       - icon: linkedin
         href: https://linkedin.com/in/muhammad-yoga-prabowo
+        aria-label: LinkedIn
+
+  # ── Back to top ─────────────────────────────────────────────
+  back-to-top-navigation: true
+  page-navigation: true
+
+  # ── Footer ──────────────────────────────────────────────────
+  page-footer:
+    background: dark
+    left: ""
+    right: ""
+    center: ""
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light:
+        - cosmo
+        - custom.scss
     toc: true
+    toc-depth: 3
+    toc-title: "Daftar Isi"
+    smooth-scroll: true
+    code-copy: true
+    code-fold: false
+    highlight-style: github
+    fig-responsive: true
+    link-external-icon: false
+    link-external-newwindow: true
+    include-after-body: navbar-scroll.html

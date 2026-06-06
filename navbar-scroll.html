@@ -1,0 +1,47 @@
+<script>
+// ── Navbar: inject R badge ───────────────────────────────────
+(function () {
+  const brand = document.querySelector('.navbar-brand');
+  if (brand) {
+    const badge = document.createElement('span');
+    badge.className = 'navbar-r-badge';
+    badge.textContent = 'R';
+    brand.insertBefore(badge, brand.firstChild);
+  }
+})();
+
+// ── Navbar scroll effect ─────────────────────────────────────
+(function () {
+  const navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+  const onScroll = () => {
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// ── Fade-in-up animation on scroll ──────────────────────────
+(function () {
+  const elements = document.querySelectorAll('.fade-in-up');
+  if (!elements.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08 }
+  );
+
+  elements.forEach((el) => observer.observe(el));
+})();
+</script>
