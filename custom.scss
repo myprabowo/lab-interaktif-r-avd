@@ -1293,3 +1293,10 @@ div.sourceCode {
 .icon-bg-4  { background: #FEE2E2; color: #991B1B; }
 .icon-bg-5  { background: #F5F3FF; color: #5B21B6; }
 .icon-bg-6  { background: #FFF7ED; color: #9A3412; }
+
+// Fix Quarto Bootstrap grid issue
+.row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
