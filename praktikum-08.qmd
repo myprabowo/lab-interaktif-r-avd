@@ -337,19 +337,30 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
 
-      # Dropdown 1: pilih variabel
+      # Dropdown 1: pilih variabel X (khusus Scatter Plot)
+      conditionalPanel(
+        condition = "input.jenis_plot == 'Scatter Plot'",
+        selectInput(
+          inputId  = "variabel_x",
+          label    = "Pilih Variabel X:",
+          choices  = var_numerik,
+          selected = "Ozone"
+        )
+      ),
+
+      # Dropdown 2: pilih variabel Y (Utama)
       selectInput(
-        inputId  = "variabel",
-        label    = "Pilih Variabel:",
+        inputId  = "variabel_y",
+        label    = "Pilih Variabel Y:",
         choices  = var_numerik,
         selected = "Temp"
       ),
 
-      # Dropdown 2: pilih jenis plot
+      # Dropdown 3: pilih jenis plot
       selectInput(
         inputId  = "jenis_plot",
         label    = "Jenis Visualisasi:",
-        choices  = c("Scatter Plot", "Line Plot", "Bar Plot", "Tabel Data"),
+        choices  = c("Scatter Plot", "Line Plot", "Histogram", "Tabel Data"),
         selected = "Scatter Plot"
       )
     ),
@@ -364,9 +375,14 @@ ui <- fluidPage(
 # ── Server ───────────────────────────────────────────────────
 server <- function(input, output) {
 
-  # Ambil kolom yang dipilih sebagai vektor
-  data_dipilih <- reactive({
-    data_plot[[input$variabel]]
+  # Ambil kolom Y yang dipilih sebagai vektor
+  data_y <- reactive({
+    data_plot[[input$variabel_y]]
+  })
+  
+  # Ambil kolom X yang dipilih (khusus scatter plot)
+  data_x <- reactive({
+    data_plot[[input$variabel_x]]
   })
 
   # Render output yang sesuai berdasarkan jenis plot
@@ -378,38 +394,41 @@ server <- function(input, output) {
     }
   })
 
-  # Render grafik (scatter / line / bar)
+  # Render grafik (scatter / line / histogram)
   output$plot_grafik <- renderPlot({
-    x   <- seq_along(data_dipilih())   # indeks baris sebagai sumbu X
-    y   <- data_dipilih()
-    lab <- input$variabel
+    y     <- data_y()
+    lab_y <- input$variabel_y
 
     switch(input$jenis_plot,
 
       "Scatter Plot" = {
+        x     <- data_x()
+        lab_x <- input$variabel_x
+        
         plot(x, y,
              pch  = 16, col = "steelblue", cex = 1.1,
-             main = paste("Scatter Plot:", lab),
-             xlab = "Observasi ke-", ylab = lab)
+             main = paste("Scatter Plot:", lab_x, "vs", lab_y),
+             xlab = lab_x, ylab = lab_y)
       },
 
       "Line Plot" = {
-        plot(x, y,
+        # Sumbu X berupa urutan observasi
+        x_idx <- seq_along(y)
+        
+        plot(x_idx, y,
              type = "l", col = "tomato", lwd = 2,
-             main = paste("Line Plot:", lab),
-             xlab = "Observasi ke-", ylab = lab)
-        points(x, y, pch = 16, col = "tomato", cex = 0.7)
+             main = paste("Line Plot:", lab_y),
+             xlab = "Observasi ke-", ylab = lab_y)
+        points(x_idx, y, pch = 16, col = "tomato", cex = 0.7)
       },
 
-      "Bar Plot" = {
-        # Bar plot: tampilkan 20 observasi pertama agar tidak terlalu padat
-        barplot(head(y, 20),
-                col    = "steelblue",
-                border = "white",
-                main   = paste("Bar Plot:", lab, "(20 observasi pertama)"),
-                ylab   = lab,
-                xlab   = "Observasi ke-",
-                names.arg = seq_len(min(20, length(y))))
+      "Histogram" = {
+        hist(y,
+             col    = "steelblue",
+             border = "white",
+             main   = paste("Histogram:", lab_y),
+             xlab   = lab_y,
+             ylab   = "Frekuensi")
       }
     )
   })
@@ -431,11 +450,12 @@ shinyApp(ui = ui, server = server)
 
 | Komponen | Fungsi |
 |---|---|
-| `selectInput("jenis_plot", ...)` | Dropdown kedua untuk memilih jenis visualisasi |
+| `conditionalPanel(...)` | Menampilkan dropdown Variabel X *hanya* jika "Scatter Plot" dipilih |
+| `selectInput("jenis_plot", ...)` | Dropdown untuk memilih jenis visualisasi |
 | `uiOutput("output_utama")` | Placeholder yang bisa berubah antara plot dan tabel |
 | `renderUI({ if (...) DTOutput else plotOutput })` | Menentukan *jenis* output secara kondisional |
 | `switch(input$jenis_plot, ...)` | Memilih kode plot yang dijalankan |
-| `reactive({ data_plot[[input$variabel]] })` | Kolom data yang dipilih, dihitung sekali, dipakai ulang |
+| `reactive({ data_plot[[input$variabel_y]] })` | Kolom data yang dipilih, dihitung sekali, dipakai ulang |
 
 ::: {.callout-tip collapse="true" title="Petunjuk: Mengapa renderUI diperlukan di sini?"}
 `plotOutput` dan `DTOutput` adalah **dua jenis elemen HTML yang berbeda**: tidak bisa ditukar hanya dengan kondisi di server. `renderUI()` memungkinkan kita mengganti *elemen UI itu sendiri* secara dinamis dari server, sehingga tabel dan plot bisa benar-benar saling menggantikan di area yang sama.
@@ -459,11 +479,11 @@ Cara menambahkan **fallback (nilai default)** adalah dengan meletakkan ekspresi 
 
 ```r
 switch(input$jenis_plot,
-  "Scatter Plot" = { plot(...) },
-  "Line Plot"    = { plot(..., type = "l") },
-  "Bar Plot"     = { barplot(...) },
+  "Scatter Plot" = { plot(x, y, ...) },
+  "Line Plot"    = { plot(x_idx, y, type = "l", ...) },
+  "Histogram"    = { hist(y, ...) },
   # Fallback: dijalankan jika tidak ada yang cocok
-  plot(seq_along(y), y, main = "Plot Default", xlab = "Index", ylab = lab)
+  plot(seq_along(y), y, main = "Plot Default", xlab = "Index", ylab = lab_y)
 )
 ```
 
