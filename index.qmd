@@ -1,46 +1,475 @@
 ---
-title: "Selamat Datang di Lab Interaktif R"
-format: live-html
-engine: knitr
+title: ""
+page-layout: custom
+toc: false
 ---
 
-Selamat datang di modul interaktif untuk mata kuliah **Analisis dan Visualisasi Data (MSIM4310)**.
+```{=html}
+<!-- ============================================================ HERO ============================================================ -->
+<div class="hero-section">
+<div class="container">
+<div class="row align-items-center g-5">
+<div class="col-lg-6">
+<div class="hero-content">
+<div class="hero-course-tag">
+<span class="tag-code">MSIM4310</span>
+<span class="tag-title">Praktikum Analisis dan Visualisasi Data</span>
+</div>
+<h1 class="hero-title">Laboratorium Komputasi &amp;<br>Eksplorasi Data dengan <span class="text-accent-brand">R</span></h1>
+<p class="hero-description">Platform praktikum interaktif berbasis Quarto dan WebR. Tulis skrip statistik, transformasikan data dengan tidyverse, dan bangun visualisasi langsung di peramban tanpa konfigurasi lokal.</p>
+<div class="hero-cta">
+<a href="praktikum-01.html" class="btn-hero-primary" id="cta-mulai-praktikum"><i class="bi bi-play-circle"></i> Buka Praktikum 01</a>
+<a href="#silabus" class="btn-hero-secondary" id="cta-lihat-modul"><i class="bi bi-grid-3x3"></i> Silabus 9 Modul</a>
+</div>
+<div class="hero-specs">
+<div class="spec-item">
+<i class="bi bi-cpu"></i>
+<div>
+<div class="spec-title">WebR Engine</div>
+<div class="spec-desc">Eksekusi lokal di browser via WASM</div>
+</div>
+</div>
+<div class="spec-item">
+<i class="bi bi-journal-code"></i>
+<div>
+<div class="spec-title">9 Modul Lengkap</div>
+<div class="spec-desc">Dasar hingga dashboard interaktif</div>
+</div>
+</div>
+<div class="spec-item">
+<i class="bi bi-shield-check"></i>
+<div>
+<div class="spec-title">Lisensi Terbuka</div>
+<div class="spec-desc">Distribusi materi di bawah lisensi MIT</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="workbench-card">
+<div class="workbench-header">
+<div class="workbench-tabs">
+<span class="workbench-tab active"><i class="bi bi-filetype-r"></i> eksplorasi_iris.R</span>
+</div>
+<div class="workbench-status ms-auto">
+<span class="status-dot"></span> WebR Siap
+</div>
+</div>
+<div class="workbench-body">
+<div class="code-block">
+<div class="code-line"><span class="c-comment"># Ringkasan data iris dan korelasi variabel</span></div>
+<div class="code-line"><span class="c-fn">summary</span><span class="c-text">(iris$Sepal.Length)</span></div>
+<div class="code-line"><span class="c-fn">cor</span><span class="c-text">(iris$Sepal.Length, iris$Petal.Length)</span></div>
+<div class="code-line">&nbsp;</div>
+<div class="code-line"><span class="c-comment"># Visualisasi sebaran dimensi bunga</span></div>
+<div class="code-line"><span class="c-fn">library</span><span class="c-text">(ggplot2)</span></div>
+<div class="code-line"><span class="c-fn">ggplot</span><span class="c-text">(iris, </span><span class="c-fn">aes</span><span class="c-text">(Sepal.Length, Sepal.Width, </span><span class="c-kw">color</span><span class="c-text"> = Species)) +</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="c-fn">geom_point</span><span class="c-text">(</span><span class="c-kw">size</span><span class="c-text"> = </span><span class="c-num">2.5</span><span class="c-text">, </span><span class="c-kw">alpha</span><span class="c-text"> = </span><span class="c-num">0.85</span><span class="c-text">) +</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="c-fn">theme_minimal</span><span class="c-text">(</span><span class="c-kw">base_size</span><span class="c-text"> = </span><span class="c-num">12</span><span class="c-text">)</span></div>
+</div>
+<div class="console-output">
+<div class="console-label"><i class="bi bi-terminal"></i> Output R Console</div>
+<pre class="console-pre"><code>&gt; summary(iris$Sepal.Length)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  4.300   5.100   5.800   5.843   6.400   7.900 
 
-Website ini dirancang sebagai pendamping belajar dan sarana praktikum mandiri. Anda dapat langsung menjalankan dan bereksperimen dengan kode R langsung dari browser Anda tanpa perlu melakukan instalasi tambahan.
+&gt; cor(iris$Sepal.Length, iris$Petal.Length)
+[1] 0.8717538</code></pre>
+</div>
+</div>
+<div class="workbench-footer">
+<span class="workbench-caption">Setiap modul dilengkapi editor interaktif yang dapat langsung dijalankan dan dimodifikasi.</span>
+<a href="praktikum-01.html" class="workbench-action-btn">Uji Coba di Praktikum 01 <i class="bi bi-arrow-right"></i></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-::: {.callout-note}
-## Deskripsi Mata Kuliah
+<!-- ============================================================ PILAR PRAKTIKUM ============================================================ -->
+<div class="pillars-section">
+<div class="container">
+<div class="row g-4">
+<div class="col-md-6 col-lg-3">
+<div class="pillar-card">
+<div class="pillar-icon"><i class="bi bi-mortarboard"></i></div>
+<h3 class="pillar-title">Kurikulum Akademik</h3>
+<p class="pillar-desc">Disusun sesuai capaian pembelajaran mata kuliah Analisis dan Visualisasi Data (MSIM4310).</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="pillar-card">
+<div class="pillar-icon"><i class="bi bi-browser-chrome"></i></div>
+<h3 class="pillar-title">100% di Peramban</h3>
+<p class="pillar-desc">WebAssembly mengeksekusi komputasi R langsung di browser tanpa instalasi perangkat lunak lokal.</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="pillar-card">
+<div class="pillar-icon"><i class="bi bi-table"></i></div>
+<h3 class="pillar-title">Dataset Riil</h3>
+<p class="pillar-desc">Berlatih menggunakan dataset standar seperti iris, mtcars, dan corpus teks untuk studi kasus.</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="pillar-card">
+<div class="pillar-icon"><i class="bi bi-code-square"></i></div>
+<h3 class="pillar-title">Format Quarto</h3>
+<p class="pillar-desc">Dokumen reproducible research yang dapat diunduh dan dibuka langsung menggunakan RStudio.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-Mata kuliah Analisis dan Visualisasi Data (2 sks) ini membahas mengenai:
+<!-- ============================================================ COURSE CARDS (9 MODUL) ============================================================ -->
+<div class="section-wrapper" id="silabus">
+<div class="container">
+<div class="section-header-block mb-5">
+<div class="row align-items-end">
+<div class="col-lg-8">
+<div class="section-eyebrow">Struktur Praktikum</div>
+<h2 class="section-heading">Silabus 9 Modul Praktikum</h2>
+<p class="section-subtext">Rangkaian pembelajaran bertahap mulai dari sintaks dasar bahasa R hingga pembuatan dashboard interaktif terdistribusi.</p>
+</div>
+<div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+<a href="praktikum-01.html" class="btn-syllabus-start">Mulai dari Modul 01 <i class="bi bi-arrow-right"></i></a>
+</div>
+</div>
+</div>
 
-1. Prinsip Dasar Penyajian Data
-2. Transformasi Data
-3. Penanganan Data Hilang
-4. Analisis Regresi
-5. Visualisasi Data Teks
-6. Visualisasi Data Interaktif
-:::
+<div class="row g-4">
+<!-- Modul 1 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-01">
+<div class="card-meta">
+<span class="card-badge">Modul 01</span>
+<span class="card-tag">Fondasi R</span>
+</div>
+<h3 class="card-title">Prinsip Dasar Penyajian Data</h3>
+<p class="card-desc">Pengenalan bahasa R, tipe data, manipulasi vektor, data frame, serta fungsi statistik deskriptif dasar.</p>
+<div class="card-footer-action">
+<a href="praktikum-01.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-## Kompetensi Umum
+<!-- Modul 2 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-02">
+<div class="card-meta">
+<span class="card-badge">Modul 02</span>
+<span class="card-tag">Tidyverse</span>
+</div>
+<h3 class="card-title">Transformasi Data</h3>
+<p class="card-desc">Operasi transformasi matematis, logaritma, dan penyesuaian skala data menggunakan fungsi tidyverse.</p>
+<div class="card-footer-action">
+<a href="praktikum-02.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-Setelah menyelesaikan mata kuliah ini, mahasiswa diharapkan mampu melakukan analisis dan visualisasi data, baik dari data numerik maupun data teks menggunakan bahasa pemrograman R.
+<!-- Modul 3 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-03">
+<div class="card-meta">
+<span class="card-badge">Modul 03</span>
+<span class="card-tag">Data Cleaning</span>
+</div>
+<h3 class="card-title">Penanganan Data Hilang</h3>
+<p class="card-desc">Identifikasi pola missing values (NA), teknik penghapusan selektif, dan metode imputasi data secara metodologis.</p>
+<div class="card-footer-action">
+<a href="praktikum-03.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-## Petunjuk Penggunaan Lab Interaktif
+<!-- Modul 4 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-04">
+<div class="card-meta">
+<span class="card-badge">Modul 04</span>
+<span class="card-tag">Regresi</span>
+</div>
+<h3 class="card-title">Analisis Regresi Eksplorasi</h3>
+<p class="card-desc">Eksplorasi hubungan antarvariabel, estimasi parameter regresi linear sederhana, dan pemeriksaan asumsi residual.</p>
+<div class="card-footer-action">
+<a href="praktikum-04.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-Untuk memaksimalkan pengalaman belajar Anda di Lab Interaktif ini, silakan ikuti petunjuk berikut:
+<!-- Modul 5 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-05">
+<div class="card-meta">
+<span class="card-badge">Modul 05</span>
+<span class="card-tag">Inferensi</span>
+</div>
+<h3 class="card-title">Analisis Regresi Konfirmasi</h3>
+<p class="card-desc">Uji hipotesis formal pada regresi, least squares estimation, dan interpretasi model regresi linear berganda.</p>
+<div class="card-footer-action">
+<a href="praktikum-05.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-1. **Jalankan Kode**: Klik tombol **Run Code** pada setiap blok kode interaktif untuk mengeksekusi kode R langsung di browser Anda tanpa perlu instalasi tambahan.
-2. **Modifikasi & Eksperimen**: Anda dapat mengedit, mengubah nilai variabel, atau menambahkan fungsi baru di dalam blok kode interaktif untuk melihat langsung efek perubahannya pada output atau grafik.
-3. **Gunakan RStudio jika Diperlukan**: Beberapa praktikum (seperti pembuatan aplikasi Shiny) tidak dapat dijalankan langsung di browser. Salin kode tersebut ke RStudio lokal Anda dengan mengeklik tombol salin di sudut kanan atas blok kode.
-4. **Eksplorasi Mandiri**: Ikuti alur praktikum secara berurutan, pahami penjelasan konsep, jalankan contoh kodenya, dan cobalah menyelesaikan latihan yang ada untuk menguji pemahaman Anda.
+<!-- Modul 6 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-06">
+<div class="card-meta">
+<span class="card-badge">Modul 06</span>
+<span class="card-tag">Text Mining</span>
+</div>
+<h3 class="card-title">Analisis Data Teks</h3>
+<p class="card-desc">Pra-pemrosesan teks, tokenisasi kata, pembersihan stop words, analisis frekuensi kata, n-gram, dan sentimen.</p>
+<div class="card-footer-action">
+<a href="praktikum-06.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
----
+<!-- Modul 7 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-07">
+<div class="card-meta">
+<span class="card-badge">Modul 07</span>
+<span class="card-tag">Visualisasi Teks</span>
+</div>
+<h3 class="card-title">Visualisasi Data Teks</h3>
+<p class="card-desc">Konstruksi word cloud informatif, diagram batang frekuensi, graf jaringan bigram, dan heatmap kata teks.</p>
+<div class="card-footer-action">
+<a href="praktikum-07.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
-> **Mulai Belajar:** Silakan pilih materi praktikum melalui menu **Praktikum** di bagian atas navigasi.
+<!-- Modul 8 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-08">
+<div class="card-meta">
+<span class="card-badge">Modul 08</span>
+<span class="card-tag">Interaktivitas</span>
+</div>
+<h3 class="card-title">Visualisasi Interaktif</h3>
+<p class="card-desc">Pembangunan antarmuka reaktif menggunakan Shiny dan Plotly, memisahkan logika UI dan Server secara terstruktur.</p>
+<div class="card-footer-action">
+<a href="praktikum-08.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
 
----
+<!-- Modul 9 -->
+<div class="col-md-6 col-lg-4">
+<div class="course-card" id="card-modul-09">
+<div class="card-meta">
+<span class="card-badge">Modul 09</span>
+<span class="card-tag">Dashboard</span>
+</div>
+<h3 class="card-title">Dashboard Interaktif</h3>
+<p class="card-desc">Pengembangan panel analitik lengkap dengan shinydashboard, valueBox, multi-tab items, dan distribusi dashboard.</p>
+<div class="card-footer-action">
+<a href="praktikum-09.html" class="card-link">Masuk Modul <i class="bi bi-chevron-right"></i></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-Selamat belajar,
+<!-- ============================================================ ALUR PEMBELAJARAN ============================================================ -->
+<div class="section-wrapper-alt" id="alur">
+<div class="container">
+<div class="row g-5">
+<div class="col-lg-6">
+<div class="section-eyebrow">Alur Belajar Terpandu</div>
+<h2 class="section-heading">4 Tahap Penguasaan Analisis Data</h2>
+<p class="section-subtext mb-4">Materi disusun secara berurutan agar Anda memahami konsep dasar sebelum melangkah ke teknik pemodelan dan antarmuka reaktif.</p>
 
-**Muhammad Yoga Prabowo**  
-*Tutor Mata Kuliah Analisis dan Visualisasi Data*
+<div class="track-list">
+<div class="track-item">
+<div class="track-number">01</div>
+<div class="track-details">
+<h4 class="track-title">Fondasi Analisis &amp; Penyiapan Data</h4>
+<p class="track-desc">Mencakup Modul 01 hingga 03: eksplorasi sintaks dasar R, manipulasi data tidyverse, dan penanganan missing values secara cermat.</p>
+<span class="track-ref">Modul 01, 02, 03</span>
+</div>
+</div>
+
+<div class="track-item">
+<div class="track-number">02</div>
+<div class="track-details">
+<h4 class="track-title">Pemodelan Statistik &amp; Inferensi</h4>
+<p class="track-desc">Mencakup Modul 04 dan 05: regresi linear sederhana, uji asumsi klasik residual, least squares, dan uji hipotesis regresi berganda.</p>
+<span class="track-ref">Modul 04, 05</span>
+</div>
+</div>
+
+<div class="track-item">
+<div class="track-number">03</div>
+<div class="track-details">
+<h4 class="track-title">Analisis &amp; Visualisasi Teks</h4>
+<p class="track-desc">Mencakup Modul 06 dan 07: tokenisasi korpus teks bahasa alami, stop words removal, n-gram, sentiment scoring, dan network visualization.</p>
+<span class="track-ref">Modul 06, 07</span>
+</div>
+</div>
+
+<div class="track-item">
+<div class="track-number">04</div>
+<div class="track-details">
+<h4 class="track-title">Aplikasi Reaktif &amp; Dashboard</h4>
+<p class="track-desc">Mencakup Modul 08 dan 09: arsitektur reaktif Shiny, komponen UI &amp; Server, visual interaktif Plotly, dan dashboard analitik lengkap.</p>
+<span class="track-ref">Modul 08, 09</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-lg-6 d-flex align-items-center">
+<div class="course-profile-panel">
+<div class="profile-header">
+<div class="profile-badge">Mata Kuliah Resmi</div>
+<h3 class="profile-title">MSIM4310: Analisis dan Visualisasi Data</h3>
+<p class="profile-meta">Bobot: 2 SKS &middot; Program Studi Sistem Informasi &middot; Universitas Terbuka</p>
+</div>
+<div class="profile-body">
+<div class="profile-desc-block">
+<div class="profile-label">Deskripsi Kurikulum</div>
+<p class="profile-text">Membekali mahasiswa dengan kompetensi komputasi analisis data, mulai dari penyajian numerik, eksplorasi pola multivariat, analisis teks, hingga penyusunan dashboard visual interaktif menggunakan ekosistem bahasa R.</p>
+</div>
+<div class="profile-desc-block">
+<div class="profile-label">Perangkat &amp; Paket R Utama</div>
+<div class="package-tags">
+<span class="pkg-tag">R base</span>
+<span class="pkg-tag">tidyverse</span>
+<span class="pkg-tag">ggplot2</span>
+<span class="pkg-tag">tidytext</span>
+<span class="pkg-tag">Shiny</span>
+<span class="pkg-tag">shinydashboard</span>
+<span class="pkg-tag">plotly</span>
+<span class="pkg-tag">Quarto</span>
+</div>
+</div>
+</div>
+<div class="profile-footer">
+<div class="author-info">
+<div class="author-title">Pengembang Konten:</div>
+<div class="author-name">Muhammad Yoga Prabowo</div>
+<div class="author-sub">Politeknik Keuangan Negara STAN</div>
+</div>
+<a href="https://github.com/myprabowo/lab-interaktif-r-avd" target="_blank" rel="noopener" class="repo-button">
+<i class="bi bi-github"></i> Repositori GitHub
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ TEKNOLOGI & METODE ============================================================ -->
+<div class="section-wrapper" id="tentang">
+<div class="container">
+<div class="section-header-block text-center mb-5">
+<div class="section-eyebrow">Arsitektur &amp; Metode</div>
+<h2 class="section-heading">Prinsip Komputasi Terbuka</h2>
+<p class="section-subtext mx-auto">Platform dirancang dengan mengutamakan kemudahan akses, integritas hasil analisis, dan prinsip reproducible research.</p>
+</div>
+
+<div class="row g-4">
+<div class="col-md-6 col-lg-3">
+<div class="tech-item">
+<div class="tech-icon"><i class="bi bi-terminal-split"></i></div>
+<h4 class="tech-title">WebR (WebAssembly)</h4>
+<p class="tech-text">Interpreter R dieksekusi langsung pada mesin klien melalui peramban web modern tanpa memerlukan server komputasi eksternal.</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="tech-item">
+<div class="tech-icon"><i class="bi bi-file-earmark-text"></i></div>
+<h4 class="tech-title">Quarto Document</h4>
+<p class="tech-text">Seluruh modul disusun dalam format Quarto Markdown (.qmd), memudahkan integrasi teks naratif, kode komputasi, dan keluaran grafik.</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="tech-item">
+<div class="tech-icon"><i class="bi bi-check2-circle"></i></div>
+<h4 class="tech-title">Kasus Nyata</h4>
+<p class="tech-text">Setiap modul mengangkat permasalahan riil dengan interpretasi statistik yang sistematis dan relevan dengan praktik dunia kerja.</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-3">
+<div class="tech-item">
+<div class="tech-icon"><i class="bi bi-arrow-repeat"></i></div>
+<h4 class="tech-title">Pembelajaran Mandiri</h4>
+<p class="tech-text">Mahasiswa dapat mengulang latihan, mengubah argumen kode secara real-time, dan memverifikasi hasil kalkulasi secara mandiri.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer class="footer-modern">
+<div class="container">
+<div class="row g-4">
+<div class="col-lg-4 col-md-6">
+<div class="footer-brand">
+<span class="footer-r-badge">R</span>
+<span class="footer-brand-text">Lab Interaktif R</span>
+</div>
+<p class="footer-brand-desc">Platform komputasi dan modul praktikum interaktif untuk mata kuliah Analisis dan Visualisasi Data (MSIM4310).</p>
+<div class="footer-links-inline">
+<a href="https://github.com/myprabowo/lab-interaktif-r-avd" target="_blank" rel="noopener"><i class="bi bi-github"></i> Repositori Proyek</a>
+<a href="https://linkedin.com/in/muhammad-yoga-prabowo" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i> Profil LinkedIn</a>
+</div>
+</div>
+
+<div class="col-lg-2 col-md-3 col-6">
+<div class="footer-heading">Navigasi Modul</div>
+<ul class="footer-nav">
+<li><a href="praktikum-01.html">Modul 01: Dasar R</a></li>
+<li><a href="praktikum-02.html">Modul 02: Transformasi</a></li>
+<li><a href="praktikum-03.html">Modul 03: Data Hilang</a></li>
+<li><a href="praktikum-04.html">Modul 04: Regresi Eksplorasi</a></li>
+<li><a href="praktikum-05.html">Modul 05: Regresi Konfirmasi</a></li>
+</ul>
+</div>
+
+<div class="col-lg-3 col-md-3 col-6">
+<div class="footer-heading">Modul Lanjutan</div>
+<ul class="footer-nav">
+<li><a href="praktikum-06.html">Modul 06: Analisis Teks</a></li>
+<li><a href="praktikum-07.html">Modul 07: Visualisasi Teks</a></li>
+<li><a href="praktikum-08.html">Modul 08: Interaktif</a></li>
+<li><a href="praktikum-09.html">Modul 09: Dashboard</a></li>
+<li><a href="#silabus">Daftar Lengkap</a></li>
+</ul>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="footer-heading">Referensi Resmi</div>
+<ul class="footer-nav">
+<li><a href="https://www.r-project.org/" target="_blank" rel="noopener">The R Project</a></li>
+<li><a href="https://quarto.org/" target="_blank" rel="noopener">Dokumentasi Quarto</a></li>
+<li><a href="https://docs.r-wasm.org/webr/latest/" target="_blank" rel="noopener">WebR by Posit</a></li>
+<li><a href="https://ggplot2.tidyverse.org/" target="_blank" rel="noopener">Dokumentasi ggplot2</a></li>
+</ul>
+</div>
+</div>
+
+<hr class="footer-divider">
+<div class="footer-bottom-row">
+<div class="footer-legal">
+&copy; 2026 Lab Interaktif R &middot; Muhammad Yoga Prabowo &middot; Lisensi MIT
+</div>
+<div class="footer-note">
+Materi pendamping mata kuliah Analisis dan Visualisasi Data (MSIM4310)
+</div>
+</div>
+</div>
+</footer>
+```
+
