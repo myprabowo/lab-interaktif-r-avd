@@ -7,7 +7,7 @@ website:
 
   # ── Open Graph / SEO ────────────────────────────────────────
   open-graph:
-    title: "Lab Interaktif R — Analisis & Visualisasi Data"
+    title: "Lab Interaktif R: Analisis & Visualisasi Data"
     description: "Belajar analisis data secara interaktif, jalankan kode langsung di browser, dan eksplorasi visualisasi modern tanpa instalasi."
 
   # ── Navbar ──────────────────────────────────────────────────
@@ -24,53 +24,53 @@ website:
 
       - text: "Modul"
         menu:
-          - text: "1 — Prinsip Dasar Penyajian Data"
+          - text: "Modul 01: Prinsip Dasar Penyajian Data"
             href: praktikum-01.qmd
             icon: bar-chart-fill
-          - text: "2 — Transformasi Data"
+          - text: "Modul 02: Transformasi Data"
             href: praktikum-02.qmd
             icon: arrow-repeat
-          - text: "3 — Penanganan Data Hilang"
+          - text: "Modul 03: Penanganan Data Hilang"
             href: praktikum-03.qmd
             icon: patch-exclamation-fill
-          - text: "4 — Analisis Regresi Eksplorasi"
+          - text: "Modul 04: Analisis Regresi Eksplorasi"
             href: praktikum-04.qmd
             icon: graph-up
-          - text: "5 — Analisis Regresi Konfirmasi"
+          - text: "Modul 05: Analisis Regresi Konfirmasi"
             href: praktikum-05.qmd
             icon: graph-up-arrow
-          - text: "6 — Analisis Data Teks"
+          - text: "Modul 06: Analisis Data Teks"
             href: praktikum-06.qmd
             icon: chat-text-fill
-          - text: "7 — Visualisasi Data Teks"
+          - text: "Modul 07: Visualisasi Data Teks"
             href: praktikum-07.qmd
             icon: diagram-3-fill
-          - text: "8 — Visualisasi Interaktif"
+          - text: "Modul 08: Visualisasi Interaktif"
             href: praktikum-08.qmd
             icon: display-fill
-          - text: "9 — Dashboard Interaktif"
+          - text: "Modul 09: Dashboard Interaktif"
             href: praktikum-09.qmd
             icon: layout-wtf
 
       - text: "Praktikum"
         menu:
-          - text: "Praktikum 01 — Dasar R"
+          - text: "Praktikum 01: Dasar R"
             href: praktikum-01.qmd
-          - text: "Praktikum 02 — Transformasi Data"
+          - text: "Praktikum 02: Transformasi Data"
             href: praktikum-02.qmd
-          - text: "Praktikum 03 — Data Hilang"
+          - text: "Praktikum 03: Data Hilang"
             href: praktikum-03.qmd
-          - text: "Praktikum 04 — Regresi Eksplorasi"
+          - text: "Praktikum 04: Regresi Eksplorasi"
             href: praktikum-04.qmd
-          - text: "Praktikum 05 — Regresi Konfirmasi"
+          - text: "Praktikum 05: Regresi Konfirmasi"
             href: praktikum-05.qmd
-          - text: "Praktikum 06 — Analisis Teks"
+          - text: "Praktikum 06: Analisis Teks"
             href: praktikum-06.qmd
-          - text: "Praktikum 07 — Visualisasi Teks"
+          - text: "Praktikum 07: Visualisasi Teks"
             href: praktikum-07.qmd
-          - text: "Praktikum 08 — Visualisasi Interaktif"
+          - text: "Praktikum 08: Visualisasi Interaktif"
             href: praktikum-08.qmd
-          - text: "Praktikum 09 — Dashboard"
+          - text: "Praktikum 09: Dashboard"
             href: praktikum-09.qmd
 
       - text: "Tentang"
